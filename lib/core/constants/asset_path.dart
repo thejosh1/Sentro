@@ -6,5 +6,7 @@ final String logo1x = _getImagePath('images/svg/sentro-logo.svg');
 
 //icons
 final String arrowBack = _getImagePath('icon/svg/arrow_back.svg');
+final String call = _getImagePath('icon/svg/call.svg');
+final String headPhone = _getImagePath('icon/svg/headphone.svg');
 
 String _getImagePath(String imageName) => imageAssetRoot + imageName;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
@@ -10,15 +10,15 @@ import 'package:sentro/core/utils/text.dart';
 import 'package:sentro/core/widgets/headers.dart';
 import 'package:sentro/core/widgets/text_field.dart';
 
-class CreateAccount extends StatefulWidget {
-  const CreateAccount({super.key});
+class CreatePassword extends StatefulWidget {
+  const CreatePassword({super.key});
 
   @override
-  State<CreateAccount> createState() => _CreateAccountState();
+  State<CreatePassword> createState() => _CreatePasswordState();
 }
 
-class _CreateAccountState extends State<CreateAccount> {
-  TextEditingController bvnController = TextEditingController();
+class _CreatePasswordState extends State<CreatePassword> {
+  TextEditingController createPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -33,12 +33,49 @@ class _CreateAccountState extends State<CreateAccount> {
             Padding(
               padding: EdgeInsets.only(right: widthSize(7)),
               child: PageHeader(
-                trailing: CText(
-                  text: 'Why is BVN required?',
-                  color: sTextGreen,
-                  size: 16,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: CFONT.MEDIUM,
+                trailing: Stack(
+                  children: [
+                    Container(
+                      width: widthSize(43.52),
+                      height: heightSize(43.52),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: sNavContainer.withOpacity(0.25),
+                      ),
+                      child: Center(
+                        child: SvgPicture.asset(
+                          headPhone,
+                          width: widthSize(25.93),
+                          height: heightSize(25.93),
+                          colorFilter: ColorFilter.mode(
+                            isDark?sLemon:sActionButton,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 2,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        width: widthSize(36.11),
+                        height: heightSize(13.89),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25.93),
+                          color: sNavContainer,
+                        ),
+                        child: Center(
+                          child: CText(
+                            text: 'Help?',
+                            fontFamily: CFONT.BOLD,
+                            size: 7.41,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -58,6 +95,7 @@ class _CreateAccountState extends State<CreateAccount> {
             ),
             SizedBox(height: heightSize(30),),
             AppTextField(
+              obscureText: true,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -77,7 +115,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 ],
               ),
               hint: 'Enter Bvn',
-              controller: bvnController,
+              controller: createPasswordController,
               inputType: TextInputType.number,
               error: '',
               validFunction: (value) {
@@ -100,20 +138,20 @@ class _CreateAccountState extends State<CreateAccount> {
                   foregroundColor: sLemon,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(21),
-                    side: BorderSide(
-                      color: sLemon,
-                    )
+                      borderRadius: BorderRadius.circular(21),
+                      side: BorderSide(
+                        color: sLemon,
+                      )
                   ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SvgPicture.asset(
-                      call,
-                      width: widthSize(20),
-                      height: heightSize(20),
-                      colorFilter: isDark?ColorFilter.mode(Colors.white, BlendMode.srcIn):null),
+                        call,
+                        width: widthSize(20),
+                        height: heightSize(20),
+                        colorFilter: isDark?ColorFilter.mode(Colors.white, BlendMode.srcIn):null),
                     CText(
                       text: 'Dial *565*0#',
                       size: 13,
