@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/constants/values.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/action_button.dart';
 import 'package:sentro/core/utils/text.dart';
 import 'package:sentro/core/widgets/headers.dart';
 import 'package:sentro/core/widgets/text_field.dart';
 
-class CreatePassword extends StatefulWidget {
-  const CreatePassword({super.key});
+class VerifyPhone extends StatefulWidget {
+  const VerifyPhone({super.key});
 
   @override
-  State<CreatePassword> createState() => _CreatePasswordState();
+  State<VerifyPhone> createState() => _VerifyPhoneState();
 }
 
-class _CreatePasswordState extends State<CreatePassword> {
-  TextEditingController createPasswordController = TextEditingController();
+class _VerifyPhoneState extends State<VerifyPhone> {
+  TextEditingController ctrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -55,7 +56,7 @@ class _CreatePasswordState extends State<CreatePassword> {
                       ),
                     ),
                     Positioned(
-                      top: -2,
+                      top: 2,
                       left: 0,
                       right: 0,
                       child: Container(
@@ -81,39 +82,87 @@ class _CreatePasswordState extends State<CreatePassword> {
             ),
             SizedBox(height: heightSize(34),),
             CText(
-              text: 'Create password',
+              text: 'Verify phone number',
               size: 22,
               fontFamily: CFONT.BOLD,
               fontWeight: FontWeight.w700,
             ),
             SizedBox(height: heightSize(5),),
             CText(
-              text: 'Your password protects your account from unauthorised login access',
+              text: 'Verify your phone number that you registered, a code will be sent shortly',
               fontWeight: FontWeight.w400, size: 18, fontFamily: CFONT.REGULAR, color: Theme.of(context).brightness == Brightness.dark
                 ? sDarkModeMutedText // dark mode muted text
                 : sLightModeMutedText,
             ),
             SizedBox(height: heightSize(30),),
             AppTextField(
-              obscureText: true,
+              obscureText: false,
               title: CText(
-                text: 'Password',
+                text: 'Phone Number',
                 fontWeight: FontWeight.w500,
                 fontFamily: CFONT.MEDIUM,
                 size: 16,
               ),
-              hint: '●●●●●●●●●●',
+              prefixWidget: Container(
+                width: widthSize(56),
+                height: heightSize(28),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(Values().buttonRadius15-1),
+                  color: sNavContainer,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      nigeria,
+                      width: widthSize(20),
+                      height: heightSize(20),
+                    ),
+                    SizedBox(width: widthSize(3)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: widthSize(5),
+                          height: heightSize(5),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: sActionButton,
+                          ),
+                        ),
+                        Container(
+                          width: widthSize(5),
+                          height: heightSize(5),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: sActionButton,
+                          ),
+                        ),
+                        Container(
+                          width: widthSize(5),
+                          height: heightSize(5),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: sActionButton,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              hint: '08...',
               color: sActionButton,
-              controller: createPasswordController,
-              inputType: TextInputType.number,
+              controller: ctrl,
+              inputType: TextInputType.phone,
               error: '',
               validFunction: (value) {
-                if (value == null || value
-                    .trim()
-                    .isEmpty) {
-                  return "Password cannot be empty.";
+                if (value == null || value.trim().isEmpty) {
+                  return "Phone number cannot be empty";
                 }
-                return null;
+                return value.trim().length != 10
+                    ? 'Enter 10 digits number'
+                    : null;
               },
             ),
           ],
@@ -127,7 +176,12 @@ class _CreatePasswordState extends State<CreatePassword> {
         child: ActionButton(
           text: "Continue",
           callback: () {
-            Get.toNamed(Routes.chooseSentroTag);
+            Get.toNamed(
+              Routes.confirmPhoneNumber,
+              arguments: {
+                "flow": "login",
+              },
+            );
           },
           load: false,
         ),

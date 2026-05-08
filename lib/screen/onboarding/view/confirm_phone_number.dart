@@ -14,13 +14,14 @@ import 'package:sentro/core/utils/text.dart';
 import 'package:sentro/core/widgets/headers.dart';
 
 class ConfirmPhoneNumber extends StatefulWidget {
-  const ConfirmPhoneNumber({super.key});
+  const ConfirmPhoneNumber({super.key,});
 
   @override
   State<ConfirmPhoneNumber> createState() => _ConfirmPhoneNumberState();
 }
 
 class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
+  late final String flow;
   TextEditingController otpController = TextEditingController();
 
   Timer? _timer;
@@ -57,6 +58,7 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
   @override
   void initState() {
     super.initState();
+    flow = Get.arguments?['flow'] ?? '';
     startTimer();
   }
 
@@ -100,7 +102,7 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
                     ),
                   ),
                   Positioned(
-                    top: 2,
+                    top: -2,
                     left: 0,
                     right: 0,
                     child: Container(
@@ -203,7 +205,17 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
         child: ActionButton(
           text: "Continue",
           callback: () {
-            Get.toNamed(Routes.confirmBvn);
+            switch (flow) {
+              case "bvn":
+                Get.toNamed(Routes.confirmBvn);
+                break;
+              case "resetPassword":
+                Get.toNamed(Routes.resetPassword);
+                break;
+
+              default:
+                Get.toNamed(Routes.login);
+            }
           },
           load: false,
         ),

@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/constants/values.dart';
+
+import '../constants/asset_path.dart';
 // import 'package:flutter_svg/svg.dart';
 
 class AppTextField extends StatefulWidget {
@@ -22,6 +24,10 @@ class AppTextField extends StatefulWidget {
   final bool readOnly;
   final ValueChanged<bool>? onToggle;
   final Widget? title;
+  final Widget? obscureOnIcon;
+  final Widget? obscureOffIcon;
+  final Widget? suffixWidget;
+  final Widget? prefixWidget;
 
   const AppTextField({
     super.key,
@@ -39,7 +45,11 @@ class AppTextField extends StatefulWidget {
     this.obscureText = false,
     this.readOnly = false,
     this.onToggle,
-    this.title
+    this.title,
+    this.obscureOnIcon,
+    this.obscureOffIcon,
+    this.suffixWidget,
+    this.prefixWidget,
   });
 
   @override
@@ -60,31 +70,52 @@ class _AppTextFieldState extends State<AppTextField> {
     widget.onToggle?.call(_isObscured);
   }
 
+  Widget? _resolveSuffix(Color iconColor) {
+    if (widget.obscureText == true) {
+      return SizedBox(
+        width: 48,
+        child: Center(
+          child: IconButton(
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            splashRadius: 20,
+            onPressed: _toggle,
+            icon: _isObscured
+                ? (widget.obscureOnIcon ?? Icon(Icons.visibility_off, color: iconColor))
+                : (widget.obscureOffIcon ??
+                SvgPicture.asset(hide, width: widthSize(24), height: heightSize(24))),
+          ),
+        ),
+      );
+    }
+
+    if (widget.suffixWidget != null) {
+      return SizedBox(
+        width: 48,
+        child: Center(child: widget.suffixWidget),
+      );
+    }
+
+    return null;
+  }
+
+  Widget? _resolvePrefix() {
+    if (widget.prefixWidget == null) return null;
+    return SizedBox(
+      width: 48,
+      child: Center(child: widget.prefixWidget),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final Size size = MediaQuery.of(context).size;
 
-    // ── colors that switch per mode ──────────────────────────────
-    final borderColor = isDark
-        ? sDarkBorder
-        : sLightBorder;
-
-    final hintColor = widget.hintColor ?? (isDark
-        ? sDarkHintText          // readable on dark bg
-        : sLightHintText);        // your light mode spec
-
-    final textColor = Theme.of(context).colorScheme.onSurface;
-    // #111111 light / #FFFFFF dark
-
-    final fillColor = widget.color ?? (isDark
-        ? sDarkFill          // card surface dark
-        : const Color(0xFFFFFFFF));        // white light
-
-    final iconColor = isDark
-        ? sDarkHintText
-        : sLightHintText;
-    // ─────────────────────────────────────────────────────────────
+    final borderColor = isDark ? sDarkBorder : sLightBorder;
+    final hintColor   = widget.hintColor ?? (isDark ? sDarkHintText : sLightHintText);
+    final textColor   = Theme.of(context).colorScheme.onSurface;
+    final iconColor   = isDark ? sDarkHintText : sLightHintText;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,17 +124,19 @@ class _AppTextFieldState extends State<AppTextField> {
           widget.title!,
           const SizedBox(height: 6),
         ],
-
         Container(
           height: heightSize(widget.height ?? 56),
           width: size.width,
           margin: const EdgeInsets.only(bottom: 10),
           decoration: BoxDecoration(
-            color: fillColor,
+            color: Colors.transparent,
             border: Border.all(color: borderColor),
-            borderRadius: BorderRadius.circular(Values().buttonRadius10),
+            borderRadius: BorderRadius.circular(
+              Values().buttonRadius10,
+            ),
           ),
           child: TextFormField(
+            textAlignVertical: TextAlignVertical.center,
             readOnly: widget.readOnly,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             enabled: widget.enabled,
@@ -113,14 +146,11 @@ class _AppTextFieldState extends State<AppTextField> {
             onChanged: widget.onSavedFunction,
             keyboardType: widget.inputType,
             cursorColor: Theme.of(context).colorScheme.primary,
-            style: TextStyle(
-              color: textColor,
-              fontSize: fontSize(14),
-            ),
+            style: TextStyle(color: textColor, fontSize: fontSize(14)),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
                 horizontal: widthSize(24),
-                vertical: widget.height == null ? 0.0 : widget.height! / 10,
+                vertical: 0,
               ),
               hintText: widget.hint,
               hintStyle: TextStyle(color: hintColor),
@@ -128,27 +158,9 @@ class _AppTextFieldState extends State<AppTextField> {
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
               errorStyle: const TextStyle(height: 0, fontSize: 0),
-              suffixIcon: widget.obscureText == true
-                  ? SizedBox(
-                width: 48,
-                child: Center(
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    splashRadius: 20,
-                    onPressed: _toggle,
-                    icon: Icon(
-                      _isObscured
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                      color: iconColor,
-                    ),
-                  ),
-                ),
-              )
-                  : null,
-              suffixIconConstraints:
-              const BoxConstraints(minWidth: 40, minHeight: 40),
+              prefixIcon: _resolvePrefix(),
+              suffixIcon: _resolveSuffix(iconColor),
+              suffixIconConstraints: const BoxConstraints(minWidth: 40, minHeight: 40),
             ),
           ),
         ),

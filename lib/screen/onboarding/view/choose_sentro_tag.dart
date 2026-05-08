@@ -4,21 +4,22 @@ import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/constants/values.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/action_button.dart';
 import 'package:sentro/core/utils/text.dart';
 import 'package:sentro/core/widgets/headers.dart';
 import 'package:sentro/core/widgets/text_field.dart';
 
-class CreatePassword extends StatefulWidget {
-  const CreatePassword({super.key});
+class ChooseSentroTag extends StatefulWidget {
+  const ChooseSentroTag({super.key});
 
   @override
-  State<CreatePassword> createState() => _CreatePasswordState();
+  State<ChooseSentroTag> createState() => _ChooseSentroTagState();
 }
 
-class _CreatePasswordState extends State<CreatePassword> {
-  TextEditingController createPasswordController = TextEditingController();
+class _ChooseSentroTagState extends State<ChooseSentroTag> {
+  TextEditingController tagController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -55,7 +56,7 @@ class _CreatePasswordState extends State<CreatePassword> {
                       ),
                     ),
                     Positioned(
-                      top: -2,
+                      top: 2,
                       left: 0,
                       right: 0,
                       child: Container(
@@ -81,37 +82,48 @@ class _CreatePasswordState extends State<CreatePassword> {
             ),
             SizedBox(height: heightSize(34),),
             CText(
-              text: 'Create password',
+              text: 'Choose your Sentro Tag',
               size: 22,
               fontFamily: CFONT.BOLD,
               fontWeight: FontWeight.w700,
             ),
             SizedBox(height: heightSize(5),),
             CText(
-              text: 'Your password protects your account from unauthorised login access',
+              text: 'Finaka Tag is your unique name for receiving money on Sentro',
               fontWeight: FontWeight.w400, size: 18, fontFamily: CFONT.REGULAR, color: Theme.of(context).brightness == Brightness.dark
                 ? sDarkModeMutedText // dark mode muted text
                 : sLightModeMutedText,
             ),
             SizedBox(height: heightSize(30),),
             AppTextField(
-              obscureText: true,
+              obscureText: false,
               title: CText(
-                text: 'Password',
+                text: 'Sentro Tag',
                 fontWeight: FontWeight.w500,
                 fontFamily: CFONT.MEDIUM,
                 size: 16,
               ),
-              hint: '●●●●●●●●●●',
+              suffixWidget: Container(
+                width: widthSize(19.5),
+                height: heightSize(19.5),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: sCancel.withOpacity(0.4),
+                ),
+                child: Center(
+                  child: CText(text: 'x', size: 12.7, color: sCancel, fontFamily: CFONT.BOLD, fontWeight: FontWeight.w400,),
+                ),
+              ),
+              hint: '@',
               color: sActionButton,
-              controller: createPasswordController,
+              controller: tagController,
               inputType: TextInputType.number,
               error: '',
               validFunction: (value) {
                 if (value == null || value
                     .trim()
                     .isEmpty) {
-                  return "Password cannot be empty.";
+                  return "Choose a sentro tag.";
                 }
                 return null;
               },
@@ -127,7 +139,7 @@ class _CreatePasswordState extends State<CreatePassword> {
         child: ActionButton(
           text: "Continue",
           callback: () {
-            Get.toNamed(Routes.chooseSentroTag);
+            Get.toNamed(Routes.createPin);
           },
           load: false,
         ),

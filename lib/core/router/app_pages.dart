@@ -1,19 +1,42 @@
 
 import 'package:get/get.dart';
+import 'package:sentro/core/widgets/confirm_pin.dart';
+import 'package:sentro/core/widgets/welcome_page.dart';
+import 'package:sentro/screen/main_view/main_view.dart';
+import 'package:sentro/screen/onboarding/view/choose_sentro_tag.dart';
 import 'package:sentro/screen/onboarding/view/confirm_bvn.dart';
 import 'package:sentro/screen/onboarding/view/confirm_phone_number.dart';
 import 'package:sentro/screen/onboarding/view/create_account.dart';
+import 'package:sentro/screen/onboarding/view/create_password.dart';
+import 'package:sentro/screen/onboarding/view/create_pin.dart';
 import 'package:sentro/screen/onboarding/view/get_started.dart';
+import 'package:sentro/screen/onboarding/view/login.dart';
+import 'package:sentro/screen/onboarding/view/reset_password.dart';
 import 'package:sentro/screen/onboarding/view/splash.dart';
+import 'package:sentro/screen/onboarding/view/verify_phone.dart';
 
 part 'app_routes.dart';
 
 class AppPages {
+  //onboarding
   static const splash = Routes.initial;
   static const getStarted = Routes.getStarted;
   static const createAccount = Routes.createAccount;
   static const confirmPhoneNumber = Routes.confirmPhoneNumber;
   static const confirmBvn = Routes.confirmBvn;
+  static const createPassword = Routes.createPassword;
+  static const chooseSentroTag = Routes.chooseSentroTag;
+  static const createPin =Routes.createPin;
+  static const welcome = Routes.welcome;
+  static const verifyPhone = Routes.verifyPhone;
+  static const login = Routes.login;
+  static const resetPassword = Routes.resetPassword;
+
+  //dashboard
+  static const mainview = Routes.mainView;
+
+  //shared
+  static const confirmPin = Routes. confirmPin;
   static final routes = [
     GetPage(
       name: Routes.initial,
@@ -34,10 +57,51 @@ class AppPages {
     GetPage(
       name: confirmPhoneNumber,
       page: () => const ConfirmPhoneNumber(),
+      arguments: {
+        "fromConfirmBvn": true,
+      },
     ),
     GetPage(
       name: confirmBvn,
       page: () => const ConfirmBvn(),
+    ),
+    GetPage(
+      name: createPassword,
+      page: () => const CreatePassword(),
+    ),
+    GetPage(
+      name: chooseSentroTag,
+      page: () => const ChooseSentroTag(),
+    ),
+    GetPage(
+      name: createPin,
+      page: () => const CreatePin(),
+    ),
+    GetPage(
+      name: welcome,
+      page: () => const WelcomePage(),
+    ),
+    GetPage(
+      name: verifyPhone,
+      page: () => const VerifyPhone(),
+    ),
+    GetPage(
+      name: login,
+      page: () => const Login(),
+    ),
+    GetPage(
+      name: confirmPin,
+      page: () => const ConfirmPin(),
+    ),
+    GetPage(
+      name: resetPassword,
+      page: () => const ResetPassword(),
+    ),
+    GetPage(
+      name: mainview,
+      page: () => const MainView(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 300),
     ),
   ];
 }

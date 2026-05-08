@@ -118,7 +118,7 @@ class ConfirmBvn extends StatelessWidget {
         child: ActionButton(
           text: "Continue",
           callback: () {
-            Get.toNamed(Routes.confirmBvn);
+            Get.toNamed(Routes.createPassword);
           },
           load: false,
         ),

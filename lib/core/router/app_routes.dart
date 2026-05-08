@@ -7,8 +7,18 @@ abstract class Routes {
   static const createAccount = '/create-account';
   static const confirmPhoneNumber = '/confirm-phone-number';
   static const confirmBvn = '/confirm-bvn';
+  static const createPassword = '/create-password';
+  static const chooseSentroTag = '/choose-sentro-tag';
+  static const createPin = '/create-pin';
+  static const welcome = '/welcome';
+  static const verifyPhone = '/verify-phone';
+  static const login = '/login';
+  static const resetPassword = '/reset-password';
 
 
   // dashboard screens
   static const mainView = '/screen';
+
+  //widgets
+static const confirmPin = '/confirm-pin';
 }

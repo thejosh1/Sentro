@@ -64,7 +64,9 @@ class _GetStartedState extends State<GetStarted> {
                     height: heightSize(60),
                     width: widthSize(185),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.toNamed(Routes.verifyPhone);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: isDark
                             ? Colors.white.withOpacity(0.10)

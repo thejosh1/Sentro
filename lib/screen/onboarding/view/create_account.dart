@@ -135,7 +135,12 @@ class _CreateAccountState extends State<CreateAccount> {
         child: ActionButton(
           text: "Continue",
           callback: () {
-            Get.toNamed(Routes.confirmPhoneNumber);
+            Get.toNamed(
+              Routes.confirmPhoneNumber,
+              arguments: {
+              "flow": "bvn",
+              },
+            );
           },
           load: false,
         ),

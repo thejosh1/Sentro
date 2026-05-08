@@ -10,15 +10,15 @@ import 'package:sentro/core/utils/text.dart';
 import 'package:sentro/core/widgets/headers.dart';
 import 'package:sentro/core/widgets/text_field.dart';
 
-class CreatePassword extends StatefulWidget {
-  const CreatePassword({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  State<CreatePassword> createState() => _CreatePasswordState();
+  State<Login> createState() => _LoginState();
 }
 
-class _CreatePasswordState extends State<CreatePassword> {
-  TextEditingController createPasswordController = TextEditingController();
+class _LoginState extends State<Login> {
+  TextEditingController loginPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -55,7 +55,7 @@ class _CreatePasswordState extends State<CreatePassword> {
                       ),
                     ),
                     Positioned(
-                      top: -2,
+                      top: 2,
                       left: 0,
                       right: 0,
                       child: Container(
@@ -81,14 +81,14 @@ class _CreatePasswordState extends State<CreatePassword> {
             ),
             SizedBox(height: heightSize(34),),
             CText(
-              text: 'Create password',
+              text: 'Login password',
               size: 22,
               fontFamily: CFONT.BOLD,
               fontWeight: FontWeight.w700,
             ),
             SizedBox(height: heightSize(5),),
             CText(
-              text: 'Your password protects your account from unauthorised login access',
+              text: 'Enter your account password',
               fontWeight: FontWeight.w400, size: 18, fontFamily: CFONT.REGULAR, color: Theme.of(context).brightness == Brightness.dark
                 ? sDarkModeMutedText // dark mode muted text
                 : sLightModeMutedText,
@@ -104,7 +104,7 @@ class _CreatePasswordState extends State<CreatePassword> {
               ),
               hint: '●●●●●●●●●●',
               color: sActionButton,
-              controller: createPasswordController,
+              controller: loginPasswordController,
               inputType: TextInputType.number,
               error: '',
               validFunction: (value) {
@@ -116,6 +116,28 @@ class _CreatePasswordState extends State<CreatePassword> {
                 return null;
               },
             ),
+            SizedBox(height: heightSize(10),),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Get.toNamed(
+                      Routes.confirmPhoneNumber,
+                      arguments: {
+                        "flow": "resetPassword",
+                      },
+                    );
+                  },
+                  child: CText(
+                    text: 'Forgot Password?',
+                    fontFamily: CFONT.MEDIUM,
+                    fontWeight: FontWeight.w500,
+                    color: sCancel,
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -127,7 +149,7 @@ class _CreatePasswordState extends State<CreatePassword> {
         child: ActionButton(
           text: "Continue",
           callback: () {
-            Get.toNamed(Routes.chooseSentroTag);
+            Get.toNamed(Routes.confirmPin);
           },
           load: false,
         ),

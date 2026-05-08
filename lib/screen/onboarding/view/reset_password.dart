@@ -10,14 +10,14 @@ import 'package:sentro/core/utils/text.dart';
 import 'package:sentro/core/widgets/headers.dart';
 import 'package:sentro/core/widgets/text_field.dart';
 
-class CreatePassword extends StatefulWidget {
-  const CreatePassword({super.key});
+class ResetPassword extends StatefulWidget {
+  const ResetPassword({super.key});
 
   @override
-  State<CreatePassword> createState() => _CreatePasswordState();
+  State<ResetPassword> createState() => _ResetPasswordState();
 }
 
-class _CreatePasswordState extends State<CreatePassword> {
+class _ResetPasswordState extends State<ResetPassword> {
   TextEditingController createPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class _CreatePasswordState extends State<CreatePassword> {
                       ),
                     ),
                     Positioned(
-                      top: -2,
+                      top: 2,
                       left: 0,
                       right: 0,
                       child: Container(
@@ -127,7 +127,7 @@ class _CreatePasswordState extends State<CreatePassword> {
         child: ActionButton(
           text: "Continue",
           callback: () {
-            Get.toNamed(Routes.chooseSentroTag);
+            Get.toNamed(Routes.confirmPin);
           },
           load: false,
         ),

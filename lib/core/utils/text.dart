@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
 
 class CFONT {
@@ -6,6 +7,7 @@ class CFONT {
   static const BOLD = "Satoshi-Bold";
   static const MEDIUM = "Satoshi-Medium";
   static const REGULAR = "Satoshi-Regular";
+  static const ITALIC = "Satoshi-Italic";
 }
 
 class CText extends StatelessWidget {
@@ -155,7 +157,7 @@ class TextNaira extends StatelessWidget {
           style: TextStyle(
             fontWeight: fontWeight ?? FontWeight.w700,
             fontSize: size ?? 16,
-            color: resolvedColor,
+            color: sBvnButton,
             height: 1.2,
           ),
         ),

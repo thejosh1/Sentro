@@ -4,21 +4,43 @@ import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/constants/values.dart';
 import 'package:sentro/core/router/app_pages.dart';
-import 'package:sentro/core/utils/action_button.dart';
 import 'package:sentro/core/utils/text.dart';
 import 'package:sentro/core/widgets/headers.dart';
-import 'package:sentro/core/widgets/text_field.dart';
 
-class CreatePassword extends StatefulWidget {
-  const CreatePassword({super.key});
+import 'package:sentro/core/widgets/keyboard_pin.dart';
+
+class CreatePin extends StatefulWidget {
+  const CreatePin({super.key});
 
   @override
-  State<CreatePassword> createState() => _CreatePasswordState();
+  State<CreatePin> createState() => _CreatePinState();
 }
 
-class _CreatePasswordState extends State<CreatePassword> {
-  TextEditingController createPasswordController = TextEditingController();
+class _CreatePinState extends State<CreatePin> {
+  TextEditingController pinController = TextEditingController();
+  final TextEditingController controller = TextEditingController();
+
+  Future<void> _onSubmitPin() async {
+    final pin = controller.text.trim();
+    if (pin.length < 4) {
+      // cToast(title: "Invalid PIN", message: "Enter your 4-digit PIN", color: kRed);
+      return;
+    } else {
+      Get.toNamed(Routes.welcome);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller.addListener(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -55,7 +77,7 @@ class _CreatePasswordState extends State<CreatePassword> {
                       ),
                     ),
                     Positioned(
-                      top: -2,
+                      top: 2,
                       left: 0,
                       right: 0,
                       child: Container(
@@ -81,55 +103,54 @@ class _CreatePasswordState extends State<CreatePassword> {
             ),
             SizedBox(height: heightSize(34),),
             CText(
-              text: 'Create password',
+              text: 'Create your 4 Digit PIN',
               size: 22,
               fontFamily: CFONT.BOLD,
               fontWeight: FontWeight.w700,
             ),
             SizedBox(height: heightSize(5),),
             CText(
-              text: 'Your password protects your account from unauthorised login access',
+              text: 'This PIN will be used for your account transaction\n confirmations',
               fontWeight: FontWeight.w400, size: 18, fontFamily: CFONT.REGULAR, color: Theme.of(context).brightness == Brightness.dark
                 ? sDarkModeMutedText // dark mode muted text
                 : sLightModeMutedText,
             ),
             SizedBox(height: heightSize(30),),
-            AppTextField(
-              obscureText: true,
-              title: CText(
-                text: 'Password',
-                fontWeight: FontWeight.w500,
-                fontFamily: CFONT.MEDIUM,
-                size: 16,
+            Container(
+              width: widthSize(156),
+              height: heightSize(47),
+              padding: EdgeInsets.symmetric(horizontal: widthSize(16)),
+              decoration: BoxDecoration(
+                borderRadius:
+                BorderRadius.circular(Values().buttonRadius20 * 5),
+                color: isDark ? sDarkFill : sLightPinContainer,
               ),
-              hint: '●●●●●●●●●●',
-              color: sActionButton,
-              controller: createPasswordController,
-              inputType: TextInputType.number,
-              error: '',
-              validFunction: (value) {
-                if (value == null || value
-                    .trim()
-                    .isEmpty) {
-                  return "Password cannot be empty.";
-                }
-                return null;
-              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(4, (index) {
+                  final isFilled = index < controller.text.length;
+
+                  return Container(
+                    width: widthSize(18),
+                    height: heightSize(18),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isFilled
+                          ? sActionButton
+                          : sPinIndicator,
+                    ),
+                  );
+                }),
+              ),
             ),
+            Spacer(),
+            KeyboardPin(
+              controller: controller,
+              callback: _onSubmitPin,
+            ),
+            SizedBox(height: heightSize(67),),
           ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.only(
-            left: widthSize(25),
-            right: widthSize(25),
-            bottom: heightSize(10)),
-        child: ActionButton(
-          text: "Continue",
-          callback: () {
-            Get.toNamed(Routes.chooseSentroTag);
-          },
-          load: false,
         ),
       ),
     );

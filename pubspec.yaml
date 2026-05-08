@@ -101,6 +101,7 @@ flutter:
     - assets/images/
     - assets/images/svg/
     - assets/icon/svg/
+    - assets/icon/png/
   #    - assets/images/svg/menu/
   #    - assets/images/png/
   #    - assets/images/jpg/
