@@ -27,3 +27,4 @@ const sContainerColor = Color(0xFF222222);
 const sContainerTextDark = Color(0xFFC6C6C6);
 const sButtonFillDark = Color(0xFF313131);
 const sGrey = Color(0xFF848484);
+const sContainer2 = Color(0xFFF2F2F2);

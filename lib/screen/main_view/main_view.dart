@@ -91,10 +91,10 @@ class _MainViewState extends State<MainView> {
         ),
 
         bottomNavigationBar: Container(
-          height: 94,
+          height: 84,
           padding: const EdgeInsets.only(
-            top: 4,
-            bottom: 8,
+            top: 2,
+            bottom: 0,
           ),
           decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
