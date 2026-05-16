@@ -56,6 +56,7 @@ class _CreatePinState extends State<CreatePin> {
               padding: EdgeInsets.only(right: widthSize(7)),
               child: PageHeader(
                 trailing: Stack(
+                  clipBehavior: Clip.none,
                   children: [
                     Container(
                       width: widthSize(43.52),
@@ -77,7 +78,7 @@ class _CreatePinState extends State<CreatePin> {
                       ),
                     ),
                     Positioned(
-                      top: 2,
+                      top: -5,
                       left: 0,
                       right: 0,
                       child: Container(
@@ -96,7 +97,7 @@ class _CreatePinState extends State<CreatePin> {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -110,7 +111,7 @@ class _CreatePinState extends State<CreatePin> {
             ),
             SizedBox(height: heightSize(5),),
             CText(
-              text: 'This PIN will be used for your account transaction\n confirmations',
+              text: 'This PIN will be used for your account transaction confirmations',
               fontWeight: FontWeight.w400, size: 18, fontFamily: CFONT.REGULAR, color: Theme.of(context).brightness == Brightness.dark
                 ? sDarkModeMutedText // dark mode muted text
                 : sLightModeMutedText,

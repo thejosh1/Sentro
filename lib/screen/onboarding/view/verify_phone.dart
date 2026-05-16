@@ -23,6 +23,7 @@ class _VerifyPhoneState extends State<VerifyPhone> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Padding(
@@ -35,6 +36,7 @@ class _VerifyPhoneState extends State<VerifyPhone> {
               padding: EdgeInsets.only(right: widthSize(7)),
               child: PageHeader(
                 trailing: Stack(
+                  clipBehavior: Clip.none,
                   children: [
                     Container(
                       width: widthSize(43.52),
@@ -56,7 +58,7 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                       ),
                     ),
                     Positioned(
-                      top: 2,
+                      top: -5,
                       left: 0,
                       right: 0,
                       child: Container(
@@ -75,7 +77,7 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -106,8 +108,10 @@ class _VerifyPhoneState extends State<VerifyPhone> {
               prefixWidget: Container(
                 width: widthSize(56),
                 height: heightSize(28),
+                margin: EdgeInsets.only(left: widthSize(24),),
+                padding: EdgeInsets.symmetric(horizontal: widthSize(5), vertical: heightSize(4)),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(Values().buttonRadius15-1),
+                  borderRadius: BorderRadius.circular(14),
                   color: sNavContainer,
                 ),
                 child: Row(

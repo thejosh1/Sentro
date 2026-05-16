@@ -81,6 +81,7 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
             SizedBox(height: heightSize(64),),
             PageHeader(
               trailing: Stack(
+                clipBehavior: Clip.none,
                 children: [
                   Container(
                     width: widthSize(43.52),
@@ -102,7 +103,7 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
                     ),
                   ),
                   Positioned(
-                    top: -2,
+                    top: -5,
                     left: 0,
                     right: 0,
                     child: Container(
@@ -121,7 +122,7 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -168,8 +169,9 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
             ),
             SizedBox(height: heightSize(10),),
             Container(
-              width: widthSize(170),
+              width: widthSize(174),
               height: heightSize(42),
+              padding: EdgeInsets.symmetric(horizontal: widthSize(24), vertical: heightSize(12)),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Values().buttonRadius22-1),
                 color: isDark?sDarkFill:sResendCode,

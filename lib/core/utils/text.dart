@@ -7,7 +7,7 @@ class CFONT {
   static const BOLD = "Satoshi-Bold";
   static const MEDIUM = "Satoshi-Medium";
   static const REGULAR = "Satoshi-Regular";
-  static const ITALIC = "Satoshi-Italic";
+  static const ITALIC = "Satoshi";
 }
 
 class CText extends StatelessWidget {
@@ -24,6 +24,7 @@ class CText extends StatelessWidget {
   final bool? allowOverflow;
   final TextDecoration? decoration;
   final Color? backgroundColor;
+  final FontStyle? fontStyle;
 
   const CText({
     super.key,
@@ -40,6 +41,7 @@ class CText extends StatelessWidget {
     this.decoration,
     this.allowOverflow = false,
     this.backgroundColor,
+    this.fontStyle,
   });
 
   @override
@@ -52,7 +54,9 @@ class CText extends StatelessWidget {
         textAlign: textAlign ?? TextAlign.start,
         softWrap: true,
         overflow: TextOverflow.visible,
+        //maxLines: 1,
         style: TextStyle(
+          fontStyle: fontStyle ?? FontStyle.normal,
           fontSize: fontSize(size ?? 16),
           fontWeight: fontWeight ?? FontWeight.w400,
           fontFamily: fontFamily,
@@ -136,39 +140,45 @@ class TextNaira extends StatelessWidget {
   final double? size;
   final FontWeight? fontWeight;
   final Color? color;
+  final Color? nairaColor;
 
   const TextNaira({
     required this.text,
     this.size,
     this.fontWeight,
     this.color,
+    this.nairaColor,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    // ✅ theme-aware — caller can still override with color param
-    final resolvedColor = color ?? Theme.of(context).colorScheme.onSurface;
+    final resolvedColor =
+        color ?? Theme.of(context).colorScheme.onSurface;
+
+    final resolvedNairaColor =
+        nairaColor ?? resolvedColor;
 
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           "₦",
           style: TextStyle(
             fontWeight: fontWeight ?? FontWeight.w700,
             fontSize: size ?? 16,
-            color: sBvnButton,
+            color: resolvedNairaColor,
             height: 1.2,
           ),
         ),
         Text(
           text,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontWeight: fontWeight ?? FontWeight.w700,
             fontSize: size ?? 16,
             color: resolvedColor,
             height: 1.2,
-            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],

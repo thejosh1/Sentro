@@ -14,11 +14,14 @@ abstract class Routes {
   static const verifyPhone = '/verify-phone';
   static const login = '/login';
   static const resetPassword = '/reset-password';
+  static const confirmPin = '/confirm-pin';
 
 
   // dashboard screens
   static const mainView = '/screen';
+  static const confirmation = '/confirmation';
+  static const transactionHistory = '/transaction-history';
 
   //widgets
-static const confirmPin = '/confirm-pin';
+  static const confirmTransaction = '/confirm-transaction';
 }

@@ -21,22 +21,27 @@ class _GetStartedState extends State<GetStarted> {
     return Scaffold(
       backgroundColor: sBlack,
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(height: heightSize(68),),
-          SvgPicture.asset(
-            logo,
-            width: widthSize(204.79),
-            height: heightSize(48),
+          Center(
+            child: SvgPicture.asset(
+              logo,
+              width: widthSize(204.79),
+              height: heightSize(48),
+            ),
           ),
           Spacer(),
-          SvgPicture.asset(
-            logo1x,
-            width: widthSize(297.28),
-            height: heightSize(285),
+          Center(
+            child: SvgPicture.asset(
+              logo1x,
+              width: widthSize(297.28),
+              height: heightSize(285),
+            ),
           ),
           SizedBox(height: heightSize(89.75),),
-          Center(
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
             child: CText(
               text: 'Banking but 5% better',
               fontWeight: FontWeight.w400,
@@ -90,7 +95,7 @@ class _GetStartedState extends State<GetStarted> {
                   ),
                 ),
             
-                const SizedBox(width: 12),
+                const SizedBox(width: 20),
             
                 // Right — Register
                 Expanded(

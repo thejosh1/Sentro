@@ -19,8 +19,19 @@ class WelcomePage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SvgPicture.asset(logo, width: widthSize(199.53), height: heightSize(48),),
-          Spacer(),
+          SizedBox(height: heightSize(63),),
+          Center(
+            child: SvgPicture.asset(
+              logo,
+              width: widthSize(232.78),
+              height: heightSize(56),
+              colorFilter: const ColorFilter.mode(
+                sActionButton,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
+          SizedBox(height: heightSize(234),),
           Center(
             child: Container(
               width: widthSize(93),
@@ -36,7 +47,7 @@ class WelcomePage extends StatelessWidget {
           ),
           SizedBox(height: heightSize(23.53),),
           CText(
-            text: 'Welcome John!',
+            text: 'Welcome back, John!',
             size: 28,
             fontWeight: FontWeight.w400,
             fontFamily: 'Perfectly Vintages',

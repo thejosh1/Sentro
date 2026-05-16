@@ -27,6 +27,7 @@ class ConfirmBvn extends StatelessWidget {
             SizedBox(height: heightSize(64),),
             PageHeader(
               trailing: Stack(
+                clipBehavior: Clip.none,
                 children: [
                   Container(
                     width: widthSize(43.52),
@@ -48,7 +49,7 @@ class ConfirmBvn extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    top: 2,
+                    top: -5,
                     left: 0,
                     right: 0,
                     child: Container(
@@ -67,7 +68,7 @@ class ConfirmBvn extends StatelessWidget {
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

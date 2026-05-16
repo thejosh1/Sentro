@@ -83,7 +83,7 @@ class _MainViewState extends State<MainView> {
       onWillPop: () async => false,
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        extendBody: true,                           // ✅ allows center button to float above body
+        extendBody: true,
 
         body: IndexedStack(
           index: _selectedIndex,

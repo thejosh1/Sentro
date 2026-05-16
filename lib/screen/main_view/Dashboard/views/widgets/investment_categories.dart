@@ -11,6 +11,9 @@ class InvestmentCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       width: double.maxFinite,
       height: heightSize(144),
@@ -21,11 +24,22 @@ class InvestmentCategories extends StatelessWidget {
         bottom: heightSize(15),
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Values().buttonRadius20),
-        color: sContainerColor,
+        borderRadius: BorderRadius.circular(Values().buttonRadius10),
+        // Dark: existing dark container; Light: AppTheme surface
+        color: isDark ? sContainerColor : colorScheme.surface,
+        boxShadow: isDark
+            ? null
+            : [
+          BoxShadow(
+            color: colorScheme.primary.withOpacity(0.07),
+            blurRadius: 12,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Column(
         children: [
+          // ── Header row ───────────────────────────────────────────
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -35,6 +49,7 @@ class InvestmentCategories extends StatelessWidget {
                 fontWeight: FontWeight.w500,
                 size: 14,
                 height: 1.67,
+                color: colorScheme.onSurface,
               ),
               Row(
                 children: [
@@ -43,26 +58,63 @@ class InvestmentCategories extends StatelessWidget {
                     size: 14,
                     fontWeight: FontWeight.w400,
                     fontFamily: CFONT.REGULAR,
+                    // Light: use primary green for the action label
+                    color: isDark
+                        ? colorScheme.onSurface
+                        : colorScheme.primary,
                   ),
-                  SizedBox(width: widthSize(5),),
+                  SizedBox(width: widthSize(5)),
                   SvgPicture.asset(
                     addition,
                     width: widthSize(24),
                     height: heightSize(24),
+                    // Light: tint the + icon with primary green
+                    colorFilter: isDark
+                        ? null
+                        : ColorFilter.mode(
+                      colorScheme.primary,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
-          SizedBox(height: heightSize(14),),
+
+          SizedBox(height: heightSize(14)),
+
+          // ── Investment items row ──────────────────────────────────
+          // Investment icons are colourful illustrations (birthday cake,
+          // car, house, plane, utilities) — no tinting applied so their
+          // original Figma palette shows through in both themes.
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween, // ← evenly spread
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              investmentItem(assetName: birthday, title: 'My Birthday', callback: () {}),
-              investmentItem(assetName: car, title: 'New Car', callback: () {}),
-              investmentItem(assetName: house, title: 'New House', callback: () {}),
-              investmentItem(assetName: plane, title: 'Travel Plans', callback: () {}),
-              investmentItem(assetName: utilities, title: 'Utilities', callback: () {}),
+              investmentItem(
+                  assetName: birthday,
+                  title: 'My Birthday',
+                  colorScheme: colorScheme,
+                  callback: () {}),
+              investmentItem(
+                  assetName: car,
+                  title: 'New Car',
+                  colorScheme: colorScheme,
+                  callback: () {}),
+              investmentItem(
+                  assetName: house,
+                  title: 'New House',
+                  colorScheme: colorScheme,
+                  callback: () {}),
+              investmentItem(
+                  assetName: plane,
+                  title: 'Travel Plans',
+                  colorScheme: colorScheme,
+                  callback: () {}),
+              investmentItem(
+                  assetName: utilities,
+                  title: 'Utilities',
+                  colorScheme: colorScheme,
+                  callback: () {}),
             ],
           ),
         ],
@@ -74,11 +126,13 @@ class InvestmentCategories extends StatelessWidget {
 Widget investmentItem({
   required String assetName,
   required String title,
+  required ColorScheme colorScheme,
   required VoidCallback callback,
 }) {
   return _AnimatedCategoryItem(
     assetName: assetName,
     title: title,
+    colorScheme: colorScheme,
     onTap: callback,
   );
 }
@@ -86,11 +140,13 @@ Widget investmentItem({
 class _AnimatedCategoryItem extends StatefulWidget {
   final String assetName;
   final String title;
+  final ColorScheme colorScheme;
   final VoidCallback onTap;
 
   const _AnimatedCategoryItem({
     required this.assetName,
     required this.title,
+    required this.colorScheme,
     required this.onTap,
   });
 
@@ -126,6 +182,8 @@ class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
               AnimatedScale(
                 scale: _pressed ? 0.9 : 1.0,
                 duration: const Duration(milliseconds: 120),
+                // Investment icons are full-colour illustrations —
+                // no colorFilter so they render with their original hues.
                 child: SvgPicture.asset(
                   widget.assetName,
                   height: heightSize(55.88),
@@ -140,6 +198,7 @@ class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
                 fontWeight: FontWeight.w400,
                 fontFamily: CFONT.REGULAR,
                 height: 1.67,
+                color: widget.colorScheme.onSurface,
               ),
             ],
           ),

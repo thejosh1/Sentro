@@ -47,8 +47,8 @@ class ActionButton extends StatelessWidget {
         ? (borderColor ?? sActionButton)
         : (disabledBorderColor ?? sActionButton.withOpacity(0.3));
     final txtCol = enabled
-        ? (textColor ?? sNavContainer)
-        : (disabledTextColor ?? sNavContainer.withOpacity(0.6));
+        ? (textColor ?? Colors.white)
+        : (disabledTextColor ?? Colors.white.withOpacity(0.6));
 
     return GestureDetector(
       onTap: load ? null : callback,

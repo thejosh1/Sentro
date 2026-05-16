@@ -1,6 +1,9 @@
 
 import 'package:get/get.dart';
 import 'package:sentro/core/widgets/confirm_pin.dart';
+import 'package:sentro/core/widgets/confirm_transaction.dart';
+import 'package:sentro/screen/main_view/Dashboard/views/transaction_history.dart';
+import 'package:sentro/screen/onboarding/view/confirmation_page.dart';
 import 'package:sentro/core/widgets/welcome_page.dart';
 import 'package:sentro/screen/main_view/main_view.dart';
 import 'package:sentro/screen/onboarding/view/choose_sentro_tag.dart';
@@ -31,12 +34,15 @@ class AppPages {
   static const verifyPhone = Routes.verifyPhone;
   static const login = Routes.login;
   static const resetPassword = Routes.resetPassword;
+  static const confirmationScreen = Routes.confirmation;
 
   //dashboard
   static const mainview = Routes.mainView;
+  static const transactionHistory = Routes.transactionHistory;
 
   //shared
   static const confirmPin = Routes. confirmPin;
+  static const confirmTransaction = Routes.confirmTransaction;
   static final routes = [
     GetPage(
       name: Routes.initial,
@@ -102,6 +108,18 @@ class AppPages {
       page: () => const MainView(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+      name: confirmationScreen,
+      page: () => const ConfirmationPage(),
+    ),
+    GetPage(
+      name: confirmTransaction,
+      page: () => const ConfirmTransaction(),
+    ),
+    GetPage(
+      name: transactionHistory,
+      page: () => const TransactionHistory(),
     ),
   ];
 }

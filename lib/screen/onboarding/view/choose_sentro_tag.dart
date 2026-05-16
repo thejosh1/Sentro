@@ -35,6 +35,7 @@ class _ChooseSentroTagState extends State<ChooseSentroTag> {
               padding: EdgeInsets.only(right: widthSize(7)),
               child: PageHeader(
                 trailing: Stack(
+                  clipBehavior: Clip.none,
                   children: [
                     Container(
                       width: widthSize(43.52),
@@ -56,7 +57,7 @@ class _ChooseSentroTagState extends State<ChooseSentroTag> {
                       ),
                     ),
                     Positioned(
-                      top: 2,
+                      top: -5,
                       left: 0,
                       right: 0,
                       child: Container(
@@ -75,7 +76,7 @@ class _ChooseSentroTagState extends State<ChooseSentroTag> {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
