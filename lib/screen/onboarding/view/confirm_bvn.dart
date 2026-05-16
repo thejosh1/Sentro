@@ -89,6 +89,7 @@ class ConfirmBvn extends StatelessWidget {
             ),
             SizedBox(height: heightSize(30),),
             AppTextField(
+              height: heightSize(58),
               title: CText(
                 text: 'BVN - Full Names',
                 fontWeight: FontWeight.w500,

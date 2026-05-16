@@ -21,6 +21,12 @@ abstract class Routes {
   static const mainView = '/screen';
   static const confirmation = '/confirmation';
   static const transactionHistory = '/transaction-history';
+  static const electricity = '/electricity';
+  static const cableTV = '/cable-tv';
+  static const betting = '/betting';
+  static const internetService = '/internet-service';
+  static const wastemanagent = '/waste-management';
+  static const academics = '/academics';
 
   //widgets
   static const confirmTransaction = '/confirm-transaction';

@@ -36,6 +36,11 @@ final String more = _getImagePath('images/svg/more.svg');
 final String newText = _getImagePath('images/svg/new.svg');
 final String julo = _getImagePath('images/svg/julo.svg');
 final String data = _getImagePath('images/svg/data.svg');
+final String devices = _getImagePath('images/svg/devices.svg');
+final String teacher = _getImagePath('images/svg/teacher.svg');
+final String trash = _getImagePath('images/svg/trash.svg');
+final String tick = _getImagePath('images/svg/tick-circle.svg');
+final String addSquare = _getImagePath('images/svg/add-square.svg');
 
 //icons
 final String arrowBack = _getImagePath('icon/svg/arrow_back.svg');

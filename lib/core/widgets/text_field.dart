@@ -30,6 +30,8 @@ class AppTextField extends StatefulWidget {
   final Widget? prefixWidget;
   final bool hasBottomMargin;
   final bool showNairaPrefix;
+  final int? maxLines;
+  final num? suffixWidth;
 
   const AppTextField({
     super.key,
@@ -54,6 +56,8 @@ class AppTextField extends StatefulWidget {
     this.prefixWidget,
     this.hasBottomMargin = true,
     this.showNairaPrefix = false,
+    this.maxLines,
+    this.suffixWidth,
   });
 
   @override
@@ -94,9 +98,12 @@ class _AppTextFieldState extends State<AppTextField> {
     }
 
     if (widget.suffixWidget != null) {
-      return SizedBox(
-        width: 48,
-        child: Center(child: widget.suffixWidget),
+      return Padding(
+        padding: EdgeInsets.only(right: widthSize(21.23)),
+        child: SizedBox(
+          width: widthSize(widget.suffixWidth??48),
+          child: Center(child: widget.suffixWidget),
+        ),
       );
     }
 
@@ -114,6 +121,11 @@ class _AppTextFieldState extends State<AppTextField> {
       child: widget.prefixWidget,
     );
   }
+
+  final inputBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(Values().buttonRadius10),
+    borderSide: const BorderSide(color: Color(0xFF313131)),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +145,7 @@ class _AppTextFieldState extends State<AppTextField> {
           const SizedBox(height: 6),
         ],
         Container(
-          height: heightSize(widget.height ?? 56),
+          height: heightSize(widget.height ?? 58),
           width: size.width,
           margin: widget.hasBottomMargin
               ? const EdgeInsets.only(bottom: 10)
@@ -149,8 +161,8 @@ class _AppTextFieldState extends State<AppTextField> {
           ),
           child: TextFormField(
             textAlignVertical: TextAlignVertical.center,
-            expands: !_isObscured,
-            maxLines: _isObscured ? 1 : null,
+            expands: !_isObscured && widget.maxLines == null ? false : false, // ← always false now unless explicitly multiline
+            maxLines: _isObscured ? 1 : (widget.maxLines ?? 1),
             minLines: null,
             readOnly: widget.readOnly,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -168,15 +180,18 @@ class _AppTextFieldState extends State<AppTextField> {
 
               contentPadding: EdgeInsets.symmetric(
                 horizontal: widthSize(16),
-                vertical: heightSize(18),
+                vertical: heightSize(12),
               ),
 
               hintText: widget.hint,
               hintStyle: TextStyle(color: hintColor),
 
-              border: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
+              border: inputBorder,
+              enabledBorder: inputBorder,
+              focusedBorder: inputBorder,
+              errorBorder: inputBorder,
+              focusedErrorBorder: inputBorder,
+              disabledBorder: inputBorder,
 
               errorStyle: const TextStyle(
                 height: 0,

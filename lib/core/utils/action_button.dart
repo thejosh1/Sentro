@@ -59,7 +59,7 @@ class ActionButton extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 25),
         decoration: BoxDecoration(
           color: bg,
-          borderRadius: BorderRadius.circular(Values().buttonRadius10),
+          borderRadius: BorderRadius.circular(Values().buttonRadius10+1.17),
           border: Border.all(width: 1, color: bord),
         ),
         child: Center(

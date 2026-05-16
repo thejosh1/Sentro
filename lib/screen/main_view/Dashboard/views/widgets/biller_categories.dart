@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
@@ -10,6 +11,8 @@ import 'package:sentro/core/constants/values.dart';
 import 'package:sentro/core/utils/label_container.dart';
 import 'package:sentro/core/utils/text.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/home_page.dart';
+
+import '../../../../../core/router/app_pages.dart';
 
 class BillerCategories extends StatelessWidget {
   const BillerCategories({super.key});
@@ -58,7 +61,235 @@ class BillerCategories extends StatelessWidget {
                       title: 'Top Up',
                       isDark: isDark,
                       colorScheme: colorScheme,
-                      callback: () {},
+                      callback: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: true,
+
+                          barrierColor: Colors.black.withOpacity(0.45),
+                          builder: (context) {
+                            bool isDataSelected = false;
+
+                            return StatefulBuilder(
+                              builder: (context, setDialogState) {
+                                return Dialog(
+                                  backgroundColor: isDark
+                                      ? sContainerColor
+                                      : Theme.of(context).scaffoldBackgroundColor,
+                                  insetPadding: EdgeInsets.symmetric(horizontal: widthSize(20)),
+                                  child: Container(
+                                    height: heightSize(499),
+                                    width: double.maxFinite,
+                                    padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
+                                    decoration: BoxDecoration(
+                                      color: isDark
+                                          ? sContainerColor
+                                          : Theme.of(context).scaffoldBackgroundColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(height: heightSize(15),),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              width: widthSize(156.8),
+                                              height: heightSize(31),
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(113.27),
+                                                  color: sButtonFillDark,
+                                                  border: Border.all(color: sDarkBorder)
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    wallet,
+                                                    width: widthSize(24),
+                                                    height: heightSize(24),
+                                                  ),
+                                                  SizedBox(width: widthSize(3.4),),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: '₦50,000',
+                                                          style: TextStyle(
+                                                            fontSize: 15.86,
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: CFONT.REGULAR,
+                                                            height: 22.65 / 15.86,
+                                                          ),
+                                                        ),
+
+                                                        TextSpan(
+                                                          text: '.00',
+                                                          style: TextStyle(
+                                                            fontSize: 10,
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: CFONT.REGULAR,
+                                                            height: 22.65 / 10,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SvgPicture.asset(
+                                                    visibilityOff,
+                                                    width: widthSize(24),
+                                                    height: heightSize(24),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.back();
+                                              },
+                                              child: Container(
+                                                width: widthSize(33.33),
+                                                height: heightSize(33.33),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.white.withOpacity(0.1),
+                                                ),
+                                                child: Center(
+                                                  child: SvgPicture.asset(cancelWhite),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: heightSize(13)),
+                                        CText(
+                                          text: 'Mobile Top up',
+                                          size: 18,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: CFONT.MEDIUM,
+                                        ),
+                                        SizedBox(height: heightSize(13)),
+                                        CText(
+                                          text: 'Top up your Airtime and Data',
+                                          size: 14,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: CFONT.REGULAR,
+                                        ),
+                                        SizedBox(height: heightSize(20)),
+                                        Container(
+                                          width: widthSize(214),
+                                          height: heightSize(55),
+                                          padding: EdgeInsets.symmetric(horizontal: widthSize(6)),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(40),
+                                            color: sDescriptionColor,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              // Airtime
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setDialogState(() {
+                                                    isDataSelected = false;
+                                                  });
+                                                },
+                                                child: AnimatedContainer(
+                                                  duration: const Duration(milliseconds: 250),
+                                                  width: widthSize(100),
+                                                  height: heightSize(43),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(40),
+                                                    color: !isDataSelected
+                                                        ? sActiveColor
+                                                        : Colors.transparent,
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      SvgPicture.asset(
+                                                        mobileWhite,
+                                                        width: widthSize(16),
+                                                        height: heightSize(20),
+                                                        colorFilter: !isDataSelected
+                                                            ? null
+                                                            : ColorFilter.mode(
+                                                          Colors.white.withOpacity(0.7),
+                                                          BlendMode.srcIn,
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: widthSize(8)),
+                                                      CText(
+                                                        text: 'Airtime',
+                                                        fontFamily: CFONT.REGULAR,
+                                                        fontWeight: FontWeight.w400,
+                                                        size: 14,
+                                                        color: !isDataSelected
+                                                            ? sNavContainer
+                                                            : Colors.white,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+
+                                              // Data
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setDialogState(() { // ← use setDialogState, not setState
+                                                    isDataSelected = true;
+                                                  });
+                                                },
+                                                child: AnimatedContainer(
+                                                  duration: const Duration(milliseconds: 250),
+                                                  width: widthSize(100),
+                                                  height: heightSize(43),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(40),
+                                                    color: isDataSelected
+                                                        ? sActiveColor
+                                                        : Colors.transparent,
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      SvgPicture.asset(
+                                                        data,
+                                                        width: widthSize(24),
+                                                        height: heightSize(24),
+                                                        colorFilter: ColorFilter.mode(
+                                                          isDataSelected
+                                                              ? sNavContainer
+                                                              : Colors.white.withOpacity(0.7),
+                                                          BlendMode.srcIn,
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: widthSize(5)),
+                                                      CText(
+                                                        text: 'Data',
+                                                        fontWeight: FontWeight.w400,
+                                                        size: 14,
+                                                        color: isDataSelected
+                                                            ? sNavContainer
+                                                            : Colors.white,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(height: heightSize(40)),
+                                        LabelContainer(isData: isDataSelected,),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
                       color: sLightBlue,
                     ),
                     billerItem(
@@ -66,15 +297,510 @@ class BillerCategories extends StatelessWidget {
                       title: 'Pay Bills',
                       isDark: isDark,
                       colorScheme: colorScheme,
-                      callback: () {},
-                      color: sPurple,
+                      callback: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          barrierColor: Colors.black.withOpacity(0.45),
+                          builder: (context) {
+                            return StatefulBuilder(
+                              builder: (context, setDialogState) {
+                                return Dialog(
+                                  backgroundColor: isDark
+                                      ? sContainerColor
+                                      : Theme.of(context).scaffoldBackgroundColor,
+                                  insetPadding: EdgeInsets.symmetric(horizontal: widthSize(20)),
+                                  child: Container(
+                                    height: heightSize(629),
+                                    width: double.maxFinite,
+                                    padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
+                                    decoration: BoxDecoration(
+                                      color: isDark
+                                          ? sContainerColor
+                                          : Theme.of(context).scaffoldBackgroundColor,
+                                      borderRadius: BorderRadius.circular(24),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(height: heightSize(15),),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              width: widthSize(156.8),
+                                              height: heightSize(31),
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(113.27),
+                                                  color: sButtonFillDark,
+                                                  border: Border.all(color: sDarkBorder)
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    wallet,
+                                                    width: widthSize(24),
+                                                    height: heightSize(24),
+                                                  ),
+                                                  SizedBox(width: widthSize(3.4),),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: '₦50,000',
+                                                          style: TextStyle(
+                                                            fontSize: 15.86,
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: CFONT.REGULAR,
+                                                            height: 22.65 / 15.86,
+                                                          ),
+                                                        ),
+
+                                                        TextSpan(
+                                                          text: '.00',
+                                                          style: TextStyle(
+                                                            fontSize: 10,
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: CFONT.REGULAR,
+                                                            height: 22.65 / 10,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  // SvgPicture.asset(
+                                                  //   visibilityOff,
+                                                  //   width: widthSize(24),
+                                                  //   height: heightSize(24),
+                                                  // ),
+                                                ],
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.back();
+                                              },
+                                              child: Container(
+                                                width: widthSize(33.33),
+                                                height: heightSize(33.33),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.white.withOpacity(0.1),
+                                                ),
+                                                child: Center(
+                                                  child: SvgPicture.asset(cancelWhite),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: heightSize(21)),
+                                        CText(
+                                          text: 'Bill Payment',
+                                          size: 18,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: CFONT.MEDIUM,
+                                          height: 20/18,
+                                        ),
+                                        SizedBox(height: heightSize(2.5)),
+                                        CText(
+                                          text: 'Pay for all types of utility bills easy and quick   ',
+                                          size: 14,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: CFONT.REGULAR,
+                                          height: 20/14,
+                                          color: sConfirmTextColor,
+                                        ),
+                                        SizedBox(height: heightSize(27.5)),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.toNamed(Routes.electricity);
+                                              },
+                                              child: Container(
+                                                width: double.maxFinite,
+                                                height: heightSize(70),
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: widthSize(12),
+                                                  vertical: heightSize(12),
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  color: sDarkFill,
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      width: widthSize(46),
+                                                      height: heightSize(46),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(12),
+                                                        color: sNavContainer.withOpacity(0.1),
+                                                      ),
+                                                      child: Center(
+                                                        child: SvgPicture.asset(
+                                                          electricity,
+                                                          width: widthSize(20.01),
+                                                          height: heightSize(27.5),
+                                                          colorFilter: ColorFilter.mode(
+                                                            sNavContainer,
+                                                            BlendMode.srcIn,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: widthSize(10),),
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        CText(
+                                                          text: 'Electricity',
+                                                          fontFamily: CFONT.MEDIUM,
+                                                          fontWeight: FontWeight.w500,
+                                                          size: 14,
+                                                        ),
+                                                        CText(
+                                                          text: 'Keep your lights on, buy light token',
+                                                          fontWeight: FontWeight.w400,
+                                                          size: 12,
+                                                          fontFamily: CFONT.REGULAR,
+                                                          color: Color(0xFF979797),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: heightSize(10),),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.toNamed(Routes.betting);
+                                              },
+                                              child: Container(
+                                                width: double.maxFinite,
+                                                height: heightSize(70),
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: widthSize(12),
+                                                  vertical: heightSize(12),
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  color: sDarkFill,
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      width: widthSize(46),
+                                                      height: heightSize(46),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(12),
+                                                        color: sNavContainer.withOpacity(0.1),
+                                                      ),
+                                                      child: Center(
+                                                        child: SvgPicture.asset(
+                                                          betting,
+                                                          width: widthSize(20.01),
+                                                          height: heightSize(27.5),
+                                                          colorFilter: ColorFilter.mode(
+                                                            sNavContainer,
+                                                            BlendMode.srcIn,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: widthSize(10),),
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        CText(
+                                                          text: 'Betting',
+                                                          fontFamily: CFONT.MEDIUM,
+                                                          fontWeight: FontWeight.w500,
+                                                          size: 14,
+                                                        ),
+                                                        CText(
+                                                          text: 'Bet your best, fund your betting wallet',
+                                                          fontWeight: FontWeight.w400,
+                                                          size: 12,
+                                                          fontFamily: CFONT.REGULAR,
+                                                          color: Color(0xFF979797),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: heightSize(10),),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.toNamed(Routes.cableTV);
+                                              },
+                                              child: Container(
+                                                width: double.maxFinite,
+                                                height: heightSize(70),
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: widthSize(12),
+                                                  vertical: heightSize(12),
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  color: sDarkFill,
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      width: widthSize(46),
+                                                      height: heightSize(46),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(12),
+                                                        color: sNavContainer.withOpacity(0.1),
+                                                      ),
+                                                      child: Center(
+                                                        child: SvgPicture.asset(
+                                                          devices,
+                                                          width: widthSize(20.01),
+                                                          height: heightSize(27.5),
+                                                          colorFilter: ColorFilter.mode(
+                                                            sNavContainer,
+                                                            BlendMode.srcIn,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: widthSize(10),),
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        CText(
+                                                          text: 'Cable TV',
+                                                          fontFamily: CFONT.MEDIUM,
+                                                          fontWeight: FontWeight.w500,
+                                                          size: 14,
+                                                        ),
+                                                        CText(
+                                                          text: 'Subscribe for your DSTV, GOTV, Startimes etc',
+                                                          fontWeight: FontWeight.w400,
+                                                          size: 12,
+                                                          fontFamily: CFONT.REGULAR,
+                                                          color: Color(0xFF979797),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: heightSize(10),),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.toNamed(Routes.academics);
+                                              },
+                                              child: Container(
+                                                width: double.maxFinite,
+                                                height: heightSize(70),
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: widthSize(12),
+                                                  vertical: heightSize(12),
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  color: sDarkFill,
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      width: widthSize(46),
+                                                      height: heightSize(46),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(12),
+                                                        color: sNavContainer.withOpacity(0.1),
+                                                      ),
+                                                      child: Center(
+                                                        child: SvgPicture.asset(
+                                                          teacher,
+                                                          width: widthSize(20.01),
+                                                          height: heightSize(27.5),
+                                                          colorFilter: ColorFilter.mode(
+                                                            sNavContainer,
+                                                            BlendMode.srcIn,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: widthSize(10),),
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        CText(
+                                                          text: 'Academics',
+                                                          fontFamily: CFONT.MEDIUM,
+                                                          fontWeight: FontWeight.w500,
+                                                          size: 14,
+                                                        ),
+                                                        CText(
+                                                          text: 'Pay academics bills such as JAMB, WAEC, NECO',
+                                                          fontWeight: FontWeight.w400,
+                                                          size: 12,
+                                                          fontFamily: CFONT.REGULAR,
+                                                          color: Color(0xFF979797),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: heightSize(10),),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.toNamed(Routes.wastemanagent);
+                                              },
+                                              child: Container(
+                                                width: double.maxFinite,
+                                                height: heightSize(70),
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: widthSize(12),
+                                                  vertical: heightSize(12),
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  color: sDarkFill,
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      width: widthSize(46),
+                                                      height: heightSize(46),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(12),
+                                                        color: sNavContainer.withOpacity(0.1),
+                                                      ),
+                                                      child: Center(
+                                                        child: SvgPicture.asset(
+                                                          trash,
+                                                          width: widthSize(20.01),
+                                                          height: heightSize(27.5),
+                                                          colorFilter: ColorFilter.mode(
+                                                            sNavContainer,
+                                                            BlendMode.srcIn,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: widthSize(10),),
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        CText(
+                                                          text: 'Waste Management',
+                                                          fontFamily: CFONT.MEDIUM,
+                                                          fontWeight: FontWeight.w500,
+                                                          size: 14,
+                                                        ),
+                                                        CText(
+                                                          text: 'Pay for your waste to the right management',
+                                                          fontWeight: FontWeight.w400,
+                                                          size: 12,
+                                                          fontFamily: CFONT.REGULAR,
+                                                          color: Color(0xFF979797),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: heightSize(10),),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.toNamed(Routes.internetService);
+                                              },
+                                              child: Container(
+                                                width: double.maxFinite,
+                                                height: heightSize(70),
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: widthSize(12),
+                                                  vertical: heightSize(12),
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  color: sDarkFill,
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      width: widthSize(46),
+                                                      height: heightSize(46),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(12),
+                                                        color: sNavContainer.withOpacity(0.1),
+                                                      ),
+                                                      child: Center(
+                                                        child: SvgPicture.asset(
+                                                          globalSearch,
+                                                          width: widthSize(20.01),
+                                                          height: heightSize(27.5),
+                                                          colorFilter: ColorFilter.mode(
+                                                            sNavContainer,
+                                                            BlendMode.srcIn,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: widthSize(10),),
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        CText(
+                                                          text: 'Internet Provider',
+                                                          fontFamily: CFONT.MEDIUM,
+                                                          fontWeight: FontWeight.w500,
+                                                          size: 14,
+                                                        ),
+                                                        CText(
+                                                          text: 'Pay for your preferred internet service provider',
+                                                          fontWeight: FontWeight.w400,
+                                                          size: 12,
+                                                          fontFamily: CFONT.REGULAR,
+                                                          color: Color(0xFF979797),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                      color: sYello,
                     ),
                     billerItem(
                       assetName: betting,
                       title: 'Betting',
                       isDark: isDark,
                       colorScheme: colorScheme,
-                      callback: () {},
+                      callback: () {
+                        Get.toNamed(Routes.betting);
+                      },
                       color: sOrange,
                     ),
                     billerItem(
@@ -546,7 +1272,7 @@ class _AllServicesSheet extends StatelessWidget {
                                   );
                                 },
                               );
-                            }
+                            },
                           ),
                           _item(
                             assetName: data,
@@ -783,7 +1509,9 @@ class _AllServicesSheet extends StatelessWidget {
                             assetName: electricity,
                             title: 'Electricity',
                             tintColor: Colors.white,
-                            callback: () {},
+                            callback: () {
+                              Get.toNamed(Routes.electricity);
+                            },
                             iconHeight: heightSize(34.38),
                             iconWidth: widthSize(34.38),
                           ),
@@ -1073,7 +1801,230 @@ class _AllServicesSheet extends StatelessWidget {
                                 assetName: data,
                                 title: 'Data',
                                 tintColor: Colors.white,
-                                callback: () {},
+                                callback: () {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: true,
+
+                                    barrierColor: Colors.black.withOpacity(0.45),
+                                    builder: (context) {
+                                      bool isDataSelected = true;
+
+                                      return StatefulBuilder(
+                                        builder: (context, setDialogState) {
+                                          return Dialog(
+                                            backgroundColor: isDark
+                                                ? sContainerColor
+                                                : Theme.of(context).scaffoldBackgroundColor,
+                                            insetPadding: EdgeInsets.symmetric(horizontal: widthSize(20)),
+                                            child: Container(
+                                              height: heightSize(499),
+                                              width: double.maxFinite,
+                                              padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
+                                              decoration: BoxDecoration(
+                                                color: isDark
+                                                    ? sContainerColor
+                                                    : Theme.of(context).scaffoldBackgroundColor,
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(height: heightSize(15),),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        width: widthSize(156.8),
+                                                        height: heightSize(31),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(113.27),
+                                                            color: sButtonFillDark,
+                                                            border: Border.all(color: sDarkBorder)
+                                                        ),
+                                                        child: Row(
+                                                          children: [
+                                                            SvgPicture.asset(
+                                                              wallet,
+                                                              width: widthSize(24),
+                                                              height: heightSize(24),
+                                                            ),
+                                                            SizedBox(width: widthSize(3.4),),
+                                                            RichText(
+                                                              text: TextSpan(
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text: '₦50,000',
+                                                                    style: TextStyle(
+                                                                      fontSize: 15.86,
+                                                                      fontWeight: FontWeight.w400,
+                                                                      fontFamily: CFONT.REGULAR,
+                                                                      height: 22.65 / 15.86,
+                                                                    ),
+                                                                  ),
+
+                                                                  TextSpan(
+                                                                    text: '.00',
+                                                                    style: TextStyle(
+                                                                      fontSize: 10,
+                                                                      fontWeight: FontWeight.w400,
+                                                                      fontFamily: CFONT.REGULAR,
+                                                                      height: 22.65 / 10,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            SvgPicture.asset(
+                                                              visibilityOff,
+                                                              width: widthSize(24),
+                                                              height: heightSize(24),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: widthSize(33.33),
+                                                        height: heightSize(33.33),
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          color: Colors.white.withOpacity(0.1),
+                                                        ),
+                                                        child: Center(
+                                                          child: SvgPicture.asset(cancelWhite),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: heightSize(13)),
+                                                  CText(
+                                                    text: 'Mobile Top up',
+                                                    size: 18,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily: CFONT.MEDIUM,
+                                                  ),
+                                                  SizedBox(height: heightSize(13)),
+                                                  CText(
+                                                    text: 'Top up your Airtime and Data',
+                                                    size: 14,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: CFONT.REGULAR,
+                                                  ),
+                                                  SizedBox(height: heightSize(20)),
+                                                  Container(
+                                                    width: widthSize(214),
+                                                    height: heightSize(55),
+                                                    padding: EdgeInsets.symmetric(horizontal: widthSize(6)),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(40),
+                                                      color: sDescriptionColor,
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        // Airtime
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            setDialogState(() {
+                                                              isDataSelected = false;
+                                                            });
+                                                          },
+                                                          child: AnimatedContainer(
+                                                            duration: const Duration(milliseconds: 250),
+                                                            width: widthSize(100),
+                                                            height: heightSize(43),
+                                                            decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius.circular(40),
+                                                              color: !isDataSelected
+                                                                  ? sActiveColor
+                                                                  : Colors.transparent,
+                                                            ),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                SvgPicture.asset(
+                                                                  mobileWhite,
+                                                                  width: widthSize(16),
+                                                                  height: heightSize(20),
+                                                                  colorFilter: !isDataSelected
+                                                                      ? null
+                                                                      : ColorFilter.mode(
+                                                                    Colors.white.withOpacity(0.7),
+                                                                    BlendMode.srcIn,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(width: widthSize(8)),
+                                                                CText(
+                                                                  text: 'Airtime',
+                                                                  fontFamily: CFONT.REGULAR,
+                                                                  fontWeight: FontWeight.w400,
+                                                                  size: 14,
+                                                                  color: !isDataSelected
+                                                                      ? sNavContainer
+                                                                      : Colors.white,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+
+                                                        // Data
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            setDialogState(() { // ← use setDialogState, not setState
+                                                              isDataSelected = true;
+                                                            });
+                                                          },
+                                                          child: AnimatedContainer(
+                                                            duration: const Duration(milliseconds: 250),
+                                                            width: widthSize(100),
+                                                            height: heightSize(43),
+                                                            decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius.circular(40),
+                                                              color: isDataSelected
+                                                                  ? sActiveColor
+                                                                  : Colors.transparent,
+                                                            ),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                SvgPicture.asset(
+                                                                  data,
+                                                                  width: widthSize(24),
+                                                                  height: heightSize(24),
+                                                                  colorFilter: ColorFilter.mode(
+                                                                    isDataSelected
+                                                                        ? sNavContainer
+                                                                        : Colors.white.withOpacity(0.7),
+                                                                    BlendMode.srcIn,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(width: widthSize(5)),
+                                                                CText(
+                                                                  text: 'Data',
+                                                                  fontWeight: FontWeight.w400,
+                                                                  size: 14,
+                                                                  color: isDataSelected
+                                                                      ? sNavContainer
+                                                                      : Colors.white,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: heightSize(40)),
+                                                  LabelContainer(isData: isDataSelected,),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
                                 iconHeight: heightSize(23.46),
                                 iconWidth: widthSize(30),
                                 isNew: true,
@@ -1082,7 +2033,9 @@ class _AllServicesSheet extends StatelessWidget {
                                 assetName: betting,
                                 title: 'Betting',
                                 tintColor: Colors.white,
-                                callback: () {},
+                                callback: () {
+                                  Get.toNamed(Routes.betting);
+                                },
                                 iconHeight: heightSize(36),
                                 iconWidth: widthSize(36),
                               ),
@@ -1090,7 +2043,9 @@ class _AllServicesSheet extends StatelessWidget {
                                 assetName: electricity,
                                 title: 'Electricity',
                                 tintColor: Colors.white,
-                                callback: () {},
+                                callback: () {
+                                  Get.toNamed(Routes.electricity);
+                                },
                                 iconHeight: heightSize(34.38),
                                 iconWidth: widthSize(34.38),
                               ),

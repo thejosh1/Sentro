@@ -2,7 +2,13 @@
 import 'package:get/get.dart';
 import 'package:sentro/core/widgets/confirm_pin.dart';
 import 'package:sentro/core/widgets/confirm_transaction.dart';
+import 'package:sentro/screen/main_view/Dashboard/views/academics.dart';
+import 'package:sentro/screen/main_view/Dashboard/views/betting.dart';
+import 'package:sentro/screen/main_view/Dashboard/views/cable_tv.dart';
+import 'package:sentro/screen/main_view/Dashboard/views/electricity.dart';
+import 'package:sentro/screen/main_view/Dashboard/views/internet_service_provider.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/transaction_history.dart';
+import 'package:sentro/screen/main_view/Dashboard/views/waste_management.dart';
 import 'package:sentro/screen/onboarding/view/confirmation_page.dart';
 import 'package:sentro/core/widgets/welcome_page.dart';
 import 'package:sentro/screen/main_view/main_view.dart';
@@ -39,6 +45,12 @@ class AppPages {
   //dashboard
   static const mainview = Routes.mainView;
   static const transactionHistory = Routes.transactionHistory;
+  static const electricity = Routes.electricity;
+  static const cableTv = Routes.cableTV;
+  static const betting = Routes.betting;
+  static const internetService = Routes.internetService;
+  static const wasteManagement = Routes.wastemanagent;
+  static const academics = Routes.academics;
 
   //shared
   static const confirmPin = Routes. confirmPin;
@@ -120,6 +132,30 @@ class AppPages {
     GetPage(
       name: transactionHistory,
       page: () => const TransactionHistory(),
+    ),
+    GetPage(
+      name: electricity,
+      page: () => const Electricity(),
+    ),
+    GetPage(
+      name: cableTv,
+      page: () => const CableTv(),
+    ),
+    GetPage(
+      name: betting,
+      page: () => const Betting(),
+    ),
+    GetPage(
+      name: internetService,
+      page: () => const InternetServiceProvider(),
+    ),
+    GetPage(
+      name: wasteManagement,
+      page: () => const WasteManagement(),
+    ),
+    GetPage(
+      name: academics,
+      page: () => const Academics(),
     ),
   ];
 }
