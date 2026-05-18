@@ -11,9 +11,12 @@ final String notification = _getImagePath('images/svg/notification.svg');
 final String sendMoney = _getImagePath('images/svg/send-money.svg');
 final String receiveMoney = _getImagePath('images/svg/receive-money.svg');
 final String mobile = _getImagePath('images/svg/mobile.svg');
-final String electricity = _getImagePath('images/svg/flash.svg');
+final String mobileWhite = _getImagePath('images/svg/mobile-white.svg');
+final String electricity = _getImagePath('images/svg/electricity.svg');
 final String betting = _getImagePath('images/svg/betting.svg');
+final String bettingWhite = _getImagePath('images/svg/betting_white.svg');
 final String savings = _getImagePath('images/svg/savings.svg');
+final String savingsWhite = _getImagePath('images/svg/savings_white.svg');
 final String loansService = _getImagePath('images/svg/loans.svg');
 final String gift = _getImagePath('images/svg/gift.svg');
 final String key = _getImagePath('images/svg/key-square.svg');
@@ -26,7 +29,6 @@ final String plane = _getImagePath('images/svg/plane.svg');
 final String utilities = _getImagePath('images/svg/utilities.svg');
 final String arrowUp = _getImagePath('images/svg/arrow-up.svg');
 final String globalSearch = _getImagePath('images/svg/global-search.svg');
-final String mobileWhite = _getImagePath('images/svg/mobile-white.svg');
 final String electricityWhite = _getImagePath('images/svg/electricity-white.svg');
 final String keySquareWhite = _getImagePath('images/svg/key-square-white.svg');
 final String discountCircleWhite = _getImagePath('images/svg/discount-circle-white.svg');
@@ -41,11 +43,25 @@ final String teacher = _getImagePath('images/svg/teacher.svg');
 final String trash = _getImagePath('images/svg/trash.svg');
 final String tick = _getImagePath('images/svg/tick-circle.svg');
 final String addSquare = _getImagePath('images/svg/add-square.svg');
+final String bank = _getImagePath('images/svg/bank.svg');
+final String sentro = _getImagePath('images/svg/sentro.svg');
+final String moneyReceive = _getImagePath('images/svg/money-receive.svg');
+final String coin = _getImagePath('images/svg/coin.svg');
+final String transferHistory = _getImagePath('images/svg/transfer_history.svg');
+final String cardWhite = _getImagePath('images/svg/cards-white.svg');
+final String loanWhite = _getImagePath('images/svg/loan-white.svg');
+final String qrPayWhite = _getImagePath('images/svg/qrpay-white.svg');
+final String bnpl = _getImagePath('images/svg/bnpl.svg');
+final String phone = _getImagePath('images/svg/phone.svg');
+final String dataTopUp = _getImagePath('images/svg/data-topup.svg');
+final String barChat = _getImagePath('images/svg/bar_chart.svg');
 
 //icons
-final String arrowBack = _getImagePath('icon/svg/arrow_back.svg');
+final String arrowBack = _getImagePath('icon/svg/arrow-back.svg');
+final String arrowBackWhite = _getImagePath('icon/svg/arrow-back-white.svg');
 final String call = _getImagePath('icon/svg/call.svg');
 final String headPhone = _getImagePath('icon/svg/headphone.svg');
+final String headPhoneWhite = _getImagePath('icon/svg/headphone_white.svg');
 final String hide = _getImagePath('icon/svg/hide.svg');
 final String cancel = _getImagePath('icon/svg/cancel.svg');
 final String home = _getImagePath('icon/svg/home.svg');
@@ -61,10 +77,20 @@ final String visibilityOff = _getImagePath('icon/svg/visibility-off.svg');
 final String cancelWhite = _getImagePath('icon/svg/cancel-white.svg');
 final String addUser = _getImagePath('icon/svg/add-user.svg');
 final String search = _getImagePath('icon/svg/search.svg');
+final String notif = _getImagePath('icon/svg/notif.svg');
+final String union = _getImagePath('icon/svg/union.svg');
+final String arrowRight = _getImagePath('icon/svg/arrow-right.svg');
+final String avatarTransfer = _getImagePath('icon/svg/avatar-transfer.svg');
+final String tickSquare = _getImagePath('icon/svg/tick-square.svg');
+final String add = _getImagePath('icon/svg/add.svg');
+final String calendar = _getImagePath('icon/svg/calendar-2.svg');
+final String tickLight = _getImagePath('icon/svg/tick-light.svg');
 
 //png icons
 final String aiIcon = _getImagePath('icon/png/ai.png');
 final String avatar = _getImagePath('icon/png/avatar.png');
+final String copy = _getImagePath('icon/png/copy.png');
+final String share = _getImagePath('icon/png/share.png');
 
 
 //png images
@@ -72,5 +98,12 @@ final String mtn = _getImagePath('images/png/mtn.png');
 final String glo = _getImagePath('images/png/glo.png');
 final String airtel = _getImagePath('images/png/airtel.png');
 final String etisalat = _getImagePath('images/png/etisalat.png');
+final String unionBank = _getImagePath('images/png/union-bank.png');
+final String accessBank = _getImagePath('images/png/access-bank.png');
+final String gtBank = _getImagePath('images/png/gt-bank.png');
+final String user1 = _getImagePath('images/png/user1.png');
+final String user2 = _getImagePath('images/png/user2.png');
+final String user3 = _getImagePath('images/png/user3.png');
+final String sentroTag = _getImagePath('images/png/sentro-tag.png');
 
 String _getImagePath(String imageName) => imageAssetRoot + imageName;

@@ -59,20 +59,14 @@ class _WasteManagementState extends State<WasteManagement> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: widthSize(35),
-                  height: heightSize(35),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.1),
-                  ),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      arrowBack,
-                      width: widthSize(14.87),
-                      height: heightSize(13.12),
-                      colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                    ),
+                GestureDetector(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: SvgPicture.asset(
+                    arrowBackWhite,
+                    width: widthSize(42),
+                    height: heightSize(42),
                   ),
                 ),
                 Row(

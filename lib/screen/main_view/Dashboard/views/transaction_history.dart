@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
@@ -25,23 +26,24 @@ class TransactionItem {
     required this.amount,
     required this.time,
     required this.status,
-    this.iconWidth = 27.36,
-    this.iconHeight = 27.36,
+    this.iconWidth = 38,
+    this.iconHeight = 38,
   });
 }
 
 final List<TransactionItem> _dummyTransactions = [
-  TransactionItem(icon: transfer, type: 'Transfer to Bank', amount: '₦500.50', time: '12:45 · 14 May, 2026', status: TransactionStatus.successful),
-  TransactionItem(icon: data, type: 'Mobile Data', amount: '₦1,000.00', time: '10:30 · 14 May, 2026', status: TransactionStatus.successful, iconWidth: 22.8, iconHeight: 20.4),
-  TransactionItem(icon: mobileWhite, type: 'Airtime Top-up', amount: '₦200.00', time: '09:15 · 14 May, 2026', status: TransactionStatus.failed, iconWidth: 22.8, iconHeight: 20.4),
+  TransactionItem(icon: transferHistory, type: 'Transfer to Bank', amount: '₦500.50', time: '12:45 · 14 May, 2026', status: TransactionStatus.successful),
+  TransactionItem(icon: transferHistory, type: 'Transfer to Sentro Tag', amount: '₦500.50', time: '12:45 · 14 May, 2026', status: TransactionStatus.successful),
+  TransactionItem(icon: data, type: 'Mobile Data - MTN 2GB - Daily', amount: '₦1,000.00', time: '10:30 · 14 May, 2026', status: TransactionStatus.successful,),
+  TransactionItem(icon: mobileWhite, type: 'Airtime Top-up', amount: '₦200.00', time: '09:15 · 14 May, 2026', status: TransactionStatus.failed,),
   TransactionItem(icon: electricity, type: 'Electricity Bill', amount: '₦5,000.00', time: '08:00 · 13 May, 2026', status: TransactionStatus.successful,),
   TransactionItem(icon: loansService, type: 'Loan Repayment', amount: '₦10,000.00', time: '07:45 · 13 May, 2026', status: TransactionStatus.pending),
   TransactionItem(icon: gift, type: 'Gift Card Purchase', amount: '₦3,500.00', time: '18:20 · 12 May, 2026', status: TransactionStatus.successful),
-  TransactionItem(icon: betting, type: 'Betting Deposit', amount: '₦750.00', time: '16:10 · 12 May, 2026', status: TransactionStatus.failed),
-  TransactionItem(icon: savings, type: 'Savings Deposit', amount: '₦20,000.00', time: '14:00 · 11 May, 2026', status: TransactionStatus.successful),
-  TransactionItem(icon: invest, type: 'Investment', amount: '₦500.00', time: '11:30 · 11 May, 2026', status: TransactionStatus.successful, iconWidth: 13.39, iconHeight: 15.73),
-  TransactionItem(icon: invest, type: 'Investment - Withdrawal', amount: '₦500.00', time: '11:30 · 11 May, 2026', status: TransactionStatus.successful, iconWidth: 13.39, iconHeight: 15.73),
-  TransactionItem(icon: mobileWhite, type: 'Airtime Top-up', amount: '₦100.00', time: '09:00 · 10 May, 2026', status: TransactionStatus.pending, iconWidth: 22.8, iconHeight: 20.4),
+  TransactionItem(icon: bettingWhite, type: 'Betting Deposit', amount: '₦750.00', time: '16:10 · 12 May, 2026', status: TransactionStatus.failed),
+  TransactionItem(icon: savingsWhite, type: 'Savings Deposit', amount: '₦20,000.00', time: '14:00 · 11 May, 2026', status: TransactionStatus.successful),
+  TransactionItem(icon: invest, type: 'Investment', amount: '₦500.00', time: '11:30 · 11 May, 2026', status: TransactionStatus.successful,),
+  TransactionItem(icon: invest, type: 'Investment - Withdrawal', amount: '₦500.00', time: '11:30 · 11 May, 2026', status: TransactionStatus.successful,),
+  TransactionItem(icon: mobileWhite, type: 'Airtime Top-up', amount: '₦100.00', time: '09:00 · 10 May, 2026', status: TransactionStatus.pending,),
 ];
 
 // ── Screen ─────────────────────────────────────────────────────────────────
@@ -114,20 +116,14 @@ class _TransactionHistoryState extends State<TransactionHistory> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: widthSize(35),
-                  height: heightSize(35),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.1),
-                  ),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      arrowBack,
-                      width: widthSize(14.87),
-                      height: heightSize(13.12),
-                      colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                    ),
+                GestureDetector(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: SvgPicture.asset(
+                    arrowBackWhite,
+                    width: widthSize(42),
+                    height: heightSize(42),
                   ),
                 ),
                 CText(
@@ -136,48 +132,10 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                   fontFamily: CFONT.REGULAR,
                   size: 18,
                 ),
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
-                      width: widthSize(43.52),
-                      height: heightSize(43.52),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: colorScheme.surface,
-                      ),
-                      child: Center(
-                        child: SvgPicture.asset(
-                          headPhone,
-                          width: widthSize(25.93),
-                          height: heightSize(25.93),
-                          colorFilter: ColorFilter.mode(colorScheme.onSurface, BlendMode.srcIn),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: -5,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        width: widthSize(36.11),
-                        height: heightSize(13.89),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25.93),
-                          color: isDark ? Colors.white : colorScheme.primary,
-                        ),
-                        child: Center(
-                          child: CText(
-                            text: 'Help?',
-                            fontFamily: CFONT.BOLD,
-                            size: 7.41,
-                            fontWeight: FontWeight.w700,
-                            color: isDark ? sCancel : colorScheme.onPrimary,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                SvgPicture.asset(
+                  headPhoneWhite,
+                  width: widthSize(39.17),
+                  height: heightSize(45),
                 ),
               ],
             ),
@@ -343,21 +301,11 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                         children: [
                           Row(
                             children: [
-                              Container(
-                                width: widthSize(38),
-                                height: heightSize(38),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white.withOpacity(0.1),
-                                ),
-                                child: Center(
-                                  child: SvgPicture.asset(
-                                    t.icon,
-                                    width: widthSize(t.iconWidth),
-                                    height: heightSize(t.iconHeight),
-                                    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                                  ),
-                                ),
+                              SvgPicture.asset(
+                                t.icon,
+                                width: widthSize(t.iconWidth),
+                                height: heightSize(t.iconHeight),
+                                colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                               ),
                               SizedBox(width: widthSize(10)),
                               Column(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
@@ -14,19 +15,16 @@ class PageHeader extends StatelessWidget {
       mainAxisAlignment: trailing!=null?
       MainAxisAlignment.spaceBetween:MainAxisAlignment.start,
       children: [
-        Container(
-          width: widthSize(42),
-          height: heightSize(42),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: sNavContainer.withOpacity(0.4),
-          ),
-          child: Center(
-            child: SvgPicture.asset(
-              arrowBack,
-              width: widthSize(14.87),
-              height: heightSize(13.12),
-            ),
+        GestureDetector(
+          onTap: () {
+            if (Get.key.currentState?.canPop() ?? false) {
+              Get.back();
+            }
+          },
+          child: SvgPicture.asset(
+            arrowBack,
+            width: widthSize(35),
+            height: heightSize(35),
           ),
         ),
 

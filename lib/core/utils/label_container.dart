@@ -497,7 +497,7 @@ class _LabelContainerState extends State<LabelContainer> {
             ),
           ),
         ),
-        SizedBox(height: heightSize(30),),
+        SizedBox(height: heightSize(42),),
         ActionButton(
           text: 'Buy Data',
           height: heightSize(55),
@@ -753,7 +753,7 @@ class _LabelContainerState extends State<LabelContainer> {
             return null;
           },
         ),
-        SizedBox(height: heightSize(38),),
+        SizedBox(height: heightSize(42),),
         ActionButton(
           text: 'Buy Airtime',
           height: heightSize(55),

@@ -112,19 +112,15 @@ class _AppTextFieldState extends State<AppTextField> {
 
   Widget? _resolvePrefix() {
     if (widget.prefixWidget == null) return null;
-    return Padding(
-      padding: EdgeInsets.only(
-        top: heightSize(15),
-        bottom: heightSize(15),
-        right: widthSize(15),
-      ),
+    return Align(
+      alignment: Alignment.centerLeft,
       child: widget.prefixWidget,
     );
   }
 
   final inputBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(Values().buttonRadius10),
-    borderSide: const BorderSide(color: Color(0xFF313131)),
+    borderSide: BorderSide.none, // ← no visible stroke, just the shape
   );
 
   @override
@@ -145,7 +141,7 @@ class _AppTextFieldState extends State<AppTextField> {
           const SizedBox(height: 6),
         ],
         Container(
-          height: heightSize(widget.height ?? 58),
+          height: (widget.maxLines ?? 1) > 1 ? null : heightSize(widget.height ?? 58),
           width: size.width,
           margin: widget.hasBottomMargin
               ? const EdgeInsets.only(bottom: 10)
@@ -160,9 +156,11 @@ class _AppTextFieldState extends State<AppTextField> {
             ),
           ),
           child: TextFormField(
-            textAlignVertical: TextAlignVertical.center,
+            textAlignVertical: (widget.maxLines ?? 1) > 1
+                ? TextAlignVertical.top
+                : TextAlignVertical.center,
             expands: !_isObscured && widget.maxLines == null ? false : false, // ← always false now unless explicitly multiline
-            maxLines: _isObscured ? 1 : (widget.maxLines ?? 1),
+            maxLines: _isObscured ? 1 : widget.maxLines,
             minLines: null,
             readOnly: widget.readOnly,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -175,12 +173,14 @@ class _AppTextFieldState extends State<AppTextField> {
             cursorColor: Theme.of(context).colorScheme.primary,
             style: TextStyle(color: textColor, fontSize: fontSize(14)),
             decoration: InputDecoration(
-              isCollapsed: true,
-              isDense: true,
+              filled: true,
+              fillColor: Colors.transparent,
 
               contentPadding: EdgeInsets.symmetric(
                 horizontal: widthSize(16),
-                vertical: heightSize(12),
+                vertical: (widget.maxLines ?? 1) > 1
+                    ? heightSize(16)   // ← more vertical padding for multiline
+                    : heightSize(12),
               ),
 
               hintText: widget.hint,
@@ -199,22 +199,36 @@ class _AppTextFieldState extends State<AppTextField> {
               ),
 
               // ── Naira prefix ──────────────────────────────────
-              prefix: widget.showNairaPrefix
+              prefixIcon: widget.prefixWidget != null
                   ? Padding(
-                padding: EdgeInsets.only(right: widthSize(4)),
-                child: Text(
-                  '₦',
-                  style: TextStyle(
-                    fontSize: fontSize(14),
-                    fontWeight: FontWeight.w400,
-                    fontFamily: CFONT.REGULAR,
-                    color: textColor,
+                padding: EdgeInsets.only(left: widthSize(12), right: widthSize(4)),
+                child: IntrinsicWidth(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: widget.prefixWidget,
+                  ),
+                ),
+              )
+                  : widget.showNairaPrefix
+                  ? Padding(
+                padding: EdgeInsets.only(left: widthSize(16), right: widthSize(4)),
+                child: IntrinsicWidth(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      '₦',
+                      style: TextStyle(
+                        fontSize: fontSize(14),
+                        fontWeight: FontWeight.w400,
+                        fontFamily: CFONT.REGULAR,
+                        color: textColor,
+                      ),
+                    ),
                   ),
                 ),
               )
                   : null,
-
-              prefixIcon: _resolvePrefix(),
+              prefixIconConstraints: const BoxConstraints(minHeight: 0),
               suffixIcon: _resolveSuffix(iconColor),
 
               suffixIconConstraints: const BoxConstraints(
@@ -266,7 +280,6 @@ class AuthSearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    heightSize(height ?? 48);
     final textColor   = Theme.of(context).colorScheme.onSurface;
 
     return Container(
@@ -309,6 +322,8 @@ class AuthSearchField extends StatelessWidget {
               style: TextStyle(color: textColor, fontSize: fontSize(14)),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.zero,
+                filled: true,                          // ← add this
+                fillColor: Colors.transparent,
                 hintText: hint,
                 hintStyle: TextStyle(
                   color: hintColor ?? sGrey2,

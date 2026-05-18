@@ -34,50 +34,11 @@ class _ChooseSentroTagState extends State<ChooseSentroTag> {
             Padding(
               padding: EdgeInsets.only(right: widthSize(7)),
               child: PageHeader(
-                trailing: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
-                      width: widthSize(43.52),
-                      height: heightSize(43.52),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: sNavContainer.withOpacity(0.25),
-                      ),
-                      child: Center(
-                        child: SvgPicture.asset(
-                          headPhone,
-                          width: widthSize(25.93),
-                          height: heightSize(25.93),
-                          colorFilter: ColorFilter.mode(
-                            isDark?sLemon:sActionButton,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: -5,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        width: widthSize(36.11),
-                        height: heightSize(13.89),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25.93),
-                          color: sNavContainer,
-                        ),
-                        child: Center(
-                          child: CText(
-                            text: 'Help?',
-                            fontFamily: CFONT.BOLD,
-                            size: 7.41,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                trailing: SvgPicture.asset(
+                  headPhone,
+                  width: widthSize(43.52),
+                  height: heightSize(50),
+
                 ),
               ),
             ),

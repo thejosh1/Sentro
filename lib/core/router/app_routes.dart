@@ -28,6 +28,19 @@ abstract class Routes {
   static const wastemanagent = '/waste-management';
   static const academics = '/academics';
 
+  //transfers
+  static const transfer = '/transfer';
+  static const transferDetails = '/transfer-details';
+  static const confirmTransfer = '/confirm-transfer';
+  static const requestFromSentro = '/request-from-sentro';
+
+  //savings % investmens
+  static const activeGoals = '/active-goals';
+  static const startSaving = '/start-saving';
+  static const goalsDetails = '/goals-details';
+  static const savingsType = '/savings-type';
+  static const savingsSummary = '/savings-summary';
+
   //widgets
   static const confirmTransaction = '/confirm-transaction';
 }

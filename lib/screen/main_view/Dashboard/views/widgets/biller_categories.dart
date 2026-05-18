@@ -10,6 +10,7 @@ import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/constants/values.dart';
 import 'package:sentro/core/utils/label_container.dart';
 import 'package:sentro/core/utils/text.dart';
+import 'package:sentro/core/widgets/top_up.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/home_page.dart';
 
 import '../../../../../core/router/app_pages.dart';
@@ -62,233 +63,7 @@ class BillerCategories extends StatelessWidget {
                       isDark: isDark,
                       colorScheme: colorScheme,
                       callback: () {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: true,
-
-                          barrierColor: Colors.black.withOpacity(0.45),
-                          builder: (context) {
-                            bool isDataSelected = false;
-
-                            return StatefulBuilder(
-                              builder: (context, setDialogState) {
-                                return Dialog(
-                                  backgroundColor: isDark
-                                      ? sContainerColor
-                                      : Theme.of(context).scaffoldBackgroundColor,
-                                  insetPadding: EdgeInsets.symmetric(horizontal: widthSize(20)),
-                                  child: Container(
-                                    height: heightSize(499),
-                                    width: double.maxFinite,
-                                    padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
-                                    decoration: BoxDecoration(
-                                      color: isDark
-                                          ? sContainerColor
-                                          : Theme.of(context).scaffoldBackgroundColor,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        SizedBox(height: heightSize(15),),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Container(
-                                              width: widthSize(156.8),
-                                              height: heightSize(31),
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(113.27),
-                                                  color: sButtonFillDark,
-                                                  border: Border.all(color: sDarkBorder)
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  SvgPicture.asset(
-                                                    wallet,
-                                                    width: widthSize(24),
-                                                    height: heightSize(24),
-                                                  ),
-                                                  SizedBox(width: widthSize(3.4),),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      children: [
-                                                        TextSpan(
-                                                          text: '₦50,000',
-                                                          style: TextStyle(
-                                                            fontSize: 15.86,
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: CFONT.REGULAR,
-                                                            height: 22.65 / 15.86,
-                                                          ),
-                                                        ),
-
-                                                        TextSpan(
-                                                          text: '.00',
-                                                          style: TextStyle(
-                                                            fontSize: 10,
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: CFONT.REGULAR,
-                                                            height: 22.65 / 10,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SvgPicture.asset(
-                                                    visibilityOff,
-                                                    width: widthSize(24),
-                                                    height: heightSize(24),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Get.back();
-                                              },
-                                              child: Container(
-                                                width: widthSize(33.33),
-                                                height: heightSize(33.33),
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.white.withOpacity(0.1),
-                                                ),
-                                                child: Center(
-                                                  child: SvgPicture.asset(cancelWhite),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: heightSize(13)),
-                                        CText(
-                                          text: 'Mobile Top up',
-                                          size: 18,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: CFONT.MEDIUM,
-                                        ),
-                                        SizedBox(height: heightSize(13)),
-                                        CText(
-                                          text: 'Top up your Airtime and Data',
-                                          size: 14,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: CFONT.REGULAR,
-                                        ),
-                                        SizedBox(height: heightSize(20)),
-                                        Container(
-                                          width: widthSize(214),
-                                          height: heightSize(55),
-                                          padding: EdgeInsets.symmetric(horizontal: widthSize(6)),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(40),
-                                            color: sDescriptionColor,
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              // Airtime
-                                              GestureDetector(
-                                                onTap: () {
-                                                  setDialogState(() {
-                                                    isDataSelected = false;
-                                                  });
-                                                },
-                                                child: AnimatedContainer(
-                                                  duration: const Duration(milliseconds: 250),
-                                                  width: widthSize(100),
-                                                  height: heightSize(43),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(40),
-                                                    color: !isDataSelected
-                                                        ? sActiveColor
-                                                        : Colors.transparent,
-                                                  ),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-                                                      SvgPicture.asset(
-                                                        mobileWhite,
-                                                        width: widthSize(16),
-                                                        height: heightSize(20),
-                                                        colorFilter: !isDataSelected
-                                                            ? null
-                                                            : ColorFilter.mode(
-                                                          Colors.white.withOpacity(0.7),
-                                                          BlendMode.srcIn,
-                                                        ),
-                                                      ),
-                                                      SizedBox(width: widthSize(8)),
-                                                      CText(
-                                                        text: 'Airtime',
-                                                        fontFamily: CFONT.REGULAR,
-                                                        fontWeight: FontWeight.w400,
-                                                        size: 14,
-                                                        color: !isDataSelected
-                                                            ? sNavContainer
-                                                            : Colors.white,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-
-                                              // Data
-                                              GestureDetector(
-                                                onTap: () {
-                                                  setDialogState(() { // ← use setDialogState, not setState
-                                                    isDataSelected = true;
-                                                  });
-                                                },
-                                                child: AnimatedContainer(
-                                                  duration: const Duration(milliseconds: 250),
-                                                  width: widthSize(100),
-                                                  height: heightSize(43),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(40),
-                                                    color: isDataSelected
-                                                        ? sActiveColor
-                                                        : Colors.transparent,
-                                                  ),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-                                                      SvgPicture.asset(
-                                                        data,
-                                                        width: widthSize(24),
-                                                        height: heightSize(24),
-                                                        colorFilter: ColorFilter.mode(
-                                                          isDataSelected
-                                                              ? sNavContainer
-                                                              : Colors.white.withOpacity(0.7),
-                                                          BlendMode.srcIn,
-                                                        ),
-                                                      ),
-                                                      SizedBox(width: widthSize(5)),
-                                                      CText(
-                                                        text: 'Data',
-                                                        fontWeight: FontWeight.w400,
-                                                        size: 14,
-                                                        color: isDataSelected
-                                                            ? sNavContainer
-                                                            : Colors.white,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(height: heightSize(40)),
-                                        LabelContainer(isData: isDataSelected,),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        );
+                        showMobileTopupDialog(context: context, isDark: isDark);
                       },
                       color: sLightBlue,
                     ),
@@ -335,6 +110,7 @@ class BillerCategories extends StatelessWidget {
                                                   border: Border.all(color: sDarkBorder)
                                               ),
                                               child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   SvgPicture.asset(
                                                     wallet,
@@ -432,23 +208,13 @@ class BillerCategories extends StatelessWidget {
                                                 ),
                                                 child: Row(
                                                   children: [
-                                                    Container(
+                                                    SvgPicture.asset(
+                                                      electricity,
                                                       width: widthSize(46),
                                                       height: heightSize(46),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(12),
-                                                        color: sNavContainer.withOpacity(0.1),
-                                                      ),
-                                                      child: Center(
-                                                        child: SvgPicture.asset(
-                                                          electricity,
-                                                          width: widthSize(20.01),
-                                                          height: heightSize(27.5),
-                                                          colorFilter: ColorFilter.mode(
-                                                            sNavContainer,
-                                                            BlendMode.srcIn,
-                                                          ),
-                                                        ),
+                                                      colorFilter: ColorFilter.mode(
+                                                        sNavContainer,
+                                                        BlendMode.srcIn,
                                                       ),
                                                     ),
                                                     SizedBox(width: widthSize(10),),
@@ -493,23 +259,13 @@ class BillerCategories extends StatelessWidget {
                                                 ),
                                                 child: Row(
                                                   children: [
-                                                    Container(
+                                                    SvgPicture.asset(
+                                                      betting,
                                                       width: widthSize(46),
                                                       height: heightSize(46),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(12),
-                                                        color: sNavContainer.withOpacity(0.1),
-                                                      ),
-                                                      child: Center(
-                                                        child: SvgPicture.asset(
-                                                          betting,
-                                                          width: widthSize(20.01),
-                                                          height: heightSize(27.5),
-                                                          colorFilter: ColorFilter.mode(
-                                                            sNavContainer,
-                                                            BlendMode.srcIn,
-                                                          ),
-                                                        ),
+                                                      colorFilter: ColorFilter.mode(
+                                                        sNavContainer,
+                                                        BlendMode.srcIn,
                                                       ),
                                                     ),
                                                     SizedBox(width: widthSize(10),),
@@ -554,23 +310,13 @@ class BillerCategories extends StatelessWidget {
                                                 ),
                                                 child: Row(
                                                   children: [
-                                                    Container(
+                                                    SvgPicture.asset(
+                                                      devices,
                                                       width: widthSize(46),
                                                       height: heightSize(46),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(12),
-                                                        color: sNavContainer.withOpacity(0.1),
-                                                      ),
-                                                      child: Center(
-                                                        child: SvgPicture.asset(
-                                                          devices,
-                                                          width: widthSize(20.01),
-                                                          height: heightSize(27.5),
-                                                          colorFilter: ColorFilter.mode(
-                                                            sNavContainer,
-                                                            BlendMode.srcIn,
-                                                          ),
-                                                        ),
+                                                      colorFilter: ColorFilter.mode(
+                                                        sNavContainer,
+                                                        BlendMode.srcIn,
                                                       ),
                                                     ),
                                                     SizedBox(width: widthSize(10),),
@@ -615,23 +361,13 @@ class BillerCategories extends StatelessWidget {
                                                 ),
                                                 child: Row(
                                                   children: [
-                                                    Container(
+                                                    SvgPicture.asset(
+                                                      teacher,
                                                       width: widthSize(46),
                                                       height: heightSize(46),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(12),
-                                                        color: sNavContainer.withOpacity(0.1),
-                                                      ),
-                                                      child: Center(
-                                                        child: SvgPicture.asset(
-                                                          teacher,
-                                                          width: widthSize(20.01),
-                                                          height: heightSize(27.5),
-                                                          colorFilter: ColorFilter.mode(
-                                                            sNavContainer,
-                                                            BlendMode.srcIn,
-                                                          ),
-                                                        ),
+                                                      colorFilter: ColorFilter.mode(
+                                                        sNavContainer,
+                                                        BlendMode.srcIn,
                                                       ),
                                                     ),
                                                     SizedBox(width: widthSize(10),),
@@ -676,23 +412,13 @@ class BillerCategories extends StatelessWidget {
                                                 ),
                                                 child: Row(
                                                   children: [
-                                                    Container(
+                                                    SvgPicture.asset(
+                                                      trash,
                                                       width: widthSize(46),
                                                       height: heightSize(46),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(12),
-                                                        color: sNavContainer.withOpacity(0.1),
-                                                      ),
-                                                      child: Center(
-                                                        child: SvgPicture.asset(
-                                                          trash,
-                                                          width: widthSize(20.01),
-                                                          height: heightSize(27.5),
-                                                          colorFilter: ColorFilter.mode(
-                                                            sNavContainer,
-                                                            BlendMode.srcIn,
-                                                          ),
-                                                        ),
+                                                      colorFilter: ColorFilter.mode(
+                                                        sNavContainer,
+                                                        BlendMode.srcIn,
                                                       ),
                                                     ),
                                                     SizedBox(width: widthSize(10),),
@@ -737,23 +463,13 @@ class BillerCategories extends StatelessWidget {
                                                 ),
                                                 child: Row(
                                                   children: [
-                                                    Container(
+                                                    SvgPicture.asset(
+                                                      globalSearch,
                                                       width: widthSize(46),
                                                       height: heightSize(46),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(12),
-                                                        color: sNavContainer.withOpacity(0.1),
-                                                      ),
-                                                      child: Center(
-                                                        child: SvgPicture.asset(
-                                                          globalSearch,
-                                                          width: widthSize(20.01),
-                                                          height: heightSize(27.5),
-                                                          colorFilter: ColorFilter.mode(
-                                                            sNavContainer,
-                                                            BlendMode.srcIn,
-                                                          ),
-                                                        ),
+                                                      colorFilter: ColorFilter.mode(
+                                                        sNavContainer,
+                                                        BlendMode.srcIn,
                                                       ),
                                                     ),
                                                     SizedBox(width: widthSize(10),),
@@ -808,7 +524,9 @@ class BillerCategories extends StatelessWidget {
                       title: 'Save Money',
                       isDark: isDark,
                       colorScheme: colorScheme,
-                      callback: () {},
+                      callback: () {
+                        Get.toNamed(Routes.startSaving);
+                      },
                       color: sPearl,
                     ),
                     billerItem(
@@ -826,7 +544,7 @@ class BillerCategories extends StatelessWidget {
 
             // All Services chip
             Positioned(
-              bottom: 0,
+              bottom: 1,
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
@@ -888,8 +606,8 @@ class BillerCategories extends StatelessWidget {
                     height: heightSize(29),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(Values().buttonRadius10),
-                        bottomRight: Radius.circular(Values().buttonRadius10),
+                        bottomLeft: Radius.circular(Values().buttonRadius10+2),
+                        bottomRight: Radius.circular(Values().buttonRadius10+2),
                       ),
                       color: chipBg,
                       boxShadow: isDark
@@ -985,15 +703,11 @@ class _AllServicesSheet extends StatelessWidget {
     required Function callback,
     bool isNew = false,
     Color? tintColor,
-    double? iconHeight = 37.68,
-    double? iconWidth = 37.68,
   }) {
     return investmentItem(
       assetName: assetName,
-      iconContainerHeight: heightSize(52.33),
-      iconContainerWidth: widthSize(52.33),
-      iconHeight: iconHeight,
-      iconWidth: iconWidth,
+      iconContainerHeight: heightSize(50),
+      iconContainerWidth: widthSize(50),
       title: title,
       isDark: isDark,
       colorScheme: colorScheme,
@@ -1047,462 +761,16 @@ class _AllServicesSheet extends StatelessWidget {
                             assetName: mobileWhite,
                             title: 'Airtime',
                             tintColor: Colors.white,
-                            iconHeight: heightSize(22.92),
-                            iconWidth: widthSize(22.92),
                             callback: () {
-                              showDialog(
-                                context: context,
-                                barrierDismissible: true,
-
-                                barrierColor: Colors.black.withOpacity(0.45),
-                                builder: (context) {
-                                  bool isDataSelected = false;
-
-                                  return StatefulBuilder(
-                                    builder: (context, setDialogState) {
-                                      return Dialog(
-                                        backgroundColor: isDark
-                                            ? sContainerColor
-                                            : Theme.of(context).scaffoldBackgroundColor,
-                                        insetPadding: EdgeInsets.symmetric(horizontal: widthSize(20)),
-                                        child: Container(
-                                          height: heightSize(499),
-                                          width: double.maxFinite,
-                                          padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
-                                          decoration: BoxDecoration(
-                                            color: isDark
-                                                ? sContainerColor
-                                                : Theme.of(context).scaffoldBackgroundColor,
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              SizedBox(height: heightSize(15),),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Container(
-                                                    width: widthSize(156.8),
-                                                    height: heightSize(31),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(113.27),
-                                                        color: sButtonFillDark,
-                                                        border: Border.all(color: sDarkBorder)
-                                                    ),
-                                                    child: Row(
-                                                      children: [
-                                                        SvgPicture.asset(
-                                                          wallet,
-                                                          width: widthSize(24),
-                                                          height: heightSize(24),
-                                                        ),
-                                                        SizedBox(width: widthSize(3.4),),
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            children: [
-                                                              TextSpan(
-                                                                text: '₦50,000',
-                                                                style: TextStyle(
-                                                                  fontSize: 15.86,
-                                                                  fontWeight: FontWeight.w400,
-                                                                  fontFamily: CFONT.REGULAR,
-                                                                  height: 22.65 / 15.86,
-                                                                ),
-                                                              ),
-
-                                                              TextSpan(
-                                                                text: '.00',
-                                                                style: TextStyle(
-                                                                  fontSize: 10,
-                                                                  fontWeight: FontWeight.w400,
-                                                                  fontFamily: CFONT.REGULAR,
-                                                                  height: 22.65 / 10,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        SvgPicture.asset(
-                                                          visibilityOff,
-                                                          width: widthSize(24),
-                                                          height: heightSize(24),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    width: widthSize(33.33),
-                                                    height: heightSize(33.33),
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: Colors.white.withOpacity(0.1),
-                                                    ),
-                                                    child: Center(
-                                                      child: SvgPicture.asset(cancelWhite),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              SizedBox(height: heightSize(13)),
-                                              CText(
-                                                text: 'Mobile Top up',
-                                                size: 18,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: CFONT.MEDIUM,
-                                              ),
-                                              SizedBox(height: heightSize(13)),
-                                              CText(
-                                                text: 'Top up your Airtime and Data',
-                                                size: 14,
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: CFONT.REGULAR,
-                                              ),
-                                              SizedBox(height: heightSize(20)),
-                                              Container(
-                                                width: widthSize(214),
-                                                height: heightSize(55),
-                                                padding: EdgeInsets.symmetric(horizontal: widthSize(6)),
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(40),
-                                                  color: sDescriptionColor,
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    // Airtime
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        setDialogState(() {
-                                                          isDataSelected = false;
-                                                        });
-                                                      },
-                                                      child: AnimatedContainer(
-                                                        duration: const Duration(milliseconds: 250),
-                                                        width: widthSize(100),
-                                                        height: heightSize(43),
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(40),
-                                                          color: !isDataSelected
-                                                              ? sActiveColor
-                                                              : Colors.transparent,
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              mobileWhite,
-                                                              width: widthSize(16),
-                                                              height: heightSize(20),
-                                                              colorFilter: !isDataSelected
-                                                                  ? null
-                                                                  : ColorFilter.mode(
-                                                                Colors.white.withOpacity(0.7),
-                                                                BlendMode.srcIn,
-                                                              ),
-                                                            ),
-                                                            SizedBox(width: widthSize(8)),
-                                                            CText(
-                                                              text: 'Airtime',
-                                                              fontFamily: CFONT.REGULAR,
-                                                              fontWeight: FontWeight.w400,
-                                                              size: 14,
-                                                              color: !isDataSelected
-                                                                  ? sNavContainer
-                                                                  : Colors.white,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-
-                                                    // Data
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        setDialogState(() { // ← use setDialogState, not setState
-                                                          isDataSelected = true;
-                                                        });
-                                                      },
-                                                      child: AnimatedContainer(
-                                                        duration: const Duration(milliseconds: 250),
-                                                        width: widthSize(100),
-                                                        height: heightSize(43),
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(40),
-                                                          color: isDataSelected
-                                                              ? sActiveColor
-                                                              : Colors.transparent,
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              data,
-                                                              width: widthSize(24),
-                                                              height: heightSize(24),
-                                                              colorFilter: ColorFilter.mode(
-                                                                isDataSelected
-                                                                    ? sNavContainer
-                                                                    : Colors.white.withOpacity(0.7),
-                                                                BlendMode.srcIn,
-                                                              ),
-                                                            ),
-                                                            SizedBox(width: widthSize(5)),
-                                                            CText(
-                                                              text: 'Data',
-                                                              fontWeight: FontWeight.w400,
-                                                              size: 14,
-                                                              color: isDataSelected
-                                                                  ? sNavContainer
-                                                                  : Colors.white,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(height: heightSize(40)),
-                                              LabelContainer(isData: isDataSelected,),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              );
+                              showMobileTopupDialog(context: context, isDark: isDark);
                             },
                           ),
                           _item(
                             assetName: data,
                             title: 'Data',
                             tintColor: Colors.white,
-                            iconHeight: heightSize(23.46),
-                            iconWidth: widthSize(30),
                             callback: () {
-                              showDialog(
-                                context: context,
-                                barrierDismissible: true,
-
-                                barrierColor: Colors.black.withOpacity(0.45),
-                                builder: (context) {
-                                  bool isDataSelected = true;
-
-                                  return StatefulBuilder(
-                                    builder: (context, setDialogState) {
-                                      return Dialog(
-                                        backgroundColor: isDark
-                                            ? sContainerColor
-                                            : Theme.of(context).scaffoldBackgroundColor,
-                                        insetPadding: EdgeInsets.symmetric(horizontal: widthSize(20)),
-                                        child: Container(
-                                          height: heightSize(499),
-                                          width: double.maxFinite,
-                                          padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
-                                          decoration: BoxDecoration(
-                                            color: isDark
-                                                ? sContainerColor
-                                                : Theme.of(context).scaffoldBackgroundColor,
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              SizedBox(height: heightSize(15),),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Container(
-                                                    width: widthSize(156.8),
-                                                    height: heightSize(31),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(113.27),
-                                                        color: sButtonFillDark,
-                                                        border: Border.all(color: sDarkBorder)
-                                                    ),
-                                                    child: Row(
-                                                      children: [
-                                                        SvgPicture.asset(
-                                                          wallet,
-                                                          width: widthSize(24),
-                                                          height: heightSize(24),
-                                                        ),
-                                                        SizedBox(width: widthSize(3.4),),
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            children: [
-                                                              TextSpan(
-                                                                text: '₦50,000',
-                                                                style: TextStyle(
-                                                                  fontSize: 15.86,
-                                                                  fontWeight: FontWeight.w400,
-                                                                  fontFamily: CFONT.REGULAR,
-                                                                  height: 22.65 / 15.86,
-                                                                ),
-                                                              ),
-
-                                                              TextSpan(
-                                                                text: '.00',
-                                                                style: TextStyle(
-                                                                  fontSize: 10,
-                                                                  fontWeight: FontWeight.w400,
-                                                                  fontFamily: CFONT.REGULAR,
-                                                                  height: 22.65 / 10,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        SvgPicture.asset(
-                                                          visibilityOff,
-                                                          width: widthSize(24),
-                                                          height: heightSize(24),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    width: widthSize(33.33),
-                                                    height: heightSize(33.33),
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: Colors.white.withOpacity(0.1),
-                                                    ),
-                                                    child: Center(
-                                                      child: SvgPicture.asset(cancelWhite),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              SizedBox(height: heightSize(13)),
-                                              CText(
-                                                text: 'Mobile Top up',
-                                                size: 18,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: CFONT.MEDIUM,
-                                              ),
-                                              SizedBox(height: heightSize(13)),
-                                              CText(
-                                                text: 'Top up your Airtime and Data',
-                                                size: 14,
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: CFONT.REGULAR,
-                                              ),
-                                              SizedBox(height: heightSize(20)),
-                                              Container(
-                                                width: widthSize(214),
-                                                height: heightSize(55),
-                                                padding: EdgeInsets.symmetric(horizontal: widthSize(6)),
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(40),
-                                                  color: sDescriptionColor,
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    // Airtime
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        setDialogState(() {
-                                                          isDataSelected = false;
-                                                        });
-                                                      },
-                                                      child: AnimatedContainer(
-                                                        duration: const Duration(milliseconds: 250),
-                                                        width: widthSize(100),
-                                                        height: heightSize(43),
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(40),
-                                                          color: !isDataSelected
-                                                              ? sActiveColor
-                                                              : Colors.transparent,
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              mobileWhite,
-                                                              width: widthSize(16),
-                                                              height: heightSize(20),
-                                                              colorFilter: !isDataSelected
-                                                                  ? null
-                                                                  : ColorFilter.mode(
-                                                                Colors.white.withOpacity(0.7),
-                                                                BlendMode.srcIn,
-                                                              ),
-                                                            ),
-                                                            SizedBox(width: widthSize(8)),
-                                                            CText(
-                                                              text: 'Airtime',
-                                                              fontFamily: CFONT.REGULAR,
-                                                              fontWeight: FontWeight.w400,
-                                                              size: 14,
-                                                              color: !isDataSelected
-                                                                  ? sNavContainer
-                                                                  : Colors.white,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-
-                                                    // Data
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        setDialogState(() { // ← use setDialogState, not setState
-                                                          isDataSelected = true;
-                                                        });
-                                                      },
-                                                      child: AnimatedContainer(
-                                                        duration: const Duration(milliseconds: 250),
-                                                        width: widthSize(100),
-                                                        height: heightSize(43),
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(40),
-                                                          color: isDataSelected
-                                                              ? sActiveColor
-                                                              : Colors.transparent,
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              data,
-                                                              width: widthSize(24),
-                                                              height: heightSize(24),
-                                                              colorFilter: ColorFilter.mode(
-                                                                isDataSelected
-                                                                    ? sNavContainer
-                                                                    : Colors.white.withOpacity(0.7),
-                                                                BlendMode.srcIn,
-                                                              ),
-                                                            ),
-                                                            SizedBox(width: widthSize(5)),
-                                                            CText(
-                                                              text: 'Data',
-                                                              fontWeight: FontWeight.w400,
-                                                              size: 14,
-                                                              color: isDataSelected
-                                                                  ? sNavContainer
-                                                                  : Colors.white,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(height: heightSize(40)),
-                                              LabelContainer(isData: isDataSelected,),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              );
+                              showMobileTopupDialog(context: context, isDark: isDark, initialDataSelected: true);
                             }
                           ),
                           _item(
@@ -1512,24 +780,18 @@ class _AllServicesSheet extends StatelessWidget {
                             callback: () {
                               Get.toNamed(Routes.electricity);
                             },
-                            iconHeight: heightSize(34.38),
-                            iconWidth: widthSize(34.38),
                           ),
                           _item(
                             assetName: gift,
                             title: 'Gift Cards',
                             tintColor: Colors.white,
                             callback: () {},
-                            iconHeight: heightSize(30),
-                            iconWidth: widthSize(21.32),
                           ),
                           _item(
                             assetName: loansService,
                             title: 'Loans',
                             tintColor: Colors.white,
                             callback: () {},
-                            iconHeight: heightSize(34),
-                            iconWidth: widthSize(34),
                           ),
                         ]),
                       ],
@@ -1561,240 +823,14 @@ class _AllServicesSheet extends StatelessWidget {
                               _item(
                                 assetName: transfer,
                                 title: 'Transfer',
-                                tintColor: Colors.white,
-                                iconHeight: heightSize(36),
-                                iconWidth: widthSize(36),
                                 callback: () {},
                               ),
                               _item(
                                 assetName: mobileWhite,
                                 title: 'Airtime',
                                 tintColor: Colors.white,
-                                iconHeight: heightSize(22.92),
-                                iconWidth: widthSize(22.92),
                                 callback: () {
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: true,
-
-                                      barrierColor: Colors.black.withOpacity(0.45),
-                                      builder: (context) {
-                                        bool isDataSelected = false;
-
-                                        return StatefulBuilder(
-                                          builder: (context, setDialogState) {
-                                            return Dialog(
-                                              backgroundColor: isDark
-                                                  ? sContainerColor
-                                                  : Theme.of(context).scaffoldBackgroundColor,
-                                              insetPadding: EdgeInsets.symmetric(horizontal: widthSize(20)),
-                                              child: Container(
-                                                height: heightSize(499),
-                                                width: double.maxFinite,
-                                                padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
-                                                decoration: BoxDecoration(
-                                                  color: isDark
-                                                      ? sContainerColor
-                                                      : Theme.of(context).scaffoldBackgroundColor,
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(height: heightSize(15),),
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      children: [
-                                                        Container(
-                                                          width: widthSize(156.8),
-                                                          height: heightSize(31),
-                                                          decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.circular(113.27),
-                                                              color: sButtonFillDark,
-                                                              border: Border.all(color: sDarkBorder)
-                                                          ),
-                                                          child: Row(
-                                                            children: [
-                                                              SvgPicture.asset(
-                                                                wallet,
-                                                                width: widthSize(24),
-                                                                height: heightSize(24),
-                                                              ),
-                                                              SizedBox(width: widthSize(3.4),),
-                                                              RichText(
-                                                                text: TextSpan(
-                                                                  children: [
-                                                                    TextSpan(
-                                                                      text: '₦50,000',
-                                                                      style: TextStyle(
-                                                                        fontSize: 15.86,
-                                                                        fontWeight: FontWeight.w400,
-                                                                        fontFamily: CFONT.REGULAR,
-                                                                        height: 22.65 / 15.86,
-                                                                      ),
-                                                                    ),
-
-                                                                    TextSpan(
-                                                                      text: '.00',
-                                                                      style: TextStyle(
-                                                                        fontSize: 10,
-                                                                        fontWeight: FontWeight.w400,
-                                                                        fontFamily: CFONT.REGULAR,
-                                                                        height: 22.65 / 10,
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              SvgPicture.asset(
-                                                                visibilityOff,
-                                                                width: widthSize(24),
-                                                                height: heightSize(24),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          width: widthSize(33.33),
-                                                          height: heightSize(33.33),
-                                                          decoration: BoxDecoration(
-                                                            shape: BoxShape.circle,
-                                                            color: Colors.white.withOpacity(0.1),
-                                                          ),
-                                                          child: Center(
-                                                            child: SvgPicture.asset(cancelWhite),
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                    SizedBox(height: heightSize(13)),
-                                                    CText(
-                                                      text: 'Mobile Top up',
-                                                      size: 18,
-                                                      fontWeight: FontWeight.w500,
-                                                      fontFamily: CFONT.MEDIUM,
-                                                    ),
-                                                    SizedBox(height: heightSize(13)),
-                                                    CText(
-                                                      text: 'Top up your Airtime and Data',
-                                                      size: 14,
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: CFONT.REGULAR,
-                                                    ),
-                                                    SizedBox(height: heightSize(20)),
-                                                    Container(
-                                                      width: widthSize(214),
-                                                      height: heightSize(55),
-                                                      padding: EdgeInsets.symmetric(horizontal: widthSize(6)),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(40),
-                                                        color: sDescriptionColor,
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [
-                                                          // Airtime
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              setDialogState(() {
-                                                                isDataSelected = false;
-                                                              });
-                                                            },
-                                                            child: AnimatedContainer(
-                                                              duration: const Duration(milliseconds: 250),
-                                                              width: widthSize(100),
-                                                              height: heightSize(43),
-                                                              decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(40),
-                                                                color: !isDataSelected
-                                                                    ? sActiveColor
-                                                                    : Colors.transparent,
-                                                              ),
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                children: [
-                                                                  SvgPicture.asset(
-                                                                    mobileWhite,
-                                                                    width: widthSize(16),
-                                                                    height: heightSize(20),
-                                                                    colorFilter: !isDataSelected
-                                                                        ? null
-                                                                        : ColorFilter.mode(
-                                                                      Colors.white.withOpacity(0.7),
-                                                                      BlendMode.srcIn,
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(width: widthSize(8)),
-                                                                  CText(
-                                                                    text: 'Airtime',
-                                                                    fontFamily: CFONT.REGULAR,
-                                                                    fontWeight: FontWeight.w400,
-                                                                    size: 14,
-                                                                    color: !isDataSelected
-                                                                        ? sNavContainer
-                                                                        : Colors.white,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-
-                                                          // Data
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              setDialogState(() { // ← use setDialogState, not setState
-                                                                isDataSelected = true;
-                                                              });
-                                                            },
-                                                            child: AnimatedContainer(
-                                                              duration: const Duration(milliseconds: 250),
-                                                              width: widthSize(100),
-                                                              height: heightSize(43),
-                                                              decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(40),
-                                                                color: isDataSelected
-                                                                    ? sActiveColor
-                                                                    : Colors.transparent,
-                                                              ),
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                children: [
-                                                                  SvgPicture.asset(
-                                                                    data,
-                                                                    width: widthSize(24),
-                                                                    height: heightSize(24),
-                                                                    colorFilter: ColorFilter.mode(
-                                                                      isDataSelected
-                                                                          ? sNavContainer
-                                                                          : Colors.white.withOpacity(0.7),
-                                                                      BlendMode.srcIn,
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(width: widthSize(5)),
-                                                                  CText(
-                                                                    text: 'Data',
-                                                                    fontWeight: FontWeight.w400,
-                                                                    size: 14,
-                                                                    color: isDataSelected
-                                                                        ? sNavContainer
-                                                                        : Colors.white,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: heightSize(40)),
-                                                    LabelContainer(isData: isDataSelected,),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                    );
+                                  showMobileTopupDialog(context: context, isDark: isDark);
                                   },
                               ),
                               _item(
@@ -1802,242 +838,17 @@ class _AllServicesSheet extends StatelessWidget {
                                 title: 'Data',
                                 tintColor: Colors.white,
                                 callback: () {
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible: true,
-
-                                    barrierColor: Colors.black.withOpacity(0.45),
-                                    builder: (context) {
-                                      bool isDataSelected = true;
-
-                                      return StatefulBuilder(
-                                        builder: (context, setDialogState) {
-                                          return Dialog(
-                                            backgroundColor: isDark
-                                                ? sContainerColor
-                                                : Theme.of(context).scaffoldBackgroundColor,
-                                            insetPadding: EdgeInsets.symmetric(horizontal: widthSize(20)),
-                                            child: Container(
-                                              height: heightSize(499),
-                                              width: double.maxFinite,
-                                              padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
-                                              decoration: BoxDecoration(
-                                                color: isDark
-                                                    ? sContainerColor
-                                                    : Theme.of(context).scaffoldBackgroundColor,
-                                                borderRadius: BorderRadius.circular(10),
-                                              ),
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: heightSize(15),),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Container(
-                                                        width: widthSize(156.8),
-                                                        height: heightSize(31),
-                                                        decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(113.27),
-                                                            color: sButtonFillDark,
-                                                            border: Border.all(color: sDarkBorder)
-                                                        ),
-                                                        child: Row(
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              wallet,
-                                                              width: widthSize(24),
-                                                              height: heightSize(24),
-                                                            ),
-                                                            SizedBox(width: widthSize(3.4),),
-                                                            RichText(
-                                                              text: TextSpan(
-                                                                children: [
-                                                                  TextSpan(
-                                                                    text: '₦50,000',
-                                                                    style: TextStyle(
-                                                                      fontSize: 15.86,
-                                                                      fontWeight: FontWeight.w400,
-                                                                      fontFamily: CFONT.REGULAR,
-                                                                      height: 22.65 / 15.86,
-                                                                    ),
-                                                                  ),
-
-                                                                  TextSpan(
-                                                                    text: '.00',
-                                                                    style: TextStyle(
-                                                                      fontSize: 10,
-                                                                      fontWeight: FontWeight.w400,
-                                                                      fontFamily: CFONT.REGULAR,
-                                                                      height: 22.65 / 10,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            SvgPicture.asset(
-                                                              visibilityOff,
-                                                              width: widthSize(24),
-                                                              height: heightSize(24),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        width: widthSize(33.33),
-                                                        height: heightSize(33.33),
-                                                        decoration: BoxDecoration(
-                                                          shape: BoxShape.circle,
-                                                          color: Colors.white.withOpacity(0.1),
-                                                        ),
-                                                        child: Center(
-                                                          child: SvgPicture.asset(cancelWhite),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  SizedBox(height: heightSize(13)),
-                                                  CText(
-                                                    text: 'Mobile Top up',
-                                                    size: 18,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontFamily: CFONT.MEDIUM,
-                                                  ),
-                                                  SizedBox(height: heightSize(13)),
-                                                  CText(
-                                                    text: 'Top up your Airtime and Data',
-                                                    size: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                    fontFamily: CFONT.REGULAR,
-                                                  ),
-                                                  SizedBox(height: heightSize(20)),
-                                                  Container(
-                                                    width: widthSize(214),
-                                                    height: heightSize(55),
-                                                    padding: EdgeInsets.symmetric(horizontal: widthSize(6)),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(40),
-                                                      color: sDescriptionColor,
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      children: [
-                                                        // Airtime
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            setDialogState(() {
-                                                              isDataSelected = false;
-                                                            });
-                                                          },
-                                                          child: AnimatedContainer(
-                                                            duration: const Duration(milliseconds: 250),
-                                                            width: widthSize(100),
-                                                            height: heightSize(43),
-                                                            decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.circular(40),
-                                                              color: !isDataSelected
-                                                                  ? sActiveColor
-                                                                  : Colors.transparent,
-                                                            ),
-                                                            child: Row(
-                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                              children: [
-                                                                SvgPicture.asset(
-                                                                  mobileWhite,
-                                                                  width: widthSize(16),
-                                                                  height: heightSize(20),
-                                                                  colorFilter: !isDataSelected
-                                                                      ? null
-                                                                      : ColorFilter.mode(
-                                                                    Colors.white.withOpacity(0.7),
-                                                                    BlendMode.srcIn,
-                                                                  ),
-                                                                ),
-                                                                SizedBox(width: widthSize(8)),
-                                                                CText(
-                                                                  text: 'Airtime',
-                                                                  fontFamily: CFONT.REGULAR,
-                                                                  fontWeight: FontWeight.w400,
-                                                                  size: 14,
-                                                                  color: !isDataSelected
-                                                                      ? sNavContainer
-                                                                      : Colors.white,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-
-                                                        // Data
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            setDialogState(() { // ← use setDialogState, not setState
-                                                              isDataSelected = true;
-                                                            });
-                                                          },
-                                                          child: AnimatedContainer(
-                                                            duration: const Duration(milliseconds: 250),
-                                                            width: widthSize(100),
-                                                            height: heightSize(43),
-                                                            decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.circular(40),
-                                                              color: isDataSelected
-                                                                  ? sActiveColor
-                                                                  : Colors.transparent,
-                                                            ),
-                                                            child: Row(
-                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                              children: [
-                                                                SvgPicture.asset(
-                                                                  data,
-                                                                  width: widthSize(24),
-                                                                  height: heightSize(24),
-                                                                  colorFilter: ColorFilter.mode(
-                                                                    isDataSelected
-                                                                        ? sNavContainer
-                                                                        : Colors.white.withOpacity(0.7),
-                                                                    BlendMode.srcIn,
-                                                                  ),
-                                                                ),
-                                                                SizedBox(width: widthSize(5)),
-                                                                CText(
-                                                                  text: 'Data',
-                                                                  fontWeight: FontWeight.w400,
-                                                                  size: 14,
-                                                                  color: isDataSelected
-                                                                      ? sNavContainer
-                                                                      : Colors.white,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: heightSize(40)),
-                                                  LabelContainer(isData: isDataSelected,),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                  );
+                                  showMobileTopupDialog(context: context, isDark: isDark, initialDataSelected: true);
                                 },
-                                iconHeight: heightSize(23.46),
-                                iconWidth: widthSize(30),
                                 isNew: true,
                               ),
                               _item(
-                                assetName: betting,
+                                assetName: bettingWhite,
                                 title: 'Betting',
                                 tintColor: Colors.white,
                                 callback: () {
                                   Get.toNamed(Routes.betting);
                                 },
-                                iconHeight: heightSize(36),
-                                iconWidth: widthSize(36),
                               ),
                               _item(
                                 assetName: electricity,
@@ -2046,8 +857,6 @@ class _AllServicesSheet extends StatelessWidget {
                                 callback: () {
                                   Get.toNamed(Routes.electricity);
                                 },
-                                iconHeight: heightSize(34.38),
-                                iconWidth: widthSize(34.38),
                               ),
                             ]),
 
@@ -2059,40 +868,30 @@ class _AllServicesSheet extends StatelessWidget {
                                 title: 'Gift Cards',
                                 tintColor: Colors.white,
                                 callback: () {},
-                                iconHeight: heightSize(30),
-                                iconWidth: widthSize(21.32),
                               ),
                               _item(
-                                assetName: card,
+                                assetName: cardWhite,
                                 title: 'Cards',
                                 tintColor: Colors.white,
                                 callback: () {},
-                                iconHeight: heightSize(36),
-                                iconWidth: widthSize(36),
                               ),
                               _item(
                                 assetName: loansService,
                                 title: 'Loans',
                                 tintColor: Colors.white,
                                 callback: () {},
-                                iconHeight: heightSize(34),
-                                iconWidth: widthSize(34),
                               ),
                               _item(
                                 assetName: invest,
                                 title: 'Investment',
                                 tintColor: Colors.white,
                                 callback: () {},
-                                iconHeight: heightSize(20.7),
-                                iconWidth: widthSize(17.61),
                               ),
                               _item(
-                                assetName: qrPay,
+                                assetName: qrPayWhite,
                                 title: 'QR Pay',
                                 tintColor: Colors.white,
                                 callback: () {},
-                                iconHeight: heightSize(36),
-                                iconWidth: widthSize(36),
                               ),
                             ]),
 
@@ -2100,29 +899,25 @@ class _AllServicesSheet extends StatelessWidget {
 
                             _row([
                               _item(
-                                assetName: savings,
+                                assetName: savingsWhite,
                                 title: 'Savings',
                                 tintColor: Colors.white,
-                                callback: () {},
+                                callback: () {
+                                  Get.toNamed(Routes.activeGoals);
+                                },
                                 isNew: true,
-                                iconHeight: heightSize(34),
-                                iconWidth: widthSize(34),
                               ),
                               _item(
-                                assetName: gift,
+                                assetName: bnpl,
                                 title: 'BNPL',
                                 tintColor: Colors.white,
                                 callback: () {},
                                 isNew: true,
-                                iconHeight: heightSize(34),
-                                iconWidth: widthSize(34),
                               ),
                               _item(
                                 assetName: julo,
                                 title: 'Julo Energy',
                                 callback: () {},
-                                iconWidth: widthSize(37.761),
-                                iconHeight: heightSize(20),
                                 isNew: true,
                               ),
                             ]),
@@ -2149,8 +944,8 @@ class _AllServicesSheet extends StatelessWidget {
                   height: heightSize(30),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(Values().buttonRadius10),
-                      bottomRight: Radius.circular(Values().buttonRadius10),
+                      topLeft: Radius.circular(Values().buttonRadius10+2),
+                      topRight: Radius.circular(Values().buttonRadius10+2),
                     ),
                     color: _panelColor,
                     boxShadow: isDark
@@ -2289,26 +1084,14 @@ class _AnimatedCategoryItemState
                 duration: const Duration(
                   milliseconds: 120,
                 ),
-                child: Container(
-                  height: heightSize(49.45),
-                  width: widthSize(49.45),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: iconBg,
-                    borderRadius:
-                    BorderRadius.circular(
-                      Values().buttonRadius10,
-                    ),
-                  ),
-                  child: SvgPicture.asset(
-                    widget.assetName,
-                    height: heightSize(36),
-                    width: widthSize(36),
-                    fit: BoxFit.contain,
-                    colorFilter: ColorFilter.mode(
-                      iconTint,
-                      BlendMode.srcIn,
-                    ),
+                child: SvgPicture.asset(
+                  widget.assetName,
+                  height: heightSize(46),
+                  width: widthSize(46),
+                  fit: BoxFit.contain,
+                  colorFilter: ColorFilter.mode(
+                    iconTint,
+                    BlendMode.srcIn,
                   ),
                 ),
               ),

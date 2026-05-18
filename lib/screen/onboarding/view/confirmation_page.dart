@@ -25,20 +25,14 @@ class ConfirmationPage extends StatelessWidget {
             SizedBox(height: heightSize(64),),
             Row(
               children: [
-                Container(
-                  width: widthSize(35),
-                  height: heightSize(35),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.4),
-                  ),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      arrowBack,
-                      width: widthSize(14.87),
-                      height: heightSize(13.12),
-                      colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                    ),
+                GestureDetector(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: SvgPicture.asset(
+                    arrowBackWhite,
+                    width: widthSize(42),
+                    height: heightSize(42),
                   ),
                 ),
                 SizedBox(width: widthSize(101),),

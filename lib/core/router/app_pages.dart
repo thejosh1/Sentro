@@ -9,6 +9,15 @@ import 'package:sentro/screen/main_view/Dashboard/views/electricity.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/internet_service_provider.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/transaction_history.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/waste_management.dart';
+import 'package:sentro/screen/main_view/Saving&Investments/active_goals.dart';
+import 'package:sentro/screen/main_view/Saving&Investments/goals_details.dart';
+import 'package:sentro/screen/main_view/Saving&Investments/savings_summary.dart';
+import 'package:sentro/screen/main_view/Saving&Investments/savings_type.dart';
+import 'package:sentro/screen/main_view/Saving&Investments/start_saving.dart';
+import 'package:sentro/screen/main_view/transfers/confirm_transfer.dart';
+import 'package:sentro/screen/main_view/transfers/request_from_sentro.dart';
+import 'package:sentro/screen/main_view/transfers/transfer.dart';
+import 'package:sentro/screen/main_view/transfers/transfer_detail.dart';
 import 'package:sentro/screen/onboarding/view/confirmation_page.dart';
 import 'package:sentro/core/widgets/welcome_page.dart';
 import 'package:sentro/screen/main_view/main_view.dart';
@@ -51,6 +60,19 @@ class AppPages {
   static const internetService = Routes.internetService;
   static const wasteManagement = Routes.wastemanagent;
   static const academics = Routes.academics;
+
+  //transfer
+  static const transfer = Routes.transfer;
+  static const transferDetails = Routes.transferDetails;
+  static const confirmTransfer = Routes.confirmTransfer;
+  static const requestFromSentro = Routes.requestFromSentro;
+
+  //savings & investment
+  static const activeGoals = Routes.activeGoals;
+  static const startSaving = Routes.startSaving;
+  static const goalsDetails = Routes.goalsDetails;
+  static const savingsType = Routes.savingsType;
+  static const savingsSummary = Routes.savingsSummary;
 
   //shared
   static const confirmPin = Routes. confirmPin;
@@ -156,6 +178,42 @@ class AppPages {
     GetPage(
       name: academics,
       page: () => const Academics(),
+    ),
+    GetPage(
+      name: transfer,
+      page: () => const Transfer(),
+    ),
+    GetPage(
+      name: transferDetails,
+      page: () => const TransferDetail(),
+    ),
+    GetPage(
+      name: confirmTransfer,
+      page: () => const ConfirmTransfer(),
+    ),
+    GetPage(
+      name: requestFromSentro,
+      page: () => const RequestFromSentro(),
+    ),
+    GetPage(
+      name: activeGoals,
+      page: () => const ActiveGoals(),
+    ),
+    GetPage(
+      name: startSaving,
+      page: () => const StartSaving(),
+    ),
+    GetPage(
+      name: goalsDetails,
+      page: () => const GoalsDetails(),
+    ),
+    GetPage(
+      name: savingsType,
+      page: () => const SavingsType(),
+    ),
+    GetPage(
+      name: savingsSummary,
+      page: () => const SavingsSummary(),
     ),
   ];
 }
