@@ -8,14 +8,14 @@ import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/action_button.dart';
 import 'package:sentro/core/utils/text.dart';
 
-class SavingsSummary extends StatefulWidget {
-  const SavingsSummary({super.key});
+class LoanSummary extends StatefulWidget {
+  const LoanSummary({super.key});
 
   @override
-  State<SavingsSummary> createState() => _SavingsSummaryState();
+  State<LoanSummary> createState() => _LoanSummaryState();
 }
 
-class _SavingsSummaryState extends State<SavingsSummary> {
+class _LoanSummaryState extends State<LoanSummary> {
   bool _isRead = false;
   @override
   Widget build(BuildContext context) {
@@ -97,7 +97,7 @@ class _SavingsSummaryState extends State<SavingsSummary> {
                               nairaColor: isDark?Colors.white:Colors.black,
                             ),
                             CText(
-                              text: 'My New Savings',
+                              text: '6 Months Loan',
                               fontWeight: FontWeight.w500,
                               fontFamily: CFONT.MEDIUM,
                               size: 12,
@@ -110,95 +110,85 @@ class _SavingsSummaryState extends State<SavingsSummary> {
                   ),
                   SizedBox(height: heightSize(18),),
                   Column(
-                    children: [
-                      _receiptRow(
-                        title: 'Product Type',
-                        value: 'Flexible Savings',
-                        isColored: false,
-                      ),
+                      children: [
+                        _receiptRow(
+                          title: 'Loan Amount',
+                          value: 'N0.00',
+                          isColored: false,
+                        ),
 
-                      SizedBox(height: heightSize(11)),
-                      Divider(color: isDark ? sButtonFillDark : sLightBorder),
-                      SizedBox(height: heightSize(11)),
+                        SizedBox(height: heightSize(11)),
+                        Divider(color: isDark ? sButtonFillDark : sLightBorder),
+                        SizedBox(height: heightSize(11)),
 
-                      _receiptRow(
-                        title: 'Goal Name',
-                        value: 'My Savings',
-                        isColored: false,
-                      ),
+                        _receiptRow(
+                          title: 'Loan Rate',
+                          value: '20%',
+                          isColored: false,
+                        ),
 
-                      SizedBox(height: heightSize(11)),
-                      Divider(color: isDark ? sButtonFillDark : sLightBorder),
-                      SizedBox(height: heightSize(11)),
+                        SizedBox(height: heightSize(11)),
+                        Divider(color: isDark ? sButtonFillDark : sLightBorder),
+                        SizedBox(height: heightSize(11)),
 
-                      _receiptRow(
-                        title: 'Amount',
-                        value: 'N22,014',
-                        isColored: false,
-                      ),
-                      SizedBox(height: heightSize(11)),
-                      Divider(color: isDark ? sButtonFillDark : sLightBorder),
-                      SizedBox(height: heightSize(11)),
+                        _receiptRow(
+                          title: 'Monthly',
+                          value: '1.7%',
+                          isColored: false,
+                        ),
+                        SizedBox(height: heightSize(11)),
+                        Divider(color: isDark ? sButtonFillDark : sLightBorder),
+                        SizedBox(height: heightSize(11)),
 
-                      _receiptRow(
-                        title: 'Interest Rate',
-                        value: '10% per annum',
-                        isColored: true,
-                      ),
+                        _receiptRow(
+                          title: 'Total Interest (1 year)',
+                          value: 'N10',
+                          isColored: true,
+                        ),
 
-                      SizedBox(height: heightSize(11)),
-                      Divider(color: isDark ? sButtonFillDark : sLightBorder),
-                      SizedBox(height: heightSize(11)),
+                        SizedBox(height: heightSize(11)),
+                        Divider(color: isDark ? sButtonFillDark : sLightBorder),
+                        SizedBox(height: heightSize(11)),
 
-                      _receiptRow(
-                        title: 'Payout Frequency',
-                        value: 'Monthly',
-                        isColored: false,
-                      ),
+                        _receiptRow(
+                          title: 'First Repayment Amount',
+                          value: 'N10',
+                          isColored: true,
+                        ),
 
-                      SizedBox(height: heightSize(11)),
-                      Divider(color: isDark ? sButtonFillDark : sLightBorder),
-                      SizedBox(height: heightSize(11)),
+                        SizedBox(height: heightSize(11)),
+                        Divider(color: isDark ? sButtonFillDark : sLightBorder),
+                        SizedBox(height: heightSize(11)),
 
-                      _receiptRow(
-                        title: 'Duration',
-                        value: 'No lock-in',
-                        isColored: false,
-                      ),
+                        _receiptRow(
+                          title: 'First Repayment Date',
+                          value: '30 July, 2026',
+                          isColored: false,
+                        ),
 
-                      SizedBox(height: heightSize(11)),
-                      Divider(color: isDark ? sButtonFillDark : sLightBorder),
-                      SizedBox(height: heightSize(11)),
+                        SizedBox(height: heightSize(11)),
+                        Divider(color: isDark ? sButtonFillDark : sLightBorder),
+                        SizedBox(height: heightSize(11)),
 
-                      _receiptRow(
-                        title: 'Roll-over',
-                        value: 'Yes — auto-reinvest',
-                        isColored: false,
-                      ),
+                        _receiptRow(
+                          title: 'Loan Fee',
+                          value: 'N10',
+                          isColored: false,
+                        ),
 
-                      SizedBox(height: heightSize(11)),
-                      Divider(color: isDark ? sButtonFillDark : sLightBorder),
-                      SizedBox(height: heightSize(11)),
+                        SizedBox(height: heightSize(32)),
+                        Divider(color: isDark ? sButtonFillDark : sLightBorder),
+                        SizedBox(height: heightSize(23)),
 
-                      _receiptRow(
-                        title: 'Fund From',
-                        value: 'Main Balance',
-                        isColored: false,
-                      ),
-
-                      SizedBox(height: heightSize(19)),
-                      Divider(color: sGrey2),
-                      SizedBox(height: heightSize(27.5)),
-                      
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CText(text: 'Total at Maturity (est)', fontWeight: FontWeight.w500, fontFamily: CFONT.MEDIUM, size: 14,),
-                          CText(text: 'N10,000', fontWeight: FontWeight.w700, fontFamily: CFONT.BOLD, size: 18, color: sNavContainer,),
-                        ],
-                      ),
-                      SizedBox(height: heightSize(27),)
-                    ]
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CText(text: 'Receivable Loan', fontWeight: FontWeight.w500, fontFamily: CFONT.MEDIUM, size: 14,),
+                            CText(text: 'N9,990', fontWeight: FontWeight.w700, fontFamily: CFONT.BOLD, size: 18, color: sNavContainer,),
+                          ],
+                        ),
+                        SizedBox(height: heightSize(30.5),)
+                      ]
 
                   )
                 ],
@@ -283,7 +273,7 @@ class _SavingsSummaryState extends State<SavingsSummary> {
               color: sNavContainer,
               textColor: sActionButton,
               callback: () {
-                Get.back();
+                Get.toNamed(Routes.confirmTransaction);
               },
             ),
             SizedBox(height: heightSize(10),),

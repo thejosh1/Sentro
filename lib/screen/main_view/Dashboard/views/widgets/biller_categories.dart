@@ -10,6 +10,7 @@ import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/constants/values.dart';
 import 'package:sentro/core/utils/label_container.dart';
 import 'package:sentro/core/utils/text.dart';
+import 'package:sentro/core/widgets/loan_dialog.dart';
 import 'package:sentro/core/widgets/top_up.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/home_page.dart';
 
@@ -534,7 +535,9 @@ class BillerCategories extends StatelessWidget {
                       title: 'Loans',
                       isDark: isDark,
                       colorScheme: colorScheme,
-                      callback: () {},
+                      callback: () {
+                        showLoanDialog(context: context, isDark: isDark);
+                      },
                       color: sNavContainer,
                     ),
                   ],
@@ -791,7 +794,9 @@ class _AllServicesSheet extends StatelessWidget {
                             assetName: loansService,
                             title: 'Loans',
                             tintColor: Colors.white,
-                            callback: () {},
+                            callback: () {
+                              showLoanDialog(context: context, isDark: isDark);
+                            },
                           ),
                         ]),
                       ],
@@ -879,7 +884,9 @@ class _AllServicesSheet extends StatelessWidget {
                                 assetName: loansService,
                                 title: 'Loans',
                                 tintColor: Colors.white,
-                                callback: () {},
+                                callback: () {
+                                  showLoanDialog(context: context, isDark: isDark);
+                                },
                               ),
                               _item(
                                 assetName: invest,

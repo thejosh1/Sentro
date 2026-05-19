@@ -14,6 +14,13 @@ import 'package:sentro/screen/main_view/Saving&Investments/goals_details.dart';
 import 'package:sentro/screen/main_view/Saving&Investments/savings_summary.dart';
 import 'package:sentro/screen/main_view/Saving&Investments/savings_type.dart';
 import 'package:sentro/screen/main_view/Saving&Investments/start_saving.dart';
+import 'package:sentro/screen/main_view/loans/active_loans.dart';
+import 'package:sentro/screen/main_view/loans/decision.dart';
+import 'package:sentro/screen/main_view/loans/eligibility_test.dart';
+import 'package:sentro/screen/main_view/loans/loan_calculator.dart';
+import 'package:sentro/screen/main_view/loans/loan_summary.dart';
+import 'package:sentro/screen/main_view/loans/repayment.dart';
+import 'package:sentro/screen/main_view/loans/take_loan.dart';
 import 'package:sentro/screen/main_view/transfers/confirm_transfer.dart';
 import 'package:sentro/screen/main_view/transfers/request_from_sentro.dart';
 import 'package:sentro/screen/main_view/transfers/transfer.dart';
@@ -73,6 +80,15 @@ class AppPages {
   static const goalsDetails = Routes.goalsDetails;
   static const savingsType = Routes.savingsType;
   static const savingsSummary = Routes.savingsSummary;
+
+  //loans
+  static const loanCalculator = Routes.loanCalculator;
+  static const eligibilityTest = Routes.eligibilityTest;
+  static const decision = Routes.decision;
+  static const activeLoan = Routes.activeLoans;
+  static const repayment = Routes.repayment;
+  static const takeLoan = Routes.takeLoan;
+  static const loanSummary = Routes.loanSummary;
 
   //shared
   static const confirmPin = Routes. confirmPin;
@@ -214,6 +230,34 @@ class AppPages {
     GetPage(
       name: savingsSummary,
       page: () => const SavingsSummary(),
+    ),
+    GetPage(
+      name: loanCalculator,
+      page: () => const LoanCalculator(),
+    ),
+    GetPage(
+      name: eligibilityTest,
+      page: () => const EligibilityTest(),
+    ),
+    GetPage(
+      name: decision,
+      page: () => const Decision(),
+    ),
+    GetPage(
+      name: activeLoan,
+      page: () => const ActiveLoans(),
+    ),
+    GetPage(
+      name: repayment,
+      page: () => const Repayment(),
+    ),
+    GetPage(
+      name: takeLoan,
+      page: () => const TakeLoan(),
+    ),
+    GetPage(
+      name: loanSummary,
+      page: () => const LoanSummary(),
     ),
   ];
 }

@@ -10,6 +10,7 @@ import 'package:sentro/core/constants/values.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/label_container.dart';
 import 'package:sentro/core/utils/text.dart';
+import 'package:sentro/core/widgets/loan_dialog.dart';
 import 'package:sentro/core/widgets/top_up.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/widgets/available_balance.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/widgets/biller_categories.dart';
@@ -462,7 +463,9 @@ class _CollapsedRow extends StatelessWidget {
             title: 'Loans',
             isDark: isDark,
             colorScheme: colorScheme,
-            callback: () {}),
+            callback: () {
+              showLoanDialog(context: context, isDark: isDark);
+            }),
       ],
     );
   }
@@ -566,6 +569,7 @@ class _ExpandedContent extends StatelessWidget {
               iconContainerWidth: heightSize(46),
               colorScheme: colorScheme,
               tintColor: Colors.white,
+              onTap: () => showLoanDialog(context: context, isDark: isDark),
             ),
           ],
         ),

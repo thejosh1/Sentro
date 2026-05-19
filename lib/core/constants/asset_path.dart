@@ -55,6 +55,13 @@ final String bnpl = _getImagePath('images/svg/bnpl.svg');
 final String phone = _getImagePath('images/svg/phone.svg');
 final String dataTopUp = _getImagePath('images/svg/data-topup.svg');
 final String barChat = _getImagePath('images/svg/bar_chart.svg');
+final String takeLoan = _getImagePath('images/svg/take-loan.svg');
+final String payLoan = _getImagePath('images/svg/payback-loan.svg');
+final String calculator = _getImagePath('images/svg/calculator.svg');
+final String loan2 = _getImagePath('images/svg/loan2.svg');
+final String securityUser = _getImagePath('images/svg/security-user.svg');
+final String infoCircle = _getImagePath('images/svg/info-circle.svg');
+final String sentroBusiness = _getImagePath('images/svg/sentro-business.svg');
 
 //icons
 final String arrowBack = _getImagePath('icon/svg/arrow-back.svg');

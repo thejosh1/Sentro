@@ -41,6 +41,15 @@ abstract class Routes {
   static const savingsType = '/savings-type';
   static const savingsSummary = '/savings-summary';
 
+  //loans
+  static const loanCalculator = '/loan-calculator';
+  static const eligibilityTest = '/eligibility-test';
+  static const decision = '/decision';
+  static const activeLoans = '/active-loans';
+  static const repayment = '/repayment';
+  static const takeLoan = '/take-loan';
+  static const loanSummary = '/loan-summary';
+
   //widgets
   static const confirmTransaction = '/confirm-transaction';
 }
