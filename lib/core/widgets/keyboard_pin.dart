@@ -79,57 +79,6 @@ class _KeyboardPinState extends State<KeyboardPin> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Biometric Login Button (shown above keyboard if enabled)
-        if (widget.showBiometric) ...[
-          const SizedBox(height: 20),
-          Center(
-            child: Column(
-              children: [
-                const Text(
-                  'Or use biometric',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: sDarkModeMutedText,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                InkWell(
-                  onTap: widget.isBiometricLoading ? null : widget.onBiometricPressed,
-                  borderRadius: BorderRadius.circular(50),
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: sDeepGreen.withOpacity(0.1),
-                      border: Border.all(
-                        color: sDeepGreen,
-                        width: 2,
-                      ),
-                    ),
-                    child: widget.isBiometricLoading
-                        ? const Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation(sDeepGreen),
-                      ),
-                    )
-                        : SvgPicture.asset(
-                      fingerScan,
-                      width: widthSize(40.3),
-                      height: heightSize(48),
-                      colorFilter: ColorFilter.mode(
-                          sFingerPrint, BlendMode.srcIn,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-        ],
 
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -139,6 +88,7 @@ class _KeyboardPinState extends State<KeyboardPin> {
             SizedBox(
               width: MediaQuery.of(context).size.width,
               child: NumericKeyboard(
+                showBiometric: widget.showBiometric,
                 onKeyboardTap: (value) {
                   setState(() {
                     // Only add digit if less than 4 digits
@@ -150,7 +100,7 @@ class _KeyboardPinState extends State<KeyboardPin> {
                       // Automatically trigger callback when 4 digits are entered
                       if (widget.controller.text.length == 4) {
                         // Small delay to show the last digit before processing
-                        Future.delayed(const Duration(milliseconds: 300), () {
+                        Future.delayed(const Duration(milliseconds: 200), () {
                           _handlePinComplete();
                         });
                       }

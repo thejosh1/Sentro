@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,19 @@ class TakeLoan extends StatefulWidget {
 class _TakeLoanState extends State<TakeLoan> {
   TextEditingController amountController = TextEditingController();
   bool _isRead = false;
+
+  bool _isDurationOpen = false;
+  String _selectedDuration = '6 Months';
+
+  final List<String> _durations = [
+    '1 Month',
+    '3 Months',
+    '6 Months',
+    '12 Months',
+    '18 Months',
+    '24 Months',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,15 +56,15 @@ class _TakeLoanState extends State<TakeLoan> {
             CText(
               text: 'Take Loan',
               size: 18,
-              fontFamily: CFONT.MEDIUM,
-              fontWeight: FontWeight.w500,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wMedium,
             ),
             SizedBox(height: heightSize(15)),
             CText(
               text: 'Loan Eligibility',
               size: 16,
-              fontFamily: CFONT.REGULAR,
-              fontWeight: FontWeight.w400,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wRegular,
               height: 20/14,
               color: sGrey1,
             ),
@@ -58,8 +72,8 @@ class _TakeLoanState extends State<TakeLoan> {
             CText(
               text: 'N10,000,000',
               size: 24,
-              fontFamily: CFONT.MEDIUM,
-              fontWeight: FontWeight.w500,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wMedium,
               color: sNavContainer,
             ),
             SizedBox(height: heightSize(26)),
@@ -67,13 +81,13 @@ class _TakeLoanState extends State<TakeLoan> {
               title: CText(
                 text: 'Loan Amount (N)',
                 size: 16,
-                fontWeight: FontWeight.w400,
-                fontFamily: CFONT.REGULAR,
+                fontWeight: CFONT.wRegular,
+                fontFamily: CFONT.FAMILY,
               ),
               showNairaPrefix: true,
               hasBottomMargin: false,
               height: heightSize(55),
-              hint: '₦0.00',
+              hint: '0.00',
               controller: amountController,
               inputType: TextInputType.number,
               error: '',
@@ -86,112 +100,81 @@ class _TakeLoanState extends State<TakeLoan> {
                 CText(
                   text: 'Duration',
                   size: 16,
-                  fontFamily: CFONT.REGULAR,
-                  fontWeight: FontWeight.w400,
+                  fontFamily: CFONT.FAMILY,
+                  fontWeight: CFONT.wRegular,
                 ),
                 SizedBox(height: heightSize(5),),
-                GestureDetector(
+                _SelectorBox(
+                  isDark: true,
+                  isOpen: _isDurationOpen,
+                  label: _selectedDuration,
+                  isEmpty: false,
                   onTap: () async {
-                    // setState(() {
-                    //   isPlanSheetOpen = true;
-                    // });
-                    // await showModalBottomSheet(
-                    //   context: context,
-                    //   backgroundColor: Colors.transparent,
-                    //   isScrollControlled: true,
-                    //   constraints: BoxConstraints(
-                    //     minHeight: MediaQuery.of(context).size.height*0.75,
-                    //   ),
-                    //   builder: (_) {
-                    //     return TweenAnimationBuilder(
-                    //       duration: const Duration(milliseconds: 300),
-                    //       tween: Tween(begin: 0.0, end: 1.0),
-                    //       curve: Curves.easeOut,
-                    //       builder: (context, value, child) {
-                    //         return Transform.translate(
-                    //           offset: Offset(0, 100 * (1 - value)),
-                    //           child: Opacity(
-                    //             opacity: value,
-                    //             child: child,
-                    //           ),
-                    //         );
-                    //       },
-                    //       child: Container(
-                    //         padding: EdgeInsets.all(widthSize(20)),
-                    //         decoration: BoxDecoration(
-                    //           color: sModalColor,
-                    //           borderRadius: const BorderRadius.vertical(
-                    //             top: Radius.circular(24),
-                    //           ),
-                    //         ),
-                    //         child: Column(
-                    //           mainAxisSize: MainAxisSize.min,
-                    //           children: [
-                    //             Container(
-                    //               width: widthSize(44),
-                    //               height: heightSize(4),
-                    //               margin: EdgeInsets.only(bottom: heightSize(16)),
-                    //               decoration: BoxDecoration(
-                    //                 color: Colors.black,
-                    //                 borderRadius: BorderRadius.circular(8),
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       ),
-                    //     );
-                    //   },
-                    // );
-
-                    // setState(() {
-                    //   isPlanSheetOpen = false;
-                    // });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.only(left: widthSize(15), top: heightSize(20.5), right: widthSize(19), bottom: heightSize(20.5)),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(Values().buttonRadius10,),
-                      color: sDarkFill,
-                      border: Border.all(color:sDarkBorder,),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 250),
-                          transitionBuilder: (child, animation) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: SlideTransition(
-                                position: Tween<Offset>(
-                                  begin: const Offset(0, 0.3),
-                                  end: Offset.zero,
-                                ).animate(animation),
-                                child: child,
+                    FocusScope.of(context).unfocus();
+                    setState(() => _isDurationOpen = true);
+                    await showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      isScrollControlled: true,
+                      builder: (_) => _BottomSheet(
+                        isDark: true,
+                        title: 'Loan Duration',
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: _durations.map((d) {
+                            final isSelected = d == _selectedDuration;
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() => _selectedDuration = d);
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                width: double.maxFinite,
+                                margin: EdgeInsets.only(bottom: heightSize(10)),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: widthSize(16),
+                                  vertical: heightSize(14),
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: isSelected
+                                      ? sNavContainer.withOpacity(0.10)
+                                      : sDarkFill,
+                                  border: Border.all(
+                                    color: isSelected
+                                        ? sNavContainer.withOpacity(0.4)
+                                        : Colors.transparent,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CText(
+                                      text: d,
+                                      size: 14,
+                                      fontFamily: CFONT.FAMILY,
+                                      fontWeight: isSelected ? CFONT.wMedium : CFONT.wRegular,
+                                      color: isSelected ? sNavContainer : Colors.white,
+                                    ),
+                                    if (isSelected)
+                                      SvgPicture.asset(
+                                        tickLight,
+                                        width: widthSize(18),
+                                        height: heightSize(18),
+                                        colorFilter: const ColorFilter.mode(
+                                          sNavContainer, BlendMode.srcIn,
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ),
                             );
-                          },
-                          child: CText(
-                            text: '6 Month',
-                            size: 14,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: CFONT.REGULAR,
-                          ),
+                          }).toList(),
                         ),
-
-                        AnimatedRotation(
-                          turns: 0,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                          child: SvgPicture.asset(
-                            arrowDown,
-                            width: widthSize(20),
-                            height: heightSize(20),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                    setState(() => _isDurationOpen = false);
+                  },
                 ),
               ],
             ),
@@ -215,29 +198,27 @@ class _TakeLoanState extends State<TakeLoan> {
                       CText(
                         text: 'Interest Preview',
                         size: 16,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: CFONT.MEDIUM,
+                        fontWeight: CFONT.wMedium,
+                        fontFamily: CFONT.FAMILY,
                         color: sNavContainer,
                       ),
                       SizedBox(height: heightSize(15),),
                       // ── Items ──────────────────────────────────
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'Loan Amount',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: 'N0.00',
                             size: 14,
-                            fontFamily: CFONT.MEDIUM,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
                           ),
                         ],
                       ),
@@ -245,22 +226,20 @@ class _TakeLoanState extends State<TakeLoan> {
                       Divider(color: sDarkBorder,),
                       SizedBox(height: heightSize(10),),
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'Loan Rate',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: '20%',
                             size: 14,
-                            fontFamily: CFONT.MEDIUM,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
                           ),
                         ],
                       ),
@@ -268,22 +247,20 @@ class _TakeLoanState extends State<TakeLoan> {
                       Divider(color: sDarkBorder,),
                       SizedBox(height: heightSize(10),),
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'Monthly',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: '1.7%',
                             size: 14,
-                            fontFamily: CFONT.MEDIUM,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
                           ),
                         ],
                       ),
@@ -291,22 +268,20 @@ class _TakeLoanState extends State<TakeLoan> {
                       Divider(color: sDarkBorder,),
                       SizedBox(height: heightSize(10),),
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'Total Interest (1 year)',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: 'N10',
                             size: 14,
-                            fontFamily: CFONT.MEDIUM,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
                             color: sNavContainer,
                           ),
                         ],
@@ -315,22 +290,20 @@ class _TakeLoanState extends State<TakeLoan> {
                       Divider(color: sDarkBorder,),
                       SizedBox(height: heightSize(17),),
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'First Repayment Amount',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: 'N10',
                             size: 14,
-                            fontFamily: CFONT.MEDIUM,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
                             color: sNavContainer,
                           ),
                         ],
@@ -339,22 +312,20 @@ class _TakeLoanState extends State<TakeLoan> {
                       Divider(color: sDarkBorder,),
                       SizedBox(height: heightSize(10),),
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'First Repayment Date',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: '30 July, 2026',
                             size: 14,
-                            fontFamily: CFONT.MEDIUM,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
                           ),
                         ],
                       ),
@@ -384,17 +355,17 @@ class _TakeLoanState extends State<TakeLoan> {
                       CText(
                         text: 'Auto Repayment',
                         size: 14,
-                        fontFamily: CFONT.MEDIUM,
-                        fontWeight: FontWeight.w500,
+                        fontFamily: CFONT.FAMILY,
+                        fontWeight: CFONT.wMedium,
                       ),
                       SizedBox(height: heightSize(5),),
                       SizedBox(
                         width: widthSize(263),
                         child: CText(
-                          text: 'Repay loans automatically from main balance on the loan’s due date.',
+                          text: 'Repay loans automatically from main balance on the loan\'s due date.',
                           size: 12,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: CFONT.REGULAR,
+                          fontWeight: CFONT.wRegular,
+                          fontFamily: CFONT.FAMILY,
                         ),
                       )
                     ],
@@ -403,7 +374,7 @@ class _TakeLoanState extends State<TakeLoan> {
                   GestureDetector(
                     onTap: () => setState(() => _isRead = !_isRead),
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
+                      duration: const Duration(milliseconds: 180),
                       curve: Curves.easeInOut,
                       width: widthSize(54),
                       height: heightSize(28),
@@ -421,7 +392,7 @@ class _TakeLoanState extends State<TakeLoan> {
                             : MainAxisAlignment.start,
                         children: [
                           AnimatedContainer(
-                            duration: const Duration(milliseconds: 250),
+                            duration: const Duration(milliseconds: 180),
                             curve: Curves.easeInOut,
                             width: widthSize(22),
                             height: heightSize(22),
@@ -449,6 +420,125 @@ class _TakeLoanState extends State<TakeLoan> {
             SizedBox(height: heightSize(30),),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _SelectorBox extends StatelessWidget {
+  final bool isDark;
+  final bool isOpen;
+  final String label;
+  final bool isEmpty;
+  final VoidCallback? onTap;
+
+  const _SelectorBox({
+    required this.isDark,
+    required this.isOpen,
+    required this.label,
+    required this.isEmpty,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final disabled = onTap == null;
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: EdgeInsets.symmetric(
+          horizontal: widthSize(15),
+          vertical: heightSize(18),
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(Values().buttonRadius10),
+          color: isDark ? sDarkFill : Colors.transparent,
+          border: Border.all(
+            color: isOpen ? sNavContainer : sDarkBorder,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: CText(
+                text: label,
+                size: 14,
+                fontWeight: CFONT.wRegular,
+                fontFamily: CFONT.FAMILY,
+                color: isEmpty || disabled
+                    ? Colors.white38
+                    : Colors.white,
+              ),
+            ),
+            AnimatedRotation(
+              turns: isOpen ? 0.5 : 0,
+              duration: const Duration(milliseconds: 250),
+              child: SvgPicture.asset(
+                arrowDown,
+                width: widthSize(20),
+                height: heightSize(20),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BottomSheet extends StatelessWidget {
+  final bool isDark;
+  final String title;
+  final Widget child;
+
+  const _BottomSheet({
+    required this.isDark,
+    required this.title,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.maxFinite,
+      padding: EdgeInsets.fromLTRB(
+        widthSize(20),
+        heightSize(16),
+        widthSize(20),
+        heightSize(32),
+      ),
+      decoration: BoxDecoration(
+        color: isDark ? sModalColor : Colors.white,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Center(
+            child: Container(
+              width: widthSize(44),
+              height: heightSize(4),
+              margin: EdgeInsets.only(bottom: heightSize(16)),
+              decoration: BoxDecoration(
+                color: Colors.white24,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          Center(
+            child: CText(
+              text: title,
+              size: 18,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wMedium,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(height: heightSize(20)),
+          child,
+        ],
       ),
     );
   }

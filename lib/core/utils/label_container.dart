@@ -1,3 +1,5 @@
+// lib/core/utils/label_container.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -11,6 +13,9 @@ import 'package:sentro/core/utils/action_button.dart';
 import 'package:sentro/core/utils/text.dart';
 import 'package:sentro/core/widgets/text_field.dart';
 
+// ── Shared field height — single source of truth ──────────────────────────────
+const double _kFieldHeight = 58;
+
 class LabelContainer extends StatefulWidget {
   final bool isData;
   const LabelContainer({super.key, this.isData = false});
@@ -22,738 +27,301 @@ class LabelContainer extends StatefulWidget {
 class _LabelContainerState extends State<LabelContainer> {
   late NetworkModel selectedNetwork;
   PlanModel? selectedPlan;
+
   final List<NetworkModel> networks = [
     NetworkModel(name: 'MTN', logo: mtn),
     NetworkModel(name: 'AIRTEL', logo: airtel),
     NetworkModel(name: 'GLO', logo: glo),
-    NetworkModel(name: '9MOBILE', logo: etisalat,
-    ),
+    NetworkModel(name: '9MOBILE', logo: etisalat),
   ];
 
   final List<PlanModel> plans = [
-    PlanModel(
-      name: "110MB Daily Plan",
-      duration: 1,
-      amount: 100,
-    ),
-    PlanModel(
-      name: "230MB Daily Plan",
-      duration: 1,
-      amount: 200,
-    ),
-    PlanModel(
-      name: "230MB Daily Plan",
-      duration: 1,
-      amount: 1000,
-    ),
-    PlanModel(
-      name: "230MB Daily Plan",
-      duration: 1,
-      amount: 1500,
-    ),
-    PlanModel(
-      name: "230MB Daily Plan",
-      duration: 1,
-      amount: 3500,
-    ),
-    PlanModel(
-      name: "230MB Daily Plan",
-      duration: 1,
-      amount: 4500,
-    ),
-    PlanModel(
-      name: "230MB Daily Plan",
-      duration: 1,
-      amount: 5500,
-    ),
+    PlanModel(name: '110MB Daily Plan', duration: 1, amount: 100),
+    PlanModel(name: '230MB Daily Plan', duration: 1, amount: 200),
+    PlanModel(name: '500MB Daily Plan', duration: 1, amount: 1000),
+    PlanModel(name: '1GB Daily Plan',   duration: 1, amount: 1500),
+    PlanModel(name: '2GB Weekly Plan',  duration: 7, amount: 3500),
+    PlanModel(name: '5GB Monthly Plan', duration: 30, amount: 4500),
+    PlanModel(name: '10GB Monthly Plan',duration: 30, amount: 5500),
   ];
 
-  bool isSheetOpen = false;
+  bool isSheetOpen     = false;
   bool isPlanSheetOpen = false;
-  TextEditingController dataController = TextEditingController();
-  late TextEditingController dataPhoneController;
-  TextEditingController airtimeController = TextEditingController();
-  late TextEditingController airtimePhoneController;
+
+  final dataController        = TextEditingController();
+  final dataPhoneController   = TextEditingController();
+  final airtimeController     = TextEditingController();
+  final airtimePhoneController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-
-    dataPhoneController = TextEditingController();
-    airtimePhoneController = TextEditingController();
-
     selectedNetwork = networks.first;
-    selectedPlan = null;
   }
+
+  @override
+  void dispose() {
+    dataController.dispose();
+    dataPhoneController.dispose();
+    airtimeController.dispose();
+    airtimePhoneController.dispose();
+    super.dispose();
+  }
+
+  // ── Network bottom sheet ──────────────────────────────────────────────────
+
+  Future<void> _showNetworkSheet(BuildContext context, bool isDark) async {
+    setState(() => isSheetOpen = true);
+    await showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (_) => _NetworkSheet(
+        networks: networks,
+        selected: selectedNetwork,
+        isDark: isDark,
+        onSelect: (n) {
+          setState(() => selectedNetwork = n);
+          Navigator.pop(context);
+        },
+      ),
+    );
+    setState(() => isSheetOpen = false);
+  }
+
+  // ── Plan bottom sheet ─────────────────────────────────────────────────────
+
+  Future<void> _showPlanSheet(BuildContext context, bool isDark) async {
+    setState(() => isPlanSheetOpen = true);
+    await showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (_) => _PlanSheet(
+        plans: plans,
+        selected: selectedPlan,
+        isDark: isDark,
+        onSelect: (p) {
+          setState(() => selectedPlan = p);
+          Navigator.pop(context);
+        },
+      ),
+    );
+    setState(() => isPlanSheetOpen = false);
+  }
+
+  // ── Network selector box (fixed height = _kFieldHeight) ──────────────────
+
+  Widget _networkBox(BuildContext context, bool isDark) {
+    return GestureDetector(
+      onTap: () => _showNetworkSheet(context, isDark),
+      child: Container(
+        width: widthSize(115),
+        height: heightSize(_kFieldHeight), // same as AppTextField
+        padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(Values().buttonRadius10),
+          color: isDark ? sDarkFill : Colors.transparent,
+          border: Border.all(
+            color: isDark ? sDarkBorder : sLightBorder,
+          ),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: widthSize(24),
+              height: heightSize(24),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: AssetImage(selectedNetwork.logo),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            SizedBox(width: widthSize(5)),
+            Expanded(
+              child: CText(
+                text: selectedNetwork.name,
+                size: 12,
+                fontFamily: CFONT.FAMILY,
+                fontWeight: CFONT.wRegular,
+              ),
+            ),
+            AnimatedRotation(
+              turns: isSheetOpen ? 0.5 : 0,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+              child: SvgPicture.asset(
+                arrowDown,
+                width: widthSize(16),
+                height: heightSize(16),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ── Row: Network + Phone ──────────────────────────────────────────────────
+
+  Widget _networkPhoneRow(
+      BuildContext context,
+      bool isDark,
+      TextEditingController phoneCtrl,
+      ) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end, // align bottoms
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CText(
+              text: 'Network',
+              size: 14,
+              fontWeight: CFONT.wRegular,
+              fontFamily: CFONT.FAMILY,
+            ),
+            SizedBox(height: heightSize(8)),
+            _networkBox(context, isDark),
+          ],
+        ),
+        SizedBox(width: widthSize(12)),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CText(
+                text: 'Phone Number',
+                size: 14,
+                fontWeight: CFONT.wRegular,
+                fontFamily: CFONT.FAMILY,
+              ),
+              SizedBox(height: heightSize(8)),
+              // AppTextField height is driven by contentPadding → matches _kFieldHeight
+              AppTextField(
+                hint: '09060000000',
+                hasBottomMargin: false,
+                controller: phoneCtrl,
+                inputType: TextInputType.phone,
+                error: '',
+                validFunction: (v) =>
+                (v == null || v.trim().isEmpty)
+                    ? 'Please input your phone number.'
+                    : null,
+                suffixWidget: SvgPicture.asset(
+                  addUser,
+                  width: widthSize(22),
+                  height: heightSize(22),
+                  colorFilter: isDark?null:ColorFilter.mode(sActionButton, BlendMode.srcIn),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return widget.isData?Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CText(
-                  text: 'Network',
-                  size: 16,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: CFONT.REGULAR,
+
+    if (widget.isData) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _networkPhoneRow(context, isDark, dataPhoneController),
+          SizedBox(height: heightSize(14)),
+
+          // Plan selector
+          GestureDetector(
+            onTap: () => _showPlanSheet(context, isDark),
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: widthSize(15),
+                vertical: heightSize(18),
+              ),
+              decoration: BoxDecoration(
+                borderRadius:
+                BorderRadius.circular(Values().buttonRadius10),
+                color: isDark ? sDarkFill : Colors.transparent,
+                border: Border.all(
+                  color: isDark ? sDarkBorder : sLightBorder,
                 ),
-                SizedBox(height: heightSize(10),),
-                GestureDetector(
-                  onTap: () async {
-                    setState(() {
-                      isSheetOpen = true;
-                    });
-                    await showModalBottomSheet(
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      isScrollControlled: true,
-                      constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height*0.75,
-                      ),
-                      builder: (_) {
-                        return TweenAnimationBuilder(
-                          duration: const Duration(milliseconds: 300),
-                          tween: Tween(begin: 0.0, end: 1.0),
-                          curve: Curves.easeOut,
-                          builder: (context, value, child) {
-                            return Transform.translate(
-                              offset: Offset(0, 100 * (1 - value)),
-                              child: Opacity(
-                                opacity: value,
-                                child: child,
-                              ),
-                            );
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(widthSize(20)),
-                            decoration: BoxDecoration(
-                              color: isDark ? sModalColor : Colors.white,
-                              borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(24),
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  width: widthSize(44),
-                                  height: heightSize(4),
-                                  margin: EdgeInsets.only(bottom: heightSize(16)),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                Center(
-                                  child: CText(
-                                    text: 'Select Network',
-                                    fontFamily: CFONT.MEDIUM,
-                                    fontWeight: FontWeight.w500,
-                                    size: 18,
-                                  ),
-                                ),
-                                SizedBox(height: heightSize(33),),
-
-                                ...networks.map((network) {
-                                  final isSelected =
-                                      selectedNetwork.name == network.name;
-
-                                  return GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        selectedNetwork = network;
-                                      });
-
-                                      Navigator.pop(context);
-                                    },
-                                    child: AnimatedContainer(
-                                      duration: const Duration(milliseconds: 250),
-                                      margin: EdgeInsets.only(
-                                        bottom: heightSize(13),
-                                      ),
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: widthSize(24),
-                                        vertical: heightSize(16.5),
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(Values().buttonRadius10),
-                                        color: isDark?sDarkFill:Colors.transparent,
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            width: widthSize(42),
-                                            height: heightSize(42),
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                image: AssetImage(network.logo),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-
-                                          SizedBox(width: widthSize(15)),
-
-                                          Expanded(
-                                            child: CText(
-                                              text: network.name,
-                                              size: 16,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: CFONT.REGULAR,
-                                              height: 16.67/16,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-
-                    setState(() {
-                      isSheetOpen = false;
-                    });
-                  },
-                  child: Container(
-                    width: widthSize(115),
-                    height: heightSize(58),
-                    padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: sDarkFill,
-                      border: Border.all(color: sDarkBorder),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: widthSize(24),
-                          height: heightSize(24),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: AssetImage(selectedNetwork.logo),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-
-                        SizedBox(width: widthSize(5)),
-
-                        CText(
-                          text: selectedNetwork.name,
-                          size: 14,
-                          fontFamily: CFONT.REGULAR,
-                          fontWeight: FontWeight.w400,
-                        ),
-
-                        SizedBox(width: widthSize(3)),
-
-                        AnimatedRotation(
-                          turns: isSheetOpen ? 0.5 : 0,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                          child: SvgPicture.asset(
-                            arrowDown,
-                            width: widthSize(20),
-                            height: heightSize(20),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(width: widthSize(14),),
-            Expanded(
-              child:  Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CText(
-                    text: 'Phone Number',
-                    size: 16,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: CFONT.REGULAR,
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 200),
+                    child: CText(
+                      key: ValueKey(selectedPlan?.name ?? 'empty'),
+                      text: selectedPlan == null
+                          ? 'Select a plan'
+                          : '${selectedPlan!.name} (${selectedPlan!.duration}d) — ₦${selectedPlan!.amount}',
+                      size: 14,
+                      fontWeight: CFONT.wRegular,
+                      fontFamily: CFONT.FAMILY,
+                      color: selectedPlan == null
+                          ? (isDark ? Colors.white38 : Colors.black38)
+                          : null,
+                    ),
                   ),
-                  SizedBox(height: heightSize(10),),
-                  AppTextField(
-                    height: heightSize(68),
-                    hint: '09060000000',
-                    hasBottomMargin: false,
-                    controller: dataPhoneController,
-                    inputType: TextInputType.phone,
-                    error: '',
-                    validFunction: (value) {
-                      if (value == null || value
-                          .trim()
-                          .isEmpty) {
-                        return "Please input your phone number.";
-                      }
-                      return null;
-                    },
-                    suffixWidget: SvgPicture.asset(
-                      addUser,
-                      width: widthSize(24),
-                      height: heightSize(24),
+                  AnimatedRotation(
+                    turns: isPlanSheetOpen ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: SvgPicture.asset(
+                      arrowDown,
+                      width: widthSize(20),
+                      height: heightSize(20),
                     ),
                   ),
                 ],
               ),
-            )
-          ],
-        ),
-        SizedBox(height: heightSize(14),),
-        GestureDetector(
-          onTap: () async {
-            setState(() {
-              isPlanSheetOpen = true;
-            });
-            await showModalBottomSheet(
-              context: context,
-              backgroundColor: Colors.transparent,
-              isScrollControlled: true,
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height*0.75,
-              ),
-              builder: (_) {
-                return TweenAnimationBuilder(
-                  duration: const Duration(milliseconds: 300),
-                  tween: Tween(begin: 0.0, end: 1.0),
-                  curve: Curves.easeOut,
-                  builder: (context, value, child) {
-                    return Transform.translate(
-                      offset: Offset(0, 100 * (1 - value)),
-                      child: Opacity(
-                        opacity: value,
-                        child: child,
-                      ),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(widthSize(20)),
-                    decoration: BoxDecoration(
-                      color: isDark ? sModalColor : Colors.white,
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(24),
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: widthSize(44),
-                          height: heightSize(4),
-                          margin: EdgeInsets.only(bottom: heightSize(16)),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        Center(
-                          child: AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 250),
-                            transitionBuilder: (child, animation) {
-                              return FadeTransition(
-                                opacity: animation,
-                                child: SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: const Offset(0, 0.3),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
-                                ),
-                              );
-                            },
-                            child: CText(
-                              key: ValueKey(selectedPlan?.name ?? "empty"),
-                              text: selectedPlan == null
-                                  ? 'Select a plan'
-                                  : '${selectedPlan!.name} (${selectedPlan!.duration} Day)',
-                              size: 14,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: CFONT.REGULAR,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: heightSize(33),),
-
-                        ...plans.map((plan) {
-
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedPlan = plan;
-                              });
-
-                              Navigator.pop(context);
-                            },
-                            child: AnimatedContainer(
-                              width: double.maxFinite,
-                              duration: const Duration(milliseconds: 250),
-                              margin: EdgeInsets.only(
-                                bottom: heightSize(13),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: widthSize(24),
-                                vertical: heightSize(16.5),
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(Values().buttonRadius10),
-                                color: isDark?sDarkFill:Colors.transparent,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CText(
-                                    text: plan.name,
-                                    size: 16,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: CFONT.REGULAR,
-                                    height: 16.67 / 16,
-                                  ),
-                                  SizedBox(height: heightSize(10),),
-                                  CText(
-                                    text: 'N${plan.amount}',
-                                    fontFamily: CFONT.MEDIUM,
-                                    fontWeight: FontWeight.w500,
-                                    size: 16,
-                                    color: sNavContainer,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-
-            setState(() {
-              isPlanSheetOpen = false;
-            });
-          },
-          child: Container(
-            padding: EdgeInsets.only(left: widthSize(15), top: heightSize(20.5), right: widthSize(19), bottom: heightSize(20.5)),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Values().buttonRadius10,),
-              color: isDark?sDarkFill:Colors.transparent,
-              border: Border.all(color: isDark?sDarkBorder:sLightBorder,),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 250),
-                  transitionBuilder: (child, animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: SlideTransition(
-                        position: Tween<Offset>(
-                          begin: const Offset(0, 0.3),
-                          end: Offset.zero,
-                        ).animate(animation),
-                        child: child,
-                      ),
-                    );
-                  },
-                  child: CText(
-                    key: ValueKey(selectedPlan?.name ?? "empty"),
-                    text: selectedPlan == null
-                        ? 'Select a plan'
-                        : '${selectedPlan!.name} (${selectedPlan!.duration} Day) - N${selectedPlan!.amount}',
-                    size: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: CFONT.REGULAR,
-                  ),
-                ),
-
-                AnimatedRotation(
-                  turns: isPlanSheetOpen ? 0.5 : 0,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  child: SvgPicture.asset(
-                    arrowDown,
-                    width: widthSize(20),
-                    height: heightSize(20),
-                  ),
-                ),
-              ],
             ),
           ),
-        ),
-        SizedBox(height: heightSize(42),),
-        ActionButton(
-          text: 'Buy Data',
-          height: heightSize(55),
-          textColor: Colors.white,
-          callback: () {
-            Get.back();
-            Get.toNamed(Routes.confirmation);
-          },
-        ),
-      ],
-    ):
-    Column(
+
+          SizedBox(height: heightSize(32)),
+
+          ActionButton(
+            text: 'Buy Data',
+            height: heightSize(55),
+            textColor: Colors.white,
+            callback: () {
+              Get.back();
+              Get.toNamed(Routes.confirmation);
+            },
+          ),
+        ],
+      );
+    }
+
+    // ── Airtime ──────────────────────────────────────────────────────────────
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CText(
-                  text: 'Network',
-                  size: 16,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: CFONT.REGULAR,
-                ),
-                SizedBox(height: heightSize(10),),
-                GestureDetector(
-                  onTap: () async {
-                    setState(() {
-                      isSheetOpen = true;
-                    });
-                    await showModalBottomSheet(
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      isScrollControlled: true,
-                      constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height*0.75,
-                      ),
-                      builder: (_) {
-                        return TweenAnimationBuilder(
-                          duration: const Duration(milliseconds: 300),
-                          tween: Tween(begin: 0.0, end: 1.0),
-                          curve: Curves.easeOut,
-                          builder: (context, value, child) {
-                            return Transform.translate(
-                              offset: Offset(0, 100 * (1 - value)),
-                              child: Opacity(
-                                opacity: value,
-                                child: child,
-                              ),
-                            );
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(widthSize(20)),
-                            decoration: BoxDecoration(
-                              color: isDark ? sModalColor : Colors.white,
-                              borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(24),
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  width: widthSize(44),
-                                  height: heightSize(4),
-                                  margin: EdgeInsets.only(bottom: heightSize(16)),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                Center(
-                                  child: CText(
-                                    text: 'Select Network',
-                                    fontFamily: CFONT.MEDIUM,
-                                    fontWeight: FontWeight.w500,
-                                    size: 18,
-                                  ),
-                                ),
-                                SizedBox(height: heightSize(33),),
+        _networkPhoneRow(context, isDark, airtimePhoneController),
+        SizedBox(height: heightSize(14)),
 
-                                ...networks.map((network) {
-                                  final isSelected =
-                                      selectedNetwork.name == network.name;
-
-                                  return GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        selectedNetwork = network;
-                                      });
-
-                                      Navigator.pop(context);
-                                    },
-                                    child: AnimatedContainer(
-                                      duration: const Duration(milliseconds: 250),
-                                      margin: EdgeInsets.only(
-                                        bottom: heightSize(13),
-                                      ),
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: widthSize(24),
-                                        vertical: heightSize(16.5),
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(Values().buttonRadius10),
-                                        color: isDark?sDarkFill:Colors.transparent,
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            width: widthSize(42),
-                                            height: heightSize(42),
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                image: AssetImage(network.logo),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-
-                                          SizedBox(width: widthSize(15)),
-
-                                          Expanded(
-                                            child: CText(
-                                              text: network.name,
-                                              size: 16,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: CFONT.REGULAR,
-                                              height: 16.67/16,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-
-                    setState(() {
-                      isSheetOpen = false;
-                    });
-                  },
-                  child: Container(
-                    width: widthSize(115),
-                    height: heightSize(58),
-                    padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: sDarkFill,
-                      border: Border.all(color: sDarkBorder),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: widthSize(24),
-                          height: heightSize(24),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: AssetImage(selectedNetwork.logo),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-
-                        SizedBox(width: widthSize(5)),
-
-                        CText(
-                          text: selectedNetwork.name,
-                          size: 14,
-                          fontFamily: CFONT.REGULAR,
-                          fontWeight: FontWeight.w400,
-                        ),
-
-                        SizedBox(width: widthSize(3)),
-
-                        AnimatedRotation(
-                          turns: isSheetOpen ? 0.5 : 0,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                          child: SvgPicture.asset(
-                            arrowDown,
-                            width: widthSize(20),
-                            height: heightSize(20),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(width: widthSize(14),),
-            Expanded(
-              child:  Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CText(
-                    text: 'Phone Number',
-                    size: 16,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: CFONT.REGULAR,
-                  ),
-                  SizedBox(height: heightSize(10),),
-                  AppTextField(
-                    height: heightSize(68),
-                    hint: '09060000000',
-                    hasBottomMargin: false,
-                    controller: airtimePhoneController,
-                    inputType: TextInputType.phone,
-                    error: '',
-                    validFunction: (value) {
-                      if (value == null || value
-                          .trim()
-                          .isEmpty) {
-                        return "Please input your phone number.";
-                      }
-                      return null;
-                    },
-                    suffixWidget: SvgPicture.asset(
-                      addUser,
-                      width: widthSize(24),
-                      height: heightSize(24),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-        SizedBox(height: heightSize(14),),
+        // Amount
         AppTextField(
           showNairaPrefix: true,
-          height: heightSize(68),
           hasBottomMargin: false,
-          hint: '₦0.00',
+          hint: '0.00',
           controller: airtimeController,
           inputType: TextInputType.number,
           error: '',
-          validFunction: (value) {
-            if (value == null || value
-                .trim()
-                .isEmpty) {
-              return "Select an amount.";
-            }
-            return null;
-          },
+          validFunction: (v) =>
+          (v == null || v.trim().isEmpty) ? 'Select an amount.' : null,
         ),
-        SizedBox(height: heightSize(42),),
+
+        SizedBox(height: heightSize(32)),
+
         ActionButton(
           text: 'Buy Airtime',
           height: heightSize(55),
@@ -766,4 +334,222 @@ class _LabelContainerState extends State<LabelContainer> {
       ],
     );
   }
+}
+
+// ── Network bottom sheet ───────────────────────────────────────────────────────
+
+class _NetworkSheet extends StatelessWidget {
+  final List<NetworkModel> networks;
+  final NetworkModel selected;
+  final bool isDark;
+  final ValueChanged<NetworkModel> onSelect;
+
+  const _NetworkSheet({
+    required this.networks,
+    required this.selected,
+    required this.isDark,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(widthSize(20)),
+      decoration: BoxDecoration(
+        color: isDark ? sModalColor : Colors.white,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _handle(),
+          Center(
+            child: CText(
+              text: 'Select Network',
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wMedium,
+              size: 18,
+            ),
+          ),
+          SizedBox(height: heightSize(24)),
+          ...networks.map((n) {
+            final isSelected = n.name == selected.name;
+            return GestureDetector(
+              onTap: () => onSelect(n),
+              child: Container(
+                margin: EdgeInsets.only(bottom: heightSize(10)),
+                padding: EdgeInsets.symmetric(
+                  horizontal: widthSize(16),
+                  vertical: heightSize(14),
+                ),
+                decoration: BoxDecoration(
+                  borderRadius:
+                  BorderRadius.circular(Values().buttonRadius10),
+                  color: isSelected
+                      ? sNavContainer.withOpacity(0.08)
+                      : (isDark ? sDarkFill : Colors.transparent),
+                  border: Border.all(
+                    color: isSelected ? sNavContainer : Colors.transparent,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: widthSize(38),
+                      height: heightSize(38),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: AssetImage(n.logo),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: widthSize(14)),
+                    Expanded(
+                      child: CText(
+                        text: n.name,
+                        size: 16,
+                        fontWeight: CFONT.wRegular,
+                        fontFamily: CFONT.FAMILY,
+                      ),
+                    ),
+                    if (isSelected)
+                      SvgPicture.asset(
+                        tickLight,
+                        width: widthSize(20),
+                        height: heightSize(20),
+                        colorFilter: const ColorFilter.mode(
+                          sNavContainer,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            );
+          }),
+          SizedBox(height: heightSize(16)),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Plan bottom sheet ──────────────────────────────────────────────────────────
+
+class _PlanSheet extends StatelessWidget {
+  final List<PlanModel> plans;
+  final PlanModel? selected;
+  final bool isDark;
+  final ValueChanged<PlanModel> onSelect;
+
+  const _PlanSheet({
+    required this.plans,
+    required this.selected,
+    required this.isDark,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(widthSize(20)),
+      decoration: BoxDecoration(
+        color: isDark ? sModalColor : Colors.white,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _handle(),
+          Center(
+            child: CText(
+              text: 'Select a plan',
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wMedium,
+              size: 18,
+            ),
+          ),
+          SizedBox(height: heightSize(24)),
+          ...plans.map((p) {
+            final isSelected = p.name == selected?.name &&
+                p.amount == selected?.amount;
+            return GestureDetector(
+              onTap: () => onSelect(p),
+              child: Container(
+                width: double.maxFinite,
+                margin: EdgeInsets.only(bottom: heightSize(10)),
+                padding: EdgeInsets.symmetric(
+                  horizontal: widthSize(16),
+                  vertical: heightSize(14),
+                ),
+                decoration: BoxDecoration(
+                  borderRadius:
+                  BorderRadius.circular(Values().buttonRadius10),
+                  color: isSelected
+                      ? sNavContainer.withOpacity(0.08)
+                      : (isDark ? sDarkFill : Colors.transparent),
+                  border: Border.all(
+                    color:
+                    isSelected ? sNavContainer : Colors.transparent,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CText(
+                          text: p.name,
+                          size: 15,
+                          fontWeight: CFONT.wRegular,
+                          fontFamily: CFONT.FAMILY,
+                        ),
+                        SizedBox(height: heightSize(4)),
+                        CText(
+                          // system font so ₦ renders correctly
+                          text: '₦${p.amount}',
+                          size: 15,
+                          fontWeight: CFONT.wMedium,
+                          fontFamily: null,
+                          color: sNavContainer,
+                        ),
+                      ],
+                    ),
+                    if (isSelected)
+                      SvgPicture.asset(
+                        tickLight,
+                        width: widthSize(20),
+                        height: heightSize(20),
+                        colorFilter: const ColorFilter.mode(
+                          sNavContainer,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            );
+          }),
+          SizedBox(height: heightSize(16)),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Shared drag handle ────────────────────────────────────────────────────────
+
+Widget _handle() {
+  return Container(
+    width: 44,
+    height: 4,
+    margin: const EdgeInsets.only(bottom: 16),
+    decoration: BoxDecoration(
+      color: Colors.grey.shade400,
+      borderRadius: BorderRadius.circular(8),
+    ),
+  );
 }

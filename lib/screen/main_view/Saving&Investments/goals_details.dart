@@ -18,9 +18,11 @@ class _GoalsDetailsState extends State<GoalsDetails> {
   String amountOnly(String value) {
     return value.split(' on ').first;
   }
+
   @override
   Widget build(BuildContext context) {
     final GoalModel goal = Get.arguments as GoalModel;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Padding(
@@ -34,30 +36,30 @@ class _GoalsDetailsState extends State<GoalsDetails> {
                 GestureDetector(
                   onTap: () => Get.back(),
                   child: SvgPicture.asset(
-                    arrowBackWhite, width: widthSize(42), height: heightSize(42),
+                    isDark?arrowBackWhite:arrowBack, width: widthSize(42), height: heightSize(42),
                   ),
                 ),
                 CText(
                   text: 'Details',
                   size: 18,
                   height: 20/18,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: CFONT.MEDIUM,
+                  fontWeight: CFONT.wMedium,
+                  fontFamily: CFONT.FAMILY,
                 ),
                 Container(
                   width: widthSize(52),
                   height: heightSize(21),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
-                    color: sNavContainer.withOpacity(0.1),
+                    color: isDark?sNavContainer.withOpacity(0.1):sNavContainer.withOpacity(0.4),
                   ),
                   child: Center(
                     child: CText(
                       text: 'Active',
                       size: 12.57,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: CFONT.REGULAR,
-                      color: sNavContainer,
+                      fontWeight: CFONT.wRegular,
+                      fontFamily: CFONT.FAMILY,
+                      color: isDark?sNavContainer:sActionButton,
                     ),
                   ),
                 ),
@@ -66,16 +68,16 @@ class _GoalsDetailsState extends State<GoalsDetails> {
             CText(
               text: goal.type,
               size: 14,
-              fontFamily: CFONT.MEDIUM,
-              fontWeight: FontWeight.w500,
-              color: sConfirmTextColor,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wMedium,
+              color: isDark?sConfirmTextColor:sGrey2,
             ),
             SizedBox(height: heightSize(45),),
             CText(
               text: goal.name,
               size: 20,
-              fontFamily: CFONT.MEDIUM,
-              fontWeight: FontWeight.w500,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wMedium,
             ),
             SizedBox(height: heightSize(21),),
             _detailItem(
@@ -83,24 +85,28 @@ class _GoalsDetailsState extends State<GoalsDetails> {
               value: goal.balance,
               isPayout: false,
               isInterest: false,
+              isDark: isDark,
             ),
             _detailItem(
               title: 'TARGET',
               value: amountOnly(goal.target ?? ''),
               isPayout: false,
               isInterest: false,
+              isDark: isDark,
             ),
             _detailItem(
               title: 'INTEREST RATE',
               value: goal.interestRate,
               isPayout: false,
               isInterest: true,
+              isDark: isDark,
             ),
             _detailItem(
               title: 'MATURES',
               value: goal.matures,
               isPayout: false,
               isInterest: false,
+              isDark: isDark,
             ),
             _detailItem(
               title: 'Payout Frequency',
@@ -108,6 +114,7 @@ class _GoalsDetailsState extends State<GoalsDetails> {
               reinvest: goal.reinvest,
               isPayout: true,
               isInterest: true,
+              isDark: isDark,
             ),
             Spacer(),
             Container(
@@ -123,8 +130,8 @@ class _GoalsDetailsState extends State<GoalsDetails> {
                   CText(
                     text: 'Top Up',
                     size: 16,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: CFONT.MEDIUM,
+                    fontWeight: CFONT.wMedium,
+                    fontFamily: CFONT.FAMILY,
                     color: sActionButton,
                   ),
                   SizedBox(width: widthSize(5),),
@@ -145,16 +152,16 @@ class _GoalsDetailsState extends State<GoalsDetails> {
               width: double.maxFinite,
               height: heightSize(55),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(11.71),
-                color: Colors.transparent,
-                border: Border.all(color: sGrey2)
+                  borderRadius: BorderRadius.circular(11.71),
+                  color: Colors.transparent,
+                  border: Border.all(color: sGrey2)
               ),
               child: Center(
                 child: CText(
                   text: 'Withdraw',
                   size: 16,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: CFONT.MEDIUM,
+                  fontWeight: CFONT.wMedium,
+                  fontFamily: CFONT.FAMILY,
                 ),
               ),
             ),
@@ -168,10 +175,10 @@ class _GoalsDetailsState extends State<GoalsDetails> {
   Widget _detailItem({
     required String title,
     required String value,
-
     bool isPayout = false,
     bool isInterest = false,
     bool reinvest = false,
+    required bool isDark
   }) {
     if (!isPayout) {
       return Container(
@@ -185,8 +192,8 @@ class _GoalsDetailsState extends State<GoalsDetails> {
         margin: EdgeInsets.only(bottom: 10.86),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.63),
-          border: Border.all(color: sDarkBorder),
-          color: sDarkFill,
+          border: Border.all(color: isDark?sDarkBorder:sLightBorder),
+          color: isDark?sDarkFill:sLightFill,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,18 +202,16 @@ class _GoalsDetailsState extends State<GoalsDetails> {
             CText(
               text: title,
               size: 12,
-              fontFamily: CFONT.REGULAR,
-              fontWeight: FontWeight.w400,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wRegular,
               color: sGrey1,
             ),
-
             SizedBox(height: heightSize(5)),
-
             CText(
               text: value,
               size: 14,
-              fontFamily: CFONT.MEDIUM,
-              fontWeight: FontWeight.w500,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wMedium,
               color: isInterest
                   ? sNavContainer
                   : Theme.of(context).colorScheme.onSurface,
@@ -218,7 +223,6 @@ class _GoalsDetailsState extends State<GoalsDetails> {
 
     return Row(
       children: [
-
         /// Payout Frequency
         Expanded(
           child: Container(
@@ -226,8 +230,8 @@ class _GoalsDetailsState extends State<GoalsDetails> {
             padding: EdgeInsets.symmetric(horizontal: widthSize(14)),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.63),
-              color: sDarkFill,
-              border: Border.all(color: sDarkBorder),
+              color: isDark?sDarkFill:sLightFill,
+              border: Border.all(color: isDark?sDarkBorder:sLightBorder),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -236,29 +240,25 @@ class _GoalsDetailsState extends State<GoalsDetails> {
                 CText(
                   text: title,
                   size: 12,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: CFONT.REGULAR,
-                  color: sGrey1,
+                  fontWeight: CFONT.wRegular,
+                  fontFamily: CFONT.FAMILY,
+                  color: isDark?sGrey1:sGrey2,
                 ),
-
                 SizedBox(height: heightSize(5)),
-
                 CText(
                   text: value,
                   size: 14,
-                  fontFamily: CFONT.MEDIUM,
-                  fontWeight: FontWeight.w500,
+                  fontFamily: CFONT.FAMILY,
+                  fontWeight: CFONT.wMedium,
                   color: isInterest
-                      ? sNavContainer
+                      ? isDark?sNavContainer:sTextGreen
                       : Theme.of(context).colorScheme.onSurface,
                 ),
               ],
             ),
           ),
         ),
-
         SizedBox(width: widthSize(12)),
-
         /// Reinvest
         Expanded(
           child: Container(
@@ -266,8 +266,8 @@ class _GoalsDetailsState extends State<GoalsDetails> {
             padding: EdgeInsets.symmetric(horizontal: widthSize(14)),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.63),
-              color: sDarkFill,
-              border: Border.all(color: sDarkBorder),
+              color: isDark?sDarkFill:sLightFill,
+              border: Border.all(color: isDark?sDarkBorder:sLightBorder),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -276,13 +276,11 @@ class _GoalsDetailsState extends State<GoalsDetails> {
                 CText(
                   text: 'Reinvest at maturity',
                   size: 12,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: CFONT.REGULAR,
-                  color: sGrey1,
+                  fontWeight: CFONT.wRegular,
+                  fontFamily: CFONT.FAMILY,
+                  color: isDark?sGrey1:sGrey2,
                 ),
-
                 SizedBox(height: heightSize(5)),
-
                 reinvest
                     ? Row(
                   children: [
@@ -290,15 +288,14 @@ class _GoalsDetailsState extends State<GoalsDetails> {
                       tick,
                       width: widthSize(18),
                       height: heightSize(18),
+                      colorFilter: isDark?null:ColorFilter.mode(sTextGreen, BlendMode.srcIn),
                     ),
-
                     SizedBox(width: widthSize(4)),
-
                     Expanded(
                       child: CText(
                         text: 'Yes - auto reinvest',
-                        fontFamily: CFONT.MEDIUM,
-                        fontWeight: FontWeight.w500,
+                        fontFamily: CFONT.FAMILY,
+                        fontWeight: CFONT.wMedium,
                         size: 14,
                       ),
                     ),
@@ -306,8 +303,8 @@ class _GoalsDetailsState extends State<GoalsDetails> {
                 )
                     : CText(
                   text: 'No',
-                  fontFamily: CFONT.MEDIUM,
-                  fontWeight: FontWeight.w500,
+                  fontFamily: CFONT.FAMILY,
+                  fontWeight: CFONT.wMedium,
                   size: 14,
                 ),
               ],

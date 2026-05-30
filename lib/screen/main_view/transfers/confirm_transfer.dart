@@ -26,7 +26,7 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
     super.initState();
     final args = Get.arguments ?? {};
     isSentroTag = args['isSentroTag'] ?? false;
-    isRequest = args['isRequest'] ?? false; // ← add
+    isRequest = args['isRequest'] ?? false;
   }
 
   @override
@@ -48,7 +48,7 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
                     Get.back();
                   },
                   child: SvgPicture.asset(
-                    arrowBackWhite,
+                    isDark?arrowBackWhite:arrowBack,
                     width: widthSize(42),
                     height: heightSize(42),
                   ),
@@ -56,8 +56,8 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
                 SizedBox(width: widthSize(101),),
                 CText(
                   text: 'Confirmation',
-                  fontWeight: FontWeight.w400,
-                  fontFamily: CFONT.REGULAR,
+                  fontWeight: CFONT.wRegular,
+                  fontFamily: CFONT.FAMILY,
                   size: 18,
                 ),
               ],
@@ -66,8 +66,8 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
             Center(
               child: CText(
                 text: '10 April, 2026',
-                fontFamily: CFONT.MEDIUM,
-                fontWeight: FontWeight.w500,
+                fontFamily: CFONT.FAMILY,
+                fontWeight: CFONT.wMedium,
                 size: 14,
               ),
             ),
@@ -80,7 +80,7 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                color: sContainerColor,
+                color: isDark?sContainerColor:Colors.black.withOpacity(0.2),
               ),
               child: Column(
                 children: [
@@ -93,7 +93,7 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
                     ),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: sDarkBorder
+                        color: isDark?sDarkBorder:sLightBorder,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,9 +107,9 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
                               nairaColor: isDark?Colors.white:Colors.black,
                             ),
                             CText(
-                              text: '+ N15.45 VAT & Stamp Deuty',
-                              fontWeight: FontWeight.w500,
-                              fontFamily: CFONT.MEDIUM,
+                              text: '+ N15.45 VAT & Stamp Duty',
+                              fontWeight: CFONT.wMedium,
+                              fontFamily: CFONT.FAMILY,
                               size: 12,
                             ),
                           ],
@@ -139,24 +139,23 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
                       _receiptRow(
                         title: isRequest ? 'Request from' : 'Send to',
                         value: 'Richmond Uche - @richmond',
+                        isDark: isDark,
                       ),
-
                       SizedBox(height: heightSize(18.5)),
-                      Divider(color: isDark ? sButtonFillDark : sLightBorder),
+                      Divider(color: sButtonFillDark),
                       SizedBox(height: heightSize(18.5)),
-
                       _receiptRow(
                         title: 'Payment Method',
                         value: 'Sentro',
+                        isDark: isDark,
                       ),
-
                       SizedBox(height: heightSize(18.5)),
-                      Divider(color: isDark ? sButtonFillDark : sLightBorder),
+                      Divider(color: sButtonFillDark),
                       SizedBox(height: heightSize(18.5)),
-
                       _receiptRow(
                         title: 'Fee',
                         value: 'NG 0.00',
+                        isDark: isDark,
                       ),
                       SizedBox(height: heightSize(19),)
                     ]
@@ -164,42 +163,39 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
                       _receiptRow(
                         title: 'Receiver',
                         value: 'Richmond Uche',
+                        isDark: isDark,
                       ),
-
                       SizedBox(height: heightSize(18.5)),
-                      Divider(color: isDark ? sButtonFillDark : sLightBorder),
+                      Divider(color:sButtonFillDark),
                       SizedBox(height: heightSize(18.5)),
-
                       _receiptRow(
                         title: 'Receiver Bank',
                         value: 'Opay',
+                        isDark: isDark,
                       ),
-
                       SizedBox(height: heightSize(18.5)),
-                      Divider(color: isDark ? sButtonFillDark : sLightBorder),
+                      Divider(color: sButtonFillDark),
                       SizedBox(height: heightSize(18.5)),
-
                       _receiptRow(
                         title: 'Account',
                         value: '9060007015',
+                        isDark: isDark,
                       ),
-
                       SizedBox(height: heightSize(18.5)),
-                      Divider(color: isDark ? sButtonFillDark : sLightBorder),
+                      Divider(color: sButtonFillDark),
                       SizedBox(height: heightSize(18.5)),
-
                       _receiptRow(
                         title: 'Narration',
                         value: 'Sent from Sentro',
+                        isDark: isDark,
                       ),
-
                       SizedBox(height: heightSize(18.5)),
                       Divider(color: isDark ? sButtonFillDark : sLightBorder),
                       SizedBox(height: heightSize(18.5)),
-
                       _receiptRow(
                         title: 'Fee (VAT & Stamp Duty)',
                         value: 'N15.45',
+                        isDark: isDark,
                       ),
                       SizedBox(height: heightSize(31),)
                     ],
@@ -214,7 +210,7 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
                 height: heightSize(30),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(110.65),
-                  color: sTierColor,
+                  color: isDark?sTierColor:sLightFill,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -227,8 +223,8 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
                     SizedBox(width: widthSize(3.32),),
                     CText(
                       text: 'Save Beneficiary',
-                      fontWeight: FontWeight.w400,
-                      fontFamily: CFONT.REGULAR,
+                      fontWeight: CFONT.wRegular,
+                      fontFamily: CFONT.FAMILY,
                       size: 14,
                     ),
                   ],
@@ -255,8 +251,8 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
                       CText(
                         text: 'Send Anonymously ',
                         size: 14,
-                        fontFamily: CFONT.MEDIUM,
-                        fontWeight: FontWeight.w500,
+                        fontFamily: CFONT.FAMILY,
+                        fontWeight: CFONT.wMedium,
                       ),
                       SizedBox(height: heightSize(5),),
                       SizedBox(
@@ -264,8 +260,8 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
                         child: CText(
                           text: 'Send money to this person without knowing who sent the money',
                           size: 12,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: CFONT.REGULAR,
+                          fontWeight: CFONT.wRegular,
+                          fontFamily: CFONT.FAMILY,
                         ),
                       )
                     ],
@@ -274,7 +270,7 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
                   GestureDetector(
                     onTap: () => setState(() => _isAnonymous = !_isAnonymous),
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
+                      duration: const Duration(milliseconds: 180),
                       curve: Curves.easeInOut,
                       width: widthSize(54),
                       height: heightSize(28),
@@ -292,7 +288,7 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
                             : MainAxisAlignment.start,
                         children: [
                           AnimatedContainer(
-                            duration: const Duration(milliseconds: 250),
+                            duration: const Duration(milliseconds: 180),
                             curve: Curves.easeInOut,
                             width: widthSize(22),
                             height: heightSize(22),
@@ -327,22 +323,23 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
   Widget _receiptRow({
     required String title,
     required String value,
+    required bool isDark,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         CText(
           text: title,
-          fontFamily: CFONT.REGULAR,
-          fontWeight: FontWeight.w400,
+          fontFamily: CFONT.FAMILY,
+          fontWeight: CFONT.wRegular,
           size: 14,
-          color: sConfirmTextColor,
+          color: isDark?sConfirmTextColor:sGrey2,
         ),
         CText(
           text: value,
-          fontWeight: FontWeight.w500,
+          fontWeight: CFONT.wMedium,
           size: 16,
-          fontFamily: CFONT.MEDIUM,
+          fontFamily: CFONT.FAMILY,
         ),
       ],
     );

@@ -30,7 +30,7 @@ class ConfirmationPage extends StatelessWidget {
                     Get.back();
                   },
                   child: SvgPicture.asset(
-                    arrowBackWhite,
+                    isDark?arrowBackWhite:arrowBack,
                     width: widthSize(42),
                     height: heightSize(42),
                   ),
@@ -38,8 +38,8 @@ class ConfirmationPage extends StatelessWidget {
                 SizedBox(width: widthSize(101),),
                 CText(
                   text: 'Confirmation',
-                  fontWeight: FontWeight.w400,
-                  fontFamily: CFONT.REGULAR,
+                  fontWeight: CFONT.wRegular,
+                  fontFamily: CFONT.FAMILY,
                   size: 18,
                 ),
               ],
@@ -48,8 +48,8 @@ class ConfirmationPage extends StatelessWidget {
             Center(
               child: CText(
                 text: '10 April, 2026',
-                fontFamily: CFONT.MEDIUM,
-                fontWeight: FontWeight.w500,
+                fontFamily: CFONT.FAMILY,
+                fontWeight: CFONT.wMedium,
                 size: 14,
               ),
             ),
@@ -74,8 +74,8 @@ class ConfirmationPage extends StatelessWidget {
                       bottom: heightSize(19),
                     ),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: sDarkBorder
+                        borderRadius: BorderRadius.circular(12),
+                        color: sDarkBorder
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -89,9 +89,9 @@ class ConfirmationPage extends StatelessWidget {
                               nairaColor: isDark?Colors.white:Colors.black,
                             ),
                             CText(
-                              text: '+ N15.45 VAT & Stamp Deuty',
-                              fontWeight: FontWeight.w500,
-                              fontFamily: CFONT.MEDIUM,
+                              text: '+ N15.45 VAT & Stamp Duty',
+                              fontWeight: CFONT.wMedium,
+                              fontFamily: CFONT.FAMILY,
                               size: 12,
                             ),
                           ],
@@ -100,11 +100,11 @@ class ConfirmationPage extends StatelessWidget {
                           width: widthSize(45),
                           height: heightSize(45),
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: AssetImage(mtn),
-                              fit: BoxFit.cover,
-                            )
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: AssetImage(mtn),
+                                fit: BoxFit.cover,
+                              )
                           ),
                         )
                       ],
@@ -116,28 +116,38 @@ class ConfirmationPage extends StatelessWidget {
                     children: [
                       CText(
                         text: 'Receiver',
-                        fontFamily: CFONT.REGULAR,
-                        fontWeight: FontWeight.w400,
+                        fontFamily: CFONT.FAMILY,
+                        fontWeight: CFONT.wRegular,
                         size: 14,
                         color: sConfirmTextColor,
                       ),
-                      CText(text: '09060007015', fontWeight: FontWeight.w500, size: 16, fontFamily: CFONT.MEDIUM,)
+                      CText(
+                        text: '09060007015',
+                        fontWeight: CFONT.wMedium,
+                        size: 16,
+                        fontFamily: CFONT.FAMILY,
+                      )
                     ],
                   ),
                   SizedBox(height: heightSize(17),),
-                  Divider(color: isDark?sButtonFillDark:sLightBorder,),
+                  Divider(color: isDark ? sButtonFillDark : sLightBorder,),
                   SizedBox(height: heightSize(17),),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CText(
                         text: 'Provider',
-                        fontFamily: CFONT.REGULAR,
-                        fontWeight: FontWeight.w400,
+                        fontFamily: CFONT.FAMILY,
+                        fontWeight: CFONT.wRegular,
                         size: 14,
                         color: sConfirmTextColor,
                       ),
-                      CText(text: 'MTN', fontWeight: FontWeight.w500, size: 16, fontFamily: CFONT.MEDIUM,)
+                      CText(
+                        text: 'MTN',
+                        fontWeight: CFONT.wMedium,
+                        size: 16,
+                        fontFamily: CFONT.FAMILY,
+                      )
                     ],
                   ),
                   SizedBox(height: heightSize(29.5),),

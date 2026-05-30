@@ -15,119 +15,268 @@ class GetStarted extends StatefulWidget {
 }
 
 class _GetStartedState extends State<GetStarted> {
+  final PageController _controller = PageController();
+  int _index = 0;
+
+  final List<String> images = [
+    getStarted,
+    getStarted, // replace with second image
+    getStarted, // replace with third image
+  ];
+
+  final List<String> text = [
+    'Go beyond banking',
+    'Go beyond banking',
+    'We\'re 5% better'
+  ];
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: sBlack,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(height: heightSize(68),),
-          Center(
-            child: SvgPicture.asset(
-              logo,
-              width: widthSize(204.79),
-              height: heightSize(48),
+      body: Stack(
+        children: [
+          PageView.builder(
+            controller: _controller,
+            itemCount: images.length,
+            onPageChanged: (i) {
+              setState(() => _index = i);
+            },
+            itemBuilder: (_, __) => const SizedBox(),
+          ),
+          /// BACKGROUND IMAGE
+          Positioned.fill(
+            child: Image.asset(
+              images[_index],
+              fit: BoxFit.cover,
             ),
           ),
-          Spacer(),
-          Center(
-            child: SvgPicture.asset(
-              logo1x,
-              width: widthSize(297.28),
-              height: heightSize(285),
+
+          /// GRADIENT OVERLAY
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.2),
+                    Colors.black.withOpacity(0.65),
+                    Colors.black.withOpacity(0.90),
+                    Colors.black,
+                  ],
+                ),
+              ),
             ),
           ),
-          SizedBox(height: heightSize(89.75),),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
-            child: CText(
-              text: 'Banking but 5% better',
-              fontWeight: FontWeight.w400,
-              size: 37.2,
-              letterSpacing: 0.48,
-              fontFamily: 'Perfectly Vintages',
-            ),
-          ),
-          SizedBox(height: heightSize(8),),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: widthSize(25)),
-            child: CText(
-              text: 'Semper vel id ut quisque sit. Sapien ut amet non in varius. Odio libero nulla lorem ornare nibh nulla interdum arcu.',
-              size: 18.03, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400,
-            ),
-          ),
-          SizedBox(height: heightSize(68.25),),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
-            child: Row(
-              children: [
-                // Left — Login
-                Expanded(
-                  child: SizedBox(
-                    height: heightSize(60),
-                    width: widthSize(185),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Get.toNamed(Routes.verifyPhone);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isDark
-                            ? Colors.white.withOpacity(0.10)
-                            : Colors.black.withOpacity(0.08),
-                        foregroundColor: isDark
-                            ? Colors.white
-                            : sGreen,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const Text(
-                        "Login",
-                        style: TextStyle(
-                          fontFamily: CFONT.SEMIBOLD,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+
+          /// CONTENT
+          SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(height: heightSize(68)),
+
+                Center(
+                  child: SvgPicture.asset(
+                    logo,
+                    width: widthSize(204.79),
+                    height: heightSize(48),
+                  ),
+                ),
+
+                const Spacer(),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: widthSize(47),
+                  ),
+                  child: Center(
+                    child: CText(
+                      text: text[_index],
+                      fontWeight: CFONT.wRegular,
+                      size: 37.2,
+                      letterSpacing: 0.48,
+                      fontFamily: 'Perfectly Vintages',
+                      color: Colors.white,
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-            
-                const SizedBox(width: 20),
-            
-                // Right — Register
-                Expanded(
-                  child: SizedBox(
-                    height: heightSize(60),
-                    width: widthSize(185),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Get.toNamed(Routes.createAccount);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: sLemon,
-                        foregroundColor: sDeepGreen,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const Text(
-                        "Register",
-                        style: TextStyle(
-                          fontFamily: CFONT.SEMIBOLD,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
+
+                SizedBox(height: heightSize(5)),
+
+                Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: widthSize(25),
+                  ),
+                  child: CText(
+                    text:
+                    'Semper vel id ut quisque sit. Sapien ut amet non in varius. Odio libero nulla lorem ornare nibh nulla interdum arcu.',
+                    size: 15,
+                    fontFamily: CFONT.FAMILY,
+                    fontWeight: CFONT.wRegular,
+                    textAlign: TextAlign.center,
+                    color: Colors.white,
                   ),
                 ),
+
+                SizedBox(height: heightSize(12.12),),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          if (_index > 0) {
+                            _controller.previousPage(
+                              duration: const Duration(milliseconds: 200),
+                              curve: Curves.easeInOut,
+                            );
+                          }
+                        },
+                        child: SvgPicture.asset(
+                          arrowBackWhite,
+                          width: widthSize(61),
+                          height: heightSize(61),
+                        ),
+                      ),
+                  
+                      SizedBox(width: widthSize(20)),
+                  
+                      /// DOT INDICATOR (NOW IN THE MIDDLE)
+                      Row(
+                        children: List.generate(images.length, (i) {
+                          final active = i == _index;
+                  
+                          return GestureDetector(
+                            onTap: () {
+                              _controller.animateToPage(
+                                i,
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 180),
+                              margin: EdgeInsets.symmetric(horizontal: widthSize(4)),
+                              width: active ? widthSize(18) : widthSize(8),
+                              height: widthSize(8),
+                              decoration: BoxDecoration(
+                                color: active
+                                    ? sNavContainer
+                                    : Colors.white.withOpacity(0.4),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                  
+                      SizedBox(width: widthSize(20)),
+                  
+                      GestureDetector(
+                        onTap: () {
+                          if (_index < images.length - 1) {
+                            _controller.nextPage(
+                              duration: const Duration(milliseconds: 200),
+                              curve: Curves.easeInOut,
+                            );
+                          }
+                        },
+                        child: SvgPicture.asset(
+                          arrowLeft,
+                          width: widthSize(61),
+                          height: heightSize(61),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: heightSize(73)),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: widthSize(25),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: heightSize(60),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Get.toNamed(Routes.verifyPhone);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                              sNavContainer.withOpacity(0.10),
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: Text(
+                              "Login",
+                              style: TextStyle(
+                                fontFamily: CFONT.FAMILY,
+                                fontWeight: CFONT.wMedium,
+                                color: sNavContainer,
+                                letterSpacing: 0.54,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(width: widthSize(20)),
+
+                      Expanded(
+                        child: SizedBox(
+                          height: heightSize(60),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Get.toNamed(
+                                Routes.createAccount,
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: sLemon,
+                              foregroundColor: sDeepGreen,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: Text(
+                              "Register",
+                              style: TextStyle(
+                                fontFamily: CFONT.FAMILY,
+                                fontWeight: CFONT.wMedium,
+                                color: Colors.black,
+                                letterSpacing: 0.54,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: heightSize(35)),
               ],
             ),
           ),
-          SizedBox(height: heightSize(35),),
         ],
       ),
     );

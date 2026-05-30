@@ -42,8 +42,8 @@ class _StartSavingState extends State<StartSaving> {
             CText(
               text: type,
               size: 16,
-              fontWeight: FontWeight.w500,
-              fontFamily: CFONT.MEDIUM,
+              fontWeight: CFONT.wMedium,
+              fontFamily: CFONT.FAMILY,
             ),
           ],
         ),
@@ -54,8 +54,8 @@ class _StartSavingState extends State<StartSaving> {
           CText(
             text: '$interest% p.a',
             size: 14,
-            fontWeight: FontWeight.w700,
-            fontFamily: CFONT.BOLD,
+            fontWeight: CFONT.wBold,
+            fontFamily: CFONT.FAMILY,
             color: interestColor,
           ),
       ],
@@ -82,7 +82,8 @@ class _StartSavingState extends State<StartSaving> {
           child: CText(
             text: option.buttonLabel,
             size: 14,
-            fontFamily: CFONT.MEDIUM,
+            fontFamily: CFONT.FAMILY,
+            fontWeight: CFONT.wMedium,
             color: Colors.white,
           ),
         ),
@@ -114,9 +115,13 @@ class _StartSavingState extends State<StartSaving> {
       buttonLabel: 'Start Saving',
       fields: [
         SavingsField(label: 'Goal Name', type: SavingsFieldType.text, hint: 'e.g. New Car Money'),
-        SavingsField(label: 'Target Goal Amount (N)', type: SavingsFieldType.amount, hint: '₦0.00'),
+        SavingsField(label: 'Target Goal Amount (N)', type: SavingsFieldType.amount, hint: '0.00'),
         SavingsField(label: 'Target Date', type: SavingsFieldType.date, hint: 'dd/mm/yyyy',),
-        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%',),
+        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%', dropdownItems: [
+          'Monthly / 0.833%',
+          'Quarterly / 2.5%',
+          'Annually / 10%',
+        ]),
         SavingsField(
           label: 'Rollover',
           type: SavingsFieldType.info,
@@ -182,8 +187,12 @@ class _StartSavingState extends State<StartSaving> {
       buttonLabel: 'Invest in T-Bills',
       fields: [
         SavingsField(label: 'Goal Name', type: SavingsFieldType.text, hint: 'e.g. New Car Money'),
-        SavingsField(label: 'Investment Amount (N)', type: SavingsFieldType.amount, hint: '₦0.00'),
-        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%',),
+        SavingsField(label: 'Investment Amount (N)', type: SavingsFieldType.amount, hint: '0.00'),
+        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%', dropdownItems: [
+          'Monthly / 0.833%',
+          'Quarterly / 2.5%',
+          'Annually / 10%',
+        ]),
         SavingsField(
           label: 'Rollover',
           type: SavingsFieldType.info,
@@ -248,8 +257,12 @@ class _StartSavingState extends State<StartSaving> {
       buttonLabel: 'Invest in Funds',
       fields: [
         SavingsField(label: 'Goal Name', type: SavingsFieldType.text, hint: 'e.g. New Car Money'),
-        SavingsField(label: 'Investment Amount', type: SavingsFieldType.amount, hint: '₦0.00'),
-        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%',),
+        SavingsField(label: 'Investment Amount', type: SavingsFieldType.amount, hint: '0.00'),
+        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%', dropdownItems: [
+          'Monthly / 0.833%',
+          'Quarterly / 2.5%',
+          'Annually / 10%',
+        ]),
         SavingsField(
           label: 'Rollover',
           type: SavingsFieldType.info,
@@ -315,9 +328,17 @@ class _StartSavingState extends State<StartSaving> {
       buttonLabel: 'Open Dollar Vault',
       fields: [
         SavingsField(label: 'Goal Name', type: SavingsFieldType.text, hint: 'e.g. New Car Money'),
-        SavingsField(label: 'Amount (USD)', type: SavingsFieldType.amount, hint: '₦0.00'),
-        SavingsField(label: 'Duration', type: SavingsFieldType.dropdown, hint: '3 Months',),
-        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%',),
+        SavingsField(label: 'Amount (USD)', type: SavingsFieldType.amount, hint: '0.00'),
+        SavingsField(label: 'Duration', type: SavingsFieldType.dropdown, hint: '3 Months', dropdownItems: [
+          '6 Months',
+          '12 Months',
+          '24 Months',
+        ]),
+        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%', dropdownItems: [
+          'Monthly / 0.833%',
+          'Quarterly / 2.5%',
+          'Annually / 10%',
+        ]),
         SavingsField(
           label: 'Rollover',
           type: SavingsFieldType.info,
@@ -383,8 +404,8 @@ class _StartSavingState extends State<StartSaving> {
       buttonLabel: 'Open Dollar Vault',
       fields: [
         SavingsField(label: 'Goal Name', type: SavingsFieldType.text, hint: 'e.g. New Car Money'),
-        SavingsField(label: 'Tenor', type: SavingsFieldType.dropdown, hint: '180 days - 16.5% p.a', options: ['30 days', '60 days', '90 days', '180 days', '365 days']),
-        SavingsField(label: 'Target Goal Amount(N)', type: SavingsFieldType.amount, hint: '₦0.00'),
+        SavingsField(label: 'Tenor', type: SavingsFieldType.dropdown, hint: '180 days - 16.5% p.a', dropdownItems: ['30 days', '60 days', '90 days', '180 days', '365 days']),
+        SavingsField(label: 'Target Goal Amount(N)', type: SavingsFieldType.amount, hint: '0.00'),
         SavingsField(
           label: 'Rollover',
           type: SavingsFieldType.info,
@@ -449,9 +470,13 @@ class _StartSavingState extends State<StartSaving> {
       buttonLabel: 'Open Flexible Vault',
       fields: [
         SavingsField(label: 'Goal Name', type: SavingsFieldType.text, hint: 'e.g. New Car Money'),
-        SavingsField(label: 'Target Goal Amount (N)', type: SavingsFieldType.amount, hint: '₦0.00'),
+        SavingsField(label: 'Target Goal Amount (N)', type: SavingsFieldType.amount, hint: '0.00'),
         SavingsField(label: 'Target Date', type: SavingsFieldType.date, hint: 'dd/mm/yyyy',),
-        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%',),
+        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%', dropdownItems: [
+          'Monthly / 0.833%',
+          'Quarterly / 2.5%',
+          'Annually / 10%',
+        ]),
         SavingsField(
           label: 'Rollover',
           type: SavingsFieldType.info,
@@ -496,7 +521,7 @@ class _StartSavingState extends State<StartSaving> {
   ];
 
 
-  Widget _cardShell({required SavingsOption option}) {
+  Widget _cardShell({required SavingsOption option, required bool isDark}) {
     final hasInterest =
         option.interest != null && option.interest!.trim().isNotEmpty;
 
@@ -511,7 +536,7 @@ class _StartSavingState extends State<StartSaving> {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.72),
-        color: sSavingsColor,
+        color: isDark?sSavingsColor:sLightFill,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -522,58 +547,71 @@ class _StartSavingState extends State<StartSaving> {
             interestColor: option.interestColor ?? sNavContainer,
             showInterest: hasInterest,
           ),
-
           SizedBox(height: heightSize(18)),
-
           CText(
             text: option.description,
             size: 12,
-            fontFamily: CFONT.REGULAR,
-            color: sGrey1,
+            fontFamily: CFONT.FAMILY,
+            fontWeight: CFONT.wRegular,
+            color: isDark?sGrey1:sGrey2,
           ),
-
           SizedBox(height: heightSize(18)),
-
           // ✅ SAFE RENDER
           if (items.isNotEmpty)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: items.map((item) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CText(
-                      text: item.label,
-                      size: 10,
-                      fontFamily: CFONT.REGULAR,
-                      color: sGrey2,
-                    ),
-                    SizedBox(height: heightSize(0.5)),
-                    Row(
-                      children: [
-                        CText(
-                          text: item.value,
-                          size: 12,
-                          fontFamily: CFONT.MEDIUM,
-                        ),
-                        if (item.showIcon)
-                          Padding(
-                            padding: EdgeInsets.only(left: widthSize(2.5)),
-                            child: SvgPicture.asset(
-                              tick,
-                              width: widthSize(12),
-                              height: heightSize(12),
-                            ),
+            Container(
+              width: widthSize(double.maxFinite),
+              padding: EdgeInsets.only(bottom: heightSize(10), top: heightSize(9), left: widthSize(12),),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Colors.transparent,
+                border: Border.all(color: isDark?sDarkBorder:sGrey1),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: items.map((item) {
+                  return Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(right: widthSize(16)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CText(
+                            text: item.label,
+                            size: 10,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
+                            color: sGrey2,
                           ),
-                      ],
-                    )
-                  ],
-                );
-              }).toList(),
+                          SizedBox(height: heightSize(0.5)),
+                          Row(
+                            children: [
+                              Flexible(
+                                child: CText(
+                                  text: item.value,
+                                  size: 12,
+                                  fontFamily: CFONT.FAMILY,
+                                  fontWeight: CFONT.wMedium,
+                                ),
+                              ),
+                              if (item.showIcon)
+                                Padding(
+                                  padding: EdgeInsets.only(left: widthSize(2.5)),
+                                  child: SvgPicture.asset(
+                                    tick,
+                                    width: widthSize(12),
+                                    height: heightSize(12),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
-
           SizedBox(height: heightSize(22)),
-
           _cardFooter(option),
         ],
       ),
@@ -582,10 +620,11 @@ class _StartSavingState extends State<StartSaving> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
+        padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
         child: Column(
           children: [
             SizedBox(height: heightSize(64)),
@@ -593,55 +632,44 @@ class _StartSavingState extends State<StartSaving> {
               children: [
                 GestureDetector(
                   onTap: () => Get.back(),
-                  child: SvgPicture.asset(arrowBackWhite, width: widthSize(42), height: heightSize(42)),
+                  child: SvgPicture.asset(isDark?arrowBackWhite:arrowBack, width: widthSize(42), height: heightSize(42)),
                 ),
                 Expanded(child: SizedBox.shrink(),),
                 CText(
                   text: 'Start Saving',
                   size: 18,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: CFONT.MEDIUM,
+                  fontWeight: CFONT.wMedium,
+                  fontFamily: CFONT.FAMILY,
                   height: 20/18,
                 ),
                 Expanded(child: SizedBox.shrink(),),
               ],
             ),
-            
+
             SizedBox(height: heightSize(37)),
 
             Container(
               padding: EdgeInsets.symmetric(horizontal: widthSize(11), vertical: heightSize(11)),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.63), color: sDarkFill),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.63), color: isDark?sDarkFill:Colors.black.withOpacity(0.1)),
               child: Column(
                 children: [
-
                   // ── 1. Target Savings ──────────────────────────
-                  _cardShell(option: savingsOptions[0]),
-
+                  _cardShell(option: savingsOptions[0], isDark: isDark,),
                   SizedBox(height: heightSize(13)),
-
                   // ── 2. FGN Treasury Bills ──────────────────────
-                  _cardShell(option: savingsOptions[1]),
-
-
+                  _cardShell(option: savingsOptions[1], isDark: isDark,),
                   SizedBox(height: heightSize(13)),
-
-                  // ── 3. Dollar Savings ──────────────────────────
-                  _cardShell(option: savingsOptions[2]),
-
+                  // ── 3. Mutual Funds ──────────────────────────
+                  _cardShell(option: savingsOptions[2], isDark: isDark,),
                   SizedBox(height: heightSize(13)),
-
-                  // ── 4. Fixed Deposit ───────────────────────────
-                  _cardShell(option: savingsOptions[3]),
+                  // ── 4. Dollar Savings ───────────────────────────
+                  _cardShell(option: savingsOptions[3], isDark: isDark,),
                   SizedBox(height: heightSize(13)),
-
-                  // ── 5. Flexible Savings (Amber) ────────────────
-                  _cardShell(option: savingsOptions[4]),
-
+                  // ── 5. Fixed Deposit ────────────────
+                  _cardShell(option: savingsOptions[4], isDark: isDark,),
                   SizedBox(height: heightSize(13)),
-
-                  // ── 6. Mutual Fund ─────────────────────────────
-                  _cardShell(option: savingsOptions[5]),
+                  // ── 6. Flexible Savings ─────────────────────────────
+                  _cardShell(option: savingsOptions[5], isDark: isDark,),
                 ],
               ),
             ),

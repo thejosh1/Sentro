@@ -49,31 +49,35 @@ class _ConfirmTransactionState extends State<ConfirmTransaction> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: heightSize(64),),
-            Padding(
-              padding: EdgeInsets.only(right: widthSize(7)),
-              child: PageHeader(
-                trailing: SvgPicture.asset(
-                  headPhone,
-                  width: widthSize(43.52),
-                  height: heightSize(50),
-
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () => Get.back(),
+                  child: SvgPicture.asset(
+                    isDark?arrowBackWhite:arrowBack,
+                    width: widthSize(42),
+                    height: heightSize(42),
+                  ),
                 ),
-              ),
+                const Spacer(),
+                SvgPicture.asset(logo, width: widthSize(116.39), height: heightSize(28),),
+                const Spacer(),
+                SvgPicture.asset(isDark?headPhoneWhite:headPhone, width: widthSize(43.52), height: heightSize(50),),
+              ],
             ),
-            SizedBox(height: heightSize(34),),
+            SizedBox(height: heightSize(31),),
             CText(
-              text: 'Confirm Transaction',
+              text: 'Confirm your 4 Digit PIN',
               size: 22,
-              fontFamily: CFONT.BOLD,
-              fontWeight: FontWeight.w700,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wBold,
             ),
             SizedBox(height: heightSize(5),),
             CText(
-              text: 'Provide your 4 Digit transaction PIN',
-              fontWeight: FontWeight.w400, size: 18, fontFamily: CFONT.REGULAR, color: Theme.of(context).brightness == Brightness.dark
+              text: 'Authorise this action',
+              fontWeight: CFONT.wRegular, size: 18, fontFamily: CFONT.FAMILY, color: Theme.of(context).brightness == Brightness.dark
                 ? sDarkModeMutedText // dark mode muted text
                 : sLightModeMutedText,
             ),
@@ -100,7 +104,7 @@ class _ConfirmTransactionState extends State<ConfirmTransaction> {
                       shape: BoxShape.circle,
                       color: isFilled
                           ? sActionButton
-                          : sPinIndicator,
+                          : Colors.white,
                     ),
                   );
                 }),
@@ -110,6 +114,7 @@ class _ConfirmTransactionState extends State<ConfirmTransaction> {
             KeyboardPin(
               controller: controller,
               callback: _onSubmitPin,
+              showBiometric: true,
             ),
             SizedBox(height: heightSize(67),),
           ],

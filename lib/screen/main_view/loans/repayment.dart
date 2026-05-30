@@ -17,6 +17,7 @@ class Repayment extends StatefulWidget {
 
 class _RepaymentState extends State<Repayment> {
   bool _isRead = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,14 +40,14 @@ class _RepaymentState extends State<Repayment> {
             CText(
               text: 'Repayment',
               size: 18,
-              fontFamily: CFONT.MEDIUM,
-              fontWeight: FontWeight.w500,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wMedium,
             ),
             CText(
               text: 'Liquidate loan to increase your credit score',
               size: 14,
-              fontFamily: CFONT.REGULAR,
-              fontWeight: FontWeight.w400,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wRegular,
               height: 20/14,
               color: sConfirmTextColor,
             ),
@@ -54,38 +55,45 @@ class _RepaymentState extends State<Repayment> {
             CText(
               text: 'Due Loan',
               size: 14,
-              fontFamily: CFONT.REGULAR,
-              fontWeight: FontWeight.w400,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wRegular,
               color: sGrey1,
             ),
             SizedBox(height: heightSize(5)),
             CText(
               text: 'N10,000,000',
               size: 18,
-              fontFamily: CFONT.MEDIUM,
-              fontWeight: FontWeight.w500,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wMedium,
               color: sNavContainer,
             ),
             SizedBox(height: heightSize(5)),
             CText(
               text: '~ N15,000,000 remaining',
               size: 14,
-              fontFamily: CFONT.REGULAR,
-              fontWeight: FontWeight.w400,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wRegular,
             ),
             SizedBox(height: heightSize(28.97),),
             AppTextField(
               showNairaPrefix: true,
               hasBottomMargin: false,
               height: heightSize(55),
-              hint: '₦0.00',
+              hint: '0.00',
               controller: TextEditingController(),
-              suffixWidth: 94,
+              suffixWidth: 102,
               suffixWidget: Container(
                 height: heightSize(25.86),
                 padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(124.89), color: sContainerColor),
-                child: Center(child: CText(text: 'Liquidate all', size: 14, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR)),
+                child: Center(
+                  child: CText(
+                    text: 'Liquidate all',
+                    size: 14,
+                    fontWeight: CFONT.wRegular,
+                    fontFamily: CFONT.FAMILY,
+                  ),
+                ),
               ),
               inputType: TextInputType.number,
               error: '',
@@ -111,29 +119,27 @@ class _RepaymentState extends State<Repayment> {
                       CText(
                         text: 'Repayment Summary',
                         size: 14,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: CFONT.MEDIUM,
+                        fontWeight: CFONT.wMedium,
+                        fontFamily: CFONT.FAMILY,
                         color: sNavContainer,
                       ),
                       SizedBox(height: heightSize(15),),
                       // ── Items ──────────────────────────────────
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'Amount',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: 'N10,000,000',
                             size: 14,
-                            fontFamily: CFONT.MEDIUM,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
                           ),
                         ],
                       ),
@@ -141,22 +147,20 @@ class _RepaymentState extends State<Repayment> {
                       Divider(color: sDarkBorder,),
                       SizedBox(height: heightSize(10),),
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'Monthly Interest',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: '1.7%',
                             size: 14,
-                            fontFamily: CFONT.MEDIUM,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
                           ),
                         ],
                       ),
@@ -164,44 +168,40 @@ class _RepaymentState extends State<Repayment> {
                       Divider(color: sDarkBorder,),
                       SizedBox(height: heightSize(10),),
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'Interest Amount',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: 'N10,000',
                             size: 14,
-                            fontFamily: CFONT.MEDIUM,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
                           ),
                         ],
                       ),
                       SizedBox(height: heightSize(50),),
                       Divider(color: sDarkBorder,),
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'Repayment Amount',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: 'N0.00',
                             size: 16,
-                            fontFamily: CFONT.BOLD,
-                            fontWeight: FontWeight.w700,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wBold,
                             color: sNavContainer,
                           ),
                         ],
@@ -232,17 +232,17 @@ class _RepaymentState extends State<Repayment> {
                       CText(
                         text: 'Auto Repayment',
                         size: 14,
-                        fontFamily: CFONT.MEDIUM,
-                        fontWeight: FontWeight.w500,
+                        fontFamily: CFONT.FAMILY,
+                        fontWeight: CFONT.wMedium,
                       ),
                       SizedBox(height: heightSize(5),),
                       SizedBox(
                         width: widthSize(263),
                         child: CText(
-                          text: 'Repay loans automatically from main balance on the loan’s due date.',
+                          text: 'Repay loans automatically from main balance on the loan\'s due date.',
                           size: 12,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: CFONT.REGULAR,
+                          fontWeight: CFONT.wRegular,
+                          fontFamily: CFONT.FAMILY,
                         ),
                       )
                     ],
@@ -251,7 +251,7 @@ class _RepaymentState extends State<Repayment> {
                   GestureDetector(
                     onTap: () => setState(() => _isRead = !_isRead),
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
+                      duration: const Duration(milliseconds: 180),
                       curve: Curves.easeInOut,
                       width: widthSize(54),
                       height: heightSize(28),
@@ -269,7 +269,7 @@ class _RepaymentState extends State<Repayment> {
                             : MainAxisAlignment.start,
                         children: [
                           AnimatedContainer(
-                            duration: const Duration(milliseconds: 250),
+                            duration: const Duration(milliseconds: 180),
                             curve: Curves.easeInOut,
                             width: widthSize(22),
                             height: heightSize(22),

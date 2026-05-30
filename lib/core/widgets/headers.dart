@@ -7,7 +7,8 @@ import 'package:sentro/core/constants/sizes.dart';
 
 class PageHeader extends StatelessWidget {
   final Widget? trailing;
-  const PageHeader({super.key, this.trailing});
+  final bool isDark;
+  const PageHeader({super.key, this.trailing, required this.isDark});
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +22,12 @@ class PageHeader extends StatelessWidget {
               Get.back();
             }
           },
-          child: SvgPicture.asset(
-            arrowBack,
-            width: widthSize(35),
-            height: heightSize(35),
-          ),
+          child:isDark? SvgPicture.asset(
+            arrowBackWhite,
+            width: widthSize(42),
+            height: heightSize(42),
+          ):
+          SvgPicture.asset(arrowBack, width: widthSize(42), height: heightSize(42),),
         ),
 
         if (trailing != null) ...[

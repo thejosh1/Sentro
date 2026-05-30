@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/utils/balance_visibility_wrapper.dart';
 import 'package:sentro/core/utils/label_container.dart';
 import 'package:sentro/core/utils/text.dart';
 
@@ -23,156 +24,140 @@ void showLoanDialog({
     barrierDismissible: true,
     barrierColor: Colors.transparent,
     builder: (context) {
-      bool isDataSelected = initialDataSelected;
-
+      bool _obscured = false;
       return StatefulBuilder(
         builder: (context, setDialogState) {
-          return Stack(
-            children: [
-              // ── Blur + dark tint ──────────────────────────────
-              BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-                child: Container(
-                  color: Colors.black.withOpacity(0.45),
-                ),
-              ),
-              Dialog(
-                backgroundColor: isDark
-                    ? sContainerColor
-                    : Theme.of(context).scaffoldBackgroundColor,
-                insetPadding: EdgeInsets.symmetric(horizontal: widthSize(20)),
-                child: Container(
-                  height: heightSize(634),
-                  width: double.maxFinite,
-                  padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
-                  decoration: BoxDecoration(
-                    color: isDark
-                        ? sContainerColor
-                        : Theme.of(context).scaffoldBackgroundColor,
-                    borderRadius: BorderRadius.circular(10),
+          return GestureDetector(
+            onTap: () => Navigator.of(context).pop(),
+            child: Stack(
+              children: [
+                // ── Blur + dark tint ──────────────────────────────
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+                  child: Container(
+                    color: Colors.black.withOpacity(0.45),
                   ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(height: heightSize(15)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: widthSize(156.8),
-                              height: heightSize(31),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(113.27),
-                                color: sButtonFillDark,
-                                border: Border.all(color: sDarkBorder),
+                ),
+                Dialog(
+                  backgroundColor: isDark
+                      ? sContainerColor
+                      : Theme.of(context).scaffoldBackgroundColor,
+                  insetPadding: EdgeInsets.symmetric(horizontal: widthSize(20)),
+                  child: Container(
+                    height: heightSize(634),
+                    width: double.maxFinite,
+                    padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? sContainerColor
+                          : Theme.of(context).scaffoldBackgroundColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(height: heightSize(15)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _BalancePill(
+                                isDark: isDark,
+                                obscured: _obscured,
+                                onToggle: () => setDialogState(() => _obscured = !_obscured),
+                                pillBg: isDark ? sButtonFillDark : const Color(0xFFEEEEEE),
+                                pillBorder: isDark ? sDarkBorder : const Color(0xFFDDDDDD),
+                                textColor: isDark ? Colors.white : sActionButton,
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(wallet, width: widthSize(24), height: heightSize(24)),
-                                  SizedBox(width: widthSize(3.4)),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: '₦50,000',
-                                          style: TextStyle(
-                                            fontSize: 15.86,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: CFONT.REGULAR,
-                                            height: 22.65 / 15.86,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: '.00',
-                                          style: TextStyle(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: CFONT.REGULAR,
-                                            height: 22.65 / 10,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                              GestureDetector(
+                                onTap: () => Get.back(),
+                                child: Container(
+                                  width: widthSize(33.33),
+                                  height: heightSize(33.33),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white.withOpacity(0.1),
                                   ),
-                                  SvgPicture.asset(visibilityOff, width: widthSize(24), height: heightSize(24)),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => Get.back(),
-                              child: Container(
-                                width: widthSize(33.33),
-                                height: heightSize(33.33),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white.withOpacity(0.1),
+                                  child: Center(child: SvgPicture.asset(cancelWhite)),
                                 ),
-                                child: Center(child: SvgPicture.asset(cancelWhite)),
                               ),
+                            ],
+                          ),
+                          SizedBox(height: heightSize(13)),
+                          CText(text: 'Loans', size: 18, fontWeight: CFONT.wBold, fontFamily: CFONT.FAMILY),
+                          SizedBox(height: heightSize(13)),
+                          CText(text: 'Take loans for your day to day', size: 14, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY),
+                          SizedBox(height: heightSize(20)),
+                          SizedBox(height: heightSize(40)),
+                          _dialogItem(
+                            isDark: isDark,
+                            icon: takeLoan,
+                            title: 'Take Loans',
+                            subtitle: 'Send money to local and commercial banks',
+                            onTap: () => Get.toNamed(Routes.takeLoan),
+                          ),
+                          SizedBox(height: heightSize(10)),
+                          _dialogItem(
+                            isDark: isDark,
+                            icon: payLoan,
+                            title: 'Repay Loans',
+                            subtitle: 'Send money to users on Sentro, instant and free',
+                            onTap: () => Get.toNamed(Routes.activeLoans),
+                          ),
+                          SizedBox(height: heightSize(10)),
+                          _dialogItem(
+                            isDark: isDark,
+                            icon: calculator,
+                            title: 'Loan Calculator',
+                            subtitle: 'Send money by scanning QR Code',
+                            onTap: () => Get.toNamed(Routes.loanCalculator),
+                          ),
+                          SizedBox(height: heightSize(14)),
+                          CText(
+                            text: 'Active Loans',
+                            size: 14,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
+                          ),
+                          CText(
+                            text: 'See how much loan you owe',
+                            size: 12,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
+                            color: sConfirmTextColor,
+                          ),
+                          SizedBox(height: heightSize(10)),
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(Routes.activeLoans);
+                            },
+                            child: _AnimatedLoanCard(
+                              key: const ValueKey('loan_750'),
+                              progress: 550000 / 750000, // 73% paid
+                              loanAmount: 'Loans - N750,000',
+                              remainingText: 'N550,000 to complete loan liquidation',
                             ),
-                          ],
-                        ),
-                        SizedBox(height: heightSize(13)),
-                        CText(text: 'Loans', size: 18, fontWeight: FontWeight.w500, fontFamily: CFONT.MEDIUM),
-                        SizedBox(height: heightSize(13)),
-                        CText(text: 'Take loans for your day to day', size: 14, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR),
-                        SizedBox(height: heightSize(20)),
-                        SizedBox(height: heightSize(40)),
-                        _dialogItem(
-                          icon: takeLoan,
-                          title: 'Take Loans',
-                          subtitle: 'Send money to local and commercial banks',
-                          onTap: () => Get.toNamed(Routes.takeLoan),
-                        ),
-                        SizedBox(height: heightSize(10)),
-                        _dialogItem(
-                          icon: payLoan,
-                          title: 'Repay Loans',
-                          subtitle: 'Send money to users on Sentro, instant and free',
-                          onTap: () => Get.toNamed(Routes.activeLoans),
-                        ),
-                        SizedBox(height: heightSize(10)),
-                        _dialogItem(
-                          icon: calculator,
-                          title: 'Loan Calculator',
-                          subtitle: 'Send money by scanning QR Code',
-                          onTap: () => Get.toNamed(Routes.loanCalculator),
-                        ),
-                        SizedBox(height: heightSize(34)),
-                        CText(
-                          text: 'Active Loans',
-                          size: 14,
-                          fontFamily: CFONT.MEDIUM,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        CText(
-                          text: 'See how much loan you owe',
-                          size: 12,
-                          fontFamily: CFONT.REGULAR,
-                          fontWeight: FontWeight.w400,
-                          color: sConfirmTextColor,
-                        ),
-                        SizedBox(height: heightSize(10)),
-                        _AnimatedLoanCard(
-                          progress: 550000 / 750000, // 73% paid
-                          loanAmount: 'Loans - N750,000',
-                          remainingText: 'N550,000 to complete loan liquidation',
-                        ),
-                        SizedBox(height: heightSize(10)),
-                        _AnimatedLoanCard(
-                          progress: 200000 / 500000, // 40% paid
-                          loanAmount: 'Loans - N500,000',
-                          remainingText: 'N300,000 to complete loan liquidation',
-                        ),
-                        SizedBox(height: heightSize(27)),
-                      ],
+                          ),
+                          SizedBox(height: heightSize(10)),
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(Routes.activeLoans);
+                            },
+                            child: _AnimatedLoanCard(
+                              key: const ValueKey('loan_500'),
+                              progress: 200000 / 500000, // 40% paid
+                              loanAmount: 'Loans - N500,000',
+                              remainingText: 'N300,000 to complete loan liquidation',
+                            ),
+                          ),
+                          SizedBox(height: heightSize(27)),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           );
         },
       );
@@ -185,6 +170,7 @@ Widget _dialogItem({
   required String title,
   required String subtitle,
   required VoidCallback onTap,
+  required bool isDark,
 }) {
   return GestureDetector(
     onTap: onTap,
@@ -194,7 +180,7 @@ Widget _dialogItem({
       padding: EdgeInsets.symmetric(horizontal: widthSize(12), vertical: heightSize(12)),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: sDarkFill,
+        color: isDark?sDarkFill:sLightFill,
       ),
       child: Row(
         children: [
@@ -205,13 +191,21 @@ Widget _dialogItem({
             colorFilter: ColorFilter.mode(sNavContainer, BlendMode.srcIn),
           ),
           SizedBox(width: widthSize(10)),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CText(text: title, fontFamily: CFONT.MEDIUM, fontWeight: FontWeight.w500, size: 14),
-              CText(text: subtitle, fontWeight: FontWeight.w400, size: 12, fontFamily: CFONT.REGULAR, color: const Color(0xFF979797)),
-            ],
+          Expanded(                               // ← add this
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CText(text: title, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium, size: 14),
+                CText(
+                  text: subtitle,
+                  fontWeight: CFONT.wRegular,
+                  size: 12,
+                  fontFamily: CFONT.FAMILY,
+                  color: const Color(0xFF979797),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -225,6 +219,7 @@ class _AnimatedLoanCard extends StatefulWidget {
   final String remainingText;
 
   const _AnimatedLoanCard({
+    super.key,
     required this.progress,
     required this.loanAmount,
     required this.remainingText,
@@ -288,8 +283,8 @@ class _AnimatedLoanCardState extends State<_AnimatedLoanCard>
               CText(
                 text: widget.loanAmount,
                 size: 12,
-                fontWeight: FontWeight.w500,
-                fontFamily: CFONT.MEDIUM,
+                fontWeight: CFONT.wMedium,
+                fontFamily: CFONT.FAMILY,
                 color: Colors.black,
               ),
             ],
@@ -298,8 +293,8 @@ class _AnimatedLoanCardState extends State<_AnimatedLoanCard>
           CText(
             text: widget.remainingText,
             size: 12,
-            fontFamily: CFONT.REGULAR,
-            fontWeight: FontWeight.w400,
+            fontFamily: CFONT.FAMILY,
+            fontWeight: CFONT.wRegular,
             color: Colors.black,
           ),
           SizedBox(height: heightSize(5)),
@@ -316,6 +311,113 @@ class _AnimatedLoanCardState extends State<_AnimatedLoanCard>
                 ),
               );
             },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BalancePill extends StatelessWidget {
+  final bool isDark;
+  final bool obscured;
+  final Color pillBg;
+  final Color pillBorder;
+  final Color textColor;
+  final VoidCallback onToggle;
+
+  const _BalancePill({
+    required this.isDark,
+    required this.obscured,
+    required this.pillBg,
+    required this.pillBorder,
+    required this.textColor,
+    required this.onToggle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: heightSize(31),
+      padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(113.27),
+        color: pillBg,
+        border: Border.all(color: pillBorder),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          BalanceVisibility(
+            builder: (obscured, toggleLocal) => Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SvgPicture.asset(
+                  wallet,
+                  width:  widthSize(18),
+                  height: heightSize(18),
+                  colorFilter: ColorFilter.mode(
+                    isDark ? sNavContainer : sActionButton,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                SizedBox(width: widthSize(4)),
+
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  child: obscured
+                      ? Text(
+                    '••••••',
+                    key: const ValueKey('hidden'),
+                    style: TextStyle(
+                      fontSize: fontSize(13),
+                      fontFamily: CFONT.FAMILY,
+                      fontWeight: CFONT.wRegular,
+                      color: textColor,
+                      letterSpacing: 2,
+                    ),
+                  )
+                      : RichText(
+                    key: const ValueKey('shown'),
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '₦50,000',
+                          style: TextStyle(
+                            inherit: false, // break font inheritance → ₦ renders
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            color: textColor,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '.00',
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: CFONT.wRegular,
+                            fontFamily: CFONT.FAMILY,
+                            color: textColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(width: widthSize(4)),
+                GestureDetector(
+                  onTap: onToggle,
+                  child: SvgPicture.asset(
+                    obscured ? visibilityOff : hide,
+                    width: widthSize(18),
+                    height: heightSize(18),
+                    colorFilter: ColorFilter.mode(
+                      isDark ? Colors.white54 : Colors.black45,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

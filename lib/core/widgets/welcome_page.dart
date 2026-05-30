@@ -14,69 +14,119 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth  = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      backgroundColor: sNavContainer,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      backgroundColor: sNavContainer, // light green from design
+      body: Stack(
         children: [
-          SizedBox(height: heightSize(63),),
-          Center(
+          // ── Background web pattern ────────────────────────
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: screenHeight * 0.52, // covers top ~half
             child: SvgPicture.asset(
-              logo,
-              width: widthSize(232.78),
-              height: heightSize(56),
-              colorFilter: const ColorFilter.mode(
-                sActionButton,
+              unionLarge,
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.white.withOpacity(0.35),
                 BlendMode.srcIn,
               ),
             ),
           ),
-          SizedBox(height: heightSize(234),),
-          Center(
-            child: Container(
-              width: widthSize(93),
-              height: heightSize(93),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Values().buttonRadius20),
-                color: sTextGreen.withOpacity(0.2),
-              ),
-              child: Center(
-                child: SvgPicture.asset(check),
-              ),
+
+          // ── Content ───────────────────────────────────────
+          SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: heightSize(20)),
+
+                // ── Logo ─────────────────────────────────────
+                Center(
+                  child: SvgPicture.asset(
+                    logoLight,
+                    width: widthSize(200),
+                    height: heightSize(48),
+                  ),
+                ),
+
+                const Spacer(),
+
+                // ── Check icon ────────────────────────────────
+                Container(
+                  width: widthSize(93),
+                  height: heightSize(93),
+                  decoration: BoxDecoration(
+                    borderRadius:
+                    BorderRadius.circular(Values().buttonRadius20),
+                    color: sTextGreen.withOpacity(0.2),
+                  ),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      check,
+                      width: widthSize(40),
+                      height: heightSize(40),
+                      colorFilter: ColorFilter.mode(
+                        sTextGreen,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: heightSize(24)),
+
+                // ── Welcome title ─────────────────────────────
+                CText(
+                  text: 'Welcome, John!',
+                  size: 28,
+                  fontWeight: CFONT.wBold,
+                  fontFamily: CFONT.SEMIBOLD,
+                  color: Colors.black,
+                  textAlign: TextAlign.center,
+                ),
+
+                SizedBox(height: heightSize(15)),
+
+                // ── Subtitle ──────────────────────────────────
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: widthSize(30)),
+                  child: CText(
+                    text:
+                    'Nice to see you again Lorem ipsum dolor sit amet '
+                        'consectetur. Dolor cursus duis pulvinar arcu sit in '
+                        'egestas massa.',
+                    fontFamily: CFONT.FAMILY,
+                    size: 16,
+                    fontWeight: CFONT.wRegular,
+                    color: Colors.black,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+                const Spacer(),
+
+                // ── Continue button ───────────────────────────
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: widthSize(25),
+                    right: widthSize(25),
+                    bottom: heightSize(47),
+                  ),
+                  child: ActionButton(
+                    text: 'Continue',
+                    textColor: sNavContainer,
+                    callback: () => Get.toNamed(Routes.enableBiometrics),
+                    load: false,
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(height: heightSize(23.53),),
-          CText(
-            text: 'Welcome back, John!',
-            size: 28,
-            fontWeight: FontWeight.w400,
-            fontFamily: 'Perfectly Vintages',
-            color: Colors.black,
-          ),
-          SizedBox(height: heightSize(15),),
-          CText(
-            text: 'Nice to see you again Lorem ipsum dolor sit amet\nconsectetur. Dolor cursus duis pulvinar arcu sit in\negestas massa.',
-            fontFamily: CFONT.REGULAR,
-            size: 16,
-            fontWeight: FontWeight.w400,
-            color: Colors.black,
-            textAlign: TextAlign.center,
-          ),
-          Spacer(),
         ],
-      ),
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.only(
-            left: widthSize(25),
-            right: widthSize(25),
-            bottom: heightSize(47)),
-        child: ActionButton(
-          text: "Continue",
-          callback: () {
-            Get.toNamed(Routes.mainView);
-          },
-          load: false,
-        ),
       ),
     );
   }

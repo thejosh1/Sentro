@@ -43,10 +43,10 @@ class _EligibilityTestState extends State<EligibilityTest> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CText(
-                        text: 'Loan Calculator', 
-                        size: 14, 
-                        fontWeight: FontWeight.w400, 
-                        fontFamily: CFONT.REGULAR,
+                        text: 'Loan Calculator',
+                        size: 14,
+                        fontWeight: CFONT.wRegular,
+                        fontFamily: CFONT.FAMILY,
                       ),
                       SizedBox(width: widthSize(5),),
                       SvgPicture.asset(calculator, width: widthSize(24), height: heightSize(24),)
@@ -60,15 +60,15 @@ class _EligibilityTestState extends State<EligibilityTest> {
             CText(
               text: 'Eligibility Check',
               size: 18,
-              fontFamily: CFONT.MEDIUM,
-              fontWeight: FontWeight.w500,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wMedium,
             ),
             SizedBox(height: heightSize(2.5)),
             CText(
               text: 'Check if you are eligible to take a loan',
               size: 14,
-              fontFamily: CFONT.REGULAR,
-              fontWeight: FontWeight.w400,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wRegular,
               color: sConfirmTextColor,
             ),
             SizedBox(height: heightSize(57.5),),

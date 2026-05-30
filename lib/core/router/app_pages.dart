@@ -8,6 +8,12 @@ import 'package:sentro/screen/main_view/Dashboard/views/cable_tv.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/electricity.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/internet_service_provider.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/transaction_history.dart';
+import 'package:sentro/screen/main_view/accounts/account_limit.dart';
+import 'package:sentro/screen/main_view/accounts/account_statement.dart';
+import 'package:sentro/screen/main_view/beneficiary/beneficiaries.dart';
+import 'package:sentro/screen/main_view/notifications/notification_settings.dart';
+import 'package:sentro/screen/main_view/profile/terms.dart';
+import 'package:sentro/screen/main_view/verification/upgrade_account.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/waste_management.dart';
 import 'package:sentro/screen/main_view/Saving&Investments/active_goals.dart';
 import 'package:sentro/screen/main_view/Saving&Investments/goals_details.dart';
@@ -21,16 +27,29 @@ import 'package:sentro/screen/main_view/loans/loan_calculator.dart';
 import 'package:sentro/screen/main_view/loans/loan_summary.dart';
 import 'package:sentro/screen/main_view/loans/repayment.dart';
 import 'package:sentro/screen/main_view/loans/take_loan.dart';
+import 'package:sentro/screen/main_view/profile/my_qr_page.dart';
+import 'package:sentro/screen/main_view/profile/profile_page.dart';
+import 'package:sentro/screen/main_view/qr_pay/qr_pay.dart';
+import 'package:sentro/screen/main_view/qr_pay/send_qr.dart';
+import 'package:sentro/screen/main_view/security/app_lock.dart';
+import 'package:sentro/screen/main_view/security/change_password.dart';
+import 'package:sentro/screen/main_view/security/change_pin.dart';
+import 'package:sentro/screen/main_view/security/enable_biometrics.dart';
+import 'package:sentro/screen/main_view/security/linked_devices.dart';
+import 'package:sentro/screen/main_view/security/permissions.dart';
+import 'package:sentro/screen/main_view/security/security.dart';
 import 'package:sentro/screen/main_view/transfers/confirm_transfer.dart';
 import 'package:sentro/screen/main_view/transfers/request_from_sentro.dart';
 import 'package:sentro/screen/main_view/transfers/transfer.dart';
 import 'package:sentro/screen/main_view/transfers/transfer_detail.dart';
+import 'package:sentro/screen/main_view/verification/verification.dart';
 import 'package:sentro/screen/onboarding/view/confirmation_page.dart';
 import 'package:sentro/core/widgets/welcome_page.dart';
 import 'package:sentro/screen/main_view/main_view.dart';
 import 'package:sentro/screen/onboarding/view/choose_sentro_tag.dart';
 import 'package:sentro/screen/onboarding/view/confirm_bvn.dart';
 import 'package:sentro/screen/onboarding/view/confirm_phone_number.dart';
+import 'package:sentro/screen/onboarding/view/continuos_login.dart';
 import 'package:sentro/screen/onboarding/view/create_account.dart';
 import 'package:sentro/screen/onboarding/view/create_password.dart';
 import 'package:sentro/screen/onboarding/view/create_pin.dart';
@@ -57,6 +76,8 @@ class AppPages {
   static const login = Routes.login;
   static const resetPassword = Routes.resetPassword;
   static const confirmationScreen = Routes.confirmation;
+  static const linkedDevices = Routes.linkedDevices;
+  static const continuosLogin = Routes.continuosLogin;
 
   //dashboard
   static const mainview = Routes.mainView;
@@ -90,8 +111,39 @@ class AppPages {
   static const takeLoan = Routes.takeLoan;
   static const loanSummary = Routes.loanSummary;
 
+  //qrpay
+  static const qrPay = Routes.qrPay;
+  static const sendQr = Routes.sendQr;
+
+  //profile page
+  static const profilePage = Routes.profilePage;
+  static const myQrPage = Routes.myQrPage;
+  static const terms = Routes.terms;
+
+  //accounts
+  static const accountStatement = Routes.accountStatements;
+  static const accountLimit = Routes.accountLimit;
+
+  //security
+  static const security = Routes.security;
+  static const appLock = Routes.appLock;
+  static const enableBiometrics = Routes.enableBiometrics;
+  static const changePassword = Routes.changePassword;
+  static const changePin = Routes.changePin;
+  static const permissions = Routes.permissions;
+
+  //verification
+  static const verification = Routes.verification;
+  static const upgradeAccount = Routes.upgradeAccount;
+
+  //beneficiaries
+  static const beneficiaries = Routes.beneficiaries;
+
+  //notification
+  static const notification = Routes.notification;
+
   //shared
-  static const confirmPin = Routes. confirmPin;
+  static const confirmPin = Routes.confirmPin;
   static const confirmTransaction = Routes.confirmTransaction;
   static final routes = [
     GetPage(
@@ -102,13 +154,13 @@ class AppPages {
       name: getStarted,
       page: () => const GetStarted(),
       transition: Transition.fadeIn,
-      transitionDuration: const Duration(milliseconds: 300),
+      transitionDuration: const Duration(milliseconds: 200),
     ),
     GetPage(
       name: createAccount,
       page: () => const CreateAccount(),
       transition: Transition.fadeIn,
-      transitionDuration: const Duration(milliseconds: 300),
+      transitionDuration: const Duration(milliseconds: 200),
     ),
     GetPage(
       name: confirmPhoneNumber,
@@ -157,7 +209,7 @@ class AppPages {
       name: mainview,
       page: () => const MainView(),
       transition: Transition.fadeIn,
-      transitionDuration: const Duration(milliseconds: 300),
+      transitionDuration: const Duration(milliseconds: 200),
     ),
     GetPage(
       name: confirmationScreen,
@@ -258,6 +310,82 @@ class AppPages {
     GetPage(
       name: loanSummary,
       page: () => const LoanSummary(),
+    ),
+    GetPage(
+      name: qrPay,
+      page: () => const QrPay(),
+    ),
+    GetPage(
+      name: sendQr,
+      page: () => const SendQr(),
+    ),
+    GetPage(
+      name: upgradeAccount,
+      page: () => const UpgradeAccount(),
+    ),
+    GetPage(
+      name: profilePage,
+      page: () => const ProfilePage(),
+    ),
+    GetPage(
+      name: myQrPage,
+      page: () => const MyQrPage(),
+    ),
+    GetPage(
+      name: security,
+      page: () => const Security(),
+    ),
+    GetPage(
+      name: appLock,
+      page: () => const AppLock(),
+    ),
+    GetPage(
+      name: enableBiometrics,
+      page: () => const EnableBiometrics(),
+    ),
+    GetPage(
+      name: changePassword,
+      page: () => const ChangePassword(),
+    ),
+    GetPage(
+      name: changePin,
+      page: () => const ChangePin(),
+    ),
+    GetPage(
+      name: linkedDevices,
+      page: () => const LinkedDevices(),
+    ),
+    GetPage(
+      name: permissions,
+      page: () => const Permissions(),
+    ),
+    GetPage(
+      name: verification,
+      page: () => const Verification(),
+    ),
+    GetPage(
+      name: beneficiaries,
+      page: () => const Beneficiaries(),
+    ),
+    GetPage(
+      name: accountStatement,
+      page: () => const AccountStatement(),
+    ),
+    GetPage(
+      name: accountLimit,
+      page: () => const AccountLimit(),
+    ),
+    GetPage(
+      name: terms,
+      page: () => const Terms(),
+    ),
+    GetPage(
+      name: notification,
+      page: () => const NotificationSettings(),
+    ),
+    GetPage(
+      name: continuosLogin,
+      page: () => const ContinuousLogin(),
     ),
   ];
 }

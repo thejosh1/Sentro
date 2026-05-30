@@ -64,7 +64,7 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
 
   @override
   void dispose() {
-    _timer!.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -72,6 +72,7 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
@@ -79,19 +80,38 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: heightSize(64),),
-            PageHeader(
-              trailing: SvgPicture.asset(
-                headPhone,
-                width: widthSize(43.52),
-                height: heightSize(50),
-
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () => Get.back(),
+                  child: SvgPicture.asset(
+                    isDark?arrowBackWhite:arrowBack,
+                    width: widthSize(42),
+                    height: heightSize(42),
+                  ),
+                ),
+                SvgPicture.asset(
+                  logoLight,
+                  width: widthSize(116.39),
+                  height: heightSize(28),
+                  colorFilter: isDark?ColorFilter.mode(
+                    sNavContainer,
+                    BlendMode.srcIn,
+                  ):null,
+                ),
+                SvgPicture.asset(
+                  isDark?headPhoneWhite:headPhone,
+                  width: widthSize(43.52),
+                  height: heightSize(50),
+                )
+              ],
             ),
             SizedBox(height: heightSize(30),),
             CText(
               text: 'Confirm Phone Number',
-              fontWeight: FontWeight.w700,
-              fontFamily: CFONT.BOLD,
+              fontWeight: CFONT.wBold,
+              fontFamily: CFONT.FAMILY,
               size: 22,
             ),
             SizedBox(height: heightSize(5),),
@@ -99,22 +119,22 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
               text: TextSpan(
                 text: 'Enter the code sent to',
                 style: TextStyle(
-                  color: isDark? sDarkModeMutedText : sLightModeMutedText,
+                  color: isDark ? sDarkModeMutedText : sLightModeMutedText,
                   fontSize: 18,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: CFONT.REGULAR,
+                  fontWeight: CFONT.wRegular,
+                  fontFamily: CFONT.FAMILY,
                 ),
                 children: [
                   TextSpan(
                     text: '...6010',
                     style: TextStyle(
-                      fontFamily: CFONT.BOLD,
-                      fontWeight: FontWeight.w700,
+                      fontFamily: CFONT.FAMILY,
+                      fontWeight: CFONT.wBold,
                       fontSize: 18,
-                      color: isDark?Colors.white:Colors.black,
-                    )
-                  )
-                ]
+                      color: isDark ? Colors.white : Colors.black,
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: heightSize(30),),
@@ -124,50 +144,54 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
             SizedBox(height: heightSize(30),),
             CText(
               text: "Didn't get code?",
-              fontFamily: CFONT.REGULAR,
-              fontWeight: FontWeight.w400,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wRegular,
               size: 16,
             ),
             SizedBox(height: heightSize(10),),
             Container(
-              width: widthSize(174),
-              height: heightSize(42),
+              // width: widthSize(174),
+              // height: heightSize(42),
               padding: EdgeInsets.symmetric(horizontal: widthSize(24), vertical: heightSize(12)),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Values().buttonRadius22-1),
-                color: isDark?sDarkFill:sResendCode,
-                border: Border.all(color: isDark?sDarkBorder:sBorderLight)
+                borderRadius: BorderRadius.circular(Values().buttonRadius22 - 1),
+                color: Colors.transparent,
+                border: Border.all(color: isDark ? sNavContainer : sActionButton),
               ),
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   CText(
                     text: 'Resend code',
                     size: 13,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: CFONT.REGULAR,
+                    fontWeight: CFONT.wRegular,
+                    fontFamily: CFONT.FAMILY,
                   ),
                   SizedBox(width: widthSize(8),),
                   CText(
                     text: '$_start sec',
                     size: 13,
-                    fontFamily: CFONT.MEDIUM,
-                    fontWeight: FontWeight.w500,
+                    fontFamily: CFONT.FAMILY,
+                    fontWeight: CFONT.wMedium,
                     textAlign: TextAlign.center,
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(
-            left: widthSize(25),
-            right: widthSize(25),
-            bottom: heightSize(10)),
+          left: widthSize(25),
+          right: widthSize(25),
+          bottom: heightSize(10),
+        ),
         child: ActionButton(
           text: "Continue",
+          textColor: sNavContainer,
           callback: () {
+            FocusScope.of(context).unfocus();
             switch (flow) {
               case "bvn":
                 Get.toNamed(Routes.confirmBvn);
@@ -175,7 +199,6 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
               case "resetPassword":
                 Get.toNamed(Routes.resetPassword);
                 break;
-
               default:
                 Get.toNamed(Routes.login);
             }

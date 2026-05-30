@@ -49,69 +49,35 @@ class _ConfirmPinState extends State<ConfirmPin> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: heightSize(64),),
-            Padding(
-              padding: EdgeInsets.only(right: widthSize(7)),
-              child: PageHeader(
-                trailing: Stack(
-                  children: [
-                    Container(
-                      width: widthSize(43.52),
-                      height: heightSize(43.52),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: sNavContainer.withOpacity(0.25),
-                      ),
-                      child: Center(
-                        child: SvgPicture.asset(
-                          headPhone,
-                          width: widthSize(25.93),
-                          height: heightSize(25.93),
-                          colorFilter: ColorFilter.mode(
-                            isDark?sLemon:sActionButton,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 2,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        width: widthSize(36.11),
-                        height: heightSize(13.89),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25.93),
-                          color: sNavContainer,
-                        ),
-                        child: Center(
-                          child: CText(
-                            text: 'Help?',
-                            fontFamily: CFONT.BOLD,
-                            size: 7.41,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () => Get.back(),
+                  child: SvgPicture.asset(
+                    arrowBackWhite,
+                    width: widthSize(42),
+                    height: heightSize(42),
+                  ),
                 ),
-              ),
+                const Spacer(),
+                SvgPicture.asset(logo, width: widthSize(116.39), height: heightSize(28),),
+                const Spacer(),
+                SvgPicture.asset(headPhoneWhite, width: widthSize(43.52), height: heightSize(50),),
+              ],
             ),
-            SizedBox(height: heightSize(34),),
+            SizedBox(height: heightSize(31),),
             CText(
               text: 'Confirm your 4 Digit PIN',
               size: 22,
-              fontFamily: CFONT.BOLD,
-              fontWeight: FontWeight.w700,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wBold,
             ),
             SizedBox(height: heightSize(5),),
             CText(
-              text: 'Provide your 4 Digit transaction PIN',
-              fontWeight: FontWeight.w400, size: 18, fontFamily: CFONT.REGULAR, color: Theme.of(context).brightness == Brightness.dark
+              text: 'Authorise this action',
+              fontWeight: CFONT.wRegular, size: 18, fontFamily: CFONT.FAMILY, color: Theme.of(context).brightness == Brightness.dark
                 ? sDarkModeMutedText // dark mode muted text
                 : sLightModeMutedText,
             ),
@@ -138,7 +104,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
                       shape: BoxShape.circle,
                       color: isFilled
                           ? sActionButton
-                          : sPinIndicator,
+                          : Colors.white,
                     ),
                   );
                 }),
@@ -148,6 +114,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
             KeyboardPin(
               controller: controller,
               callback: _onSubmitPin,
+              showBiometric: true,
             ),
             SizedBox(height: heightSize(67),),
           ],

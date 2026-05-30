@@ -40,6 +40,8 @@ class _TransferState extends State<Transfer> {
   final TextEditingController tagController = TextEditingController();
   bool _tagResolved = false;
 
+  bool _obscured = false;
+
   bool isRecentSelected = false;
   bool isSheetOpen = false;
   BankModel? selectedBank;
@@ -99,7 +101,7 @@ class _TransferState extends State<Transfer> {
             child: GestureDetector(
               onTap: () => setState(() => isRecent = true),
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
+                duration: const Duration(milliseconds: 180),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   color: isRecent ? sDarkFill : Colors.transparent,
@@ -107,8 +109,8 @@ class _TransferState extends State<Transfer> {
                 child: Center(
                   child: CText(
                     text: 'Recently',
-                    fontFamily: CFONT.REGULAR,
-                    fontWeight: FontWeight.w400,
+                    fontFamily: CFONT.FAMILY,
+                    fontWeight: CFONT.wRegular,
                     size: 15.64,
                     height: 15.04 / 15.64,
                     color: isRecent ? sNavContainer : Theme.of(context).colorScheme.onSurface,
@@ -121,7 +123,7 @@ class _TransferState extends State<Transfer> {
             child: GestureDetector(
               onTap: () => setState(() => isRecent = false),
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
+                duration: const Duration(milliseconds: 180),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   color: !isRecent ? sDarkFill : Colors.transparent,
@@ -129,7 +131,7 @@ class _TransferState extends State<Transfer> {
                 child: Center(
                   child: CText(
                     text: 'Beneficiary',
-                    fontWeight: FontWeight.w400,
+                    fontWeight: CFONT.wRegular,
                     size: 14,
                     color: !isRecent ? sNavContainer : Theme.of(context).colorScheme.onSurface,
                   ),
@@ -156,7 +158,12 @@ class _TransferState extends State<Transfer> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CText(text: 'See More', size: 14, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400),
+              CText(
+                text: 'See More',
+                size: 14,
+                fontFamily: CFONT.FAMILY,
+                fontWeight: CFONT.wRegular,
+              ),
               SizedBox(width: widthSize(3.75)),
               SvgPicture.asset(arrowRight, width: widthSize(24), height: heightSize(24)),
             ],
@@ -182,7 +189,12 @@ class _TransferState extends State<Transfer> {
             children: [
               SvgPicture.asset(tickSquare, width: widthSize(24), height: heightSize(24)),
               SizedBox(width: widthSize(3.75)),
-              CText(text: 'Save Beneficiary', size: 17.48, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400),
+              CText(
+                text: 'Save Beneficiary',
+                size: 17.48,
+                fontFamily: CFONT.FAMILY,
+                fontWeight: CFONT.wRegular,
+              ),
             ],
           ),
         ),
@@ -191,7 +203,7 @@ class _TransferState extends State<Transfer> {
   }
 
   Widget _resolvedUserChip(String name) {
-    return _tagResolved?Container(
+    return _tagResolved ? Container(
       width: widthSize(205.78),
       height: heightSize(30),
       decoration: BoxDecoration(
@@ -203,10 +215,15 @@ class _TransferState extends State<Transfer> {
         children: [
           SvgPicture.asset(tick, width: widthSize(21.26), height: heightSize(21.26)),
           SizedBox(width: widthSize(3.32)),
-          CText(text: name, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, size: 15.49),
+          CText(
+            text: name,
+            fontWeight: CFONT.wRegular,
+            fontFamily: CFONT.FAMILY,
+            size: 15.49,
+          ),
         ],
       ),
-    ):SizedBox.shrink();
+    ) : const SizedBox.shrink();
   }
 
   @override
@@ -227,35 +244,101 @@ class _TransferState extends State<Transfer> {
               children: [
                 GestureDetector(
                   onTap: () => Get.back(),
-                  child: SvgPicture.asset(arrowBackWhite, width: widthSize(42), height: heightSize(42)),
+                  child: SvgPicture.asset(
+                    isDark?arrowBackWhite:arrowBack,
+                    width: widthSize(42),
+                    height: heightSize(42),
+                  ),
                 ),
-                Row(
-                  children: [
-                    SvgPicture.asset(wallet, width: widthSize(24), height: heightSize(24)),
-                    SizedBox(width: widthSize(3.4)),
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: '₦50,000',
-                            style: TextStyle(fontSize: 15.86, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, height: 22.65 / 15.86),
-                          ),
-                          TextSpan(
-                            text: '.00',
-                            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, height: 22.65 / 10),
-                          ),
-                        ],
+                Container(
+                  height: heightSize(34.18),
+                  padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(113.27),
+                    color: isDark ? sButtonFillDark
+                        : sLightFill,
+                    border: Border.all(color: isDark ? sDarkBorder
+                        : sLightFill),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SvgPicture.asset(
+                        wallet,
+                        width: widthSize(18),
+                        height: heightSize(18),
                       ),
-                    ),
-                    SizedBox(width: widthSize(3.75)),
-                    SvgPicture.asset(visibilityOff, width: widthSize(24), height: heightSize(24)),
-                  ],
-                ),
+                      SizedBox(width: widthSize(4)),
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        child: _obscured
+                            ? Text(
+                          '••••••',
+                          key: const ValueKey('hidden'),
+                          style: TextStyle(
+                            fontSize: fontSize(13),
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
+                            color: isDark? Colors.white
+                                : sActionButton,
+                            letterSpacing: 2,
+                          ),
+                        )
+                            : RichText(
+                          key: const ValueKey('shown'),
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '₦50,000',
+                                style: TextStyle(
+                                  inherit: false, // break font inheritance → ₦ renders
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                  color: isDark? Colors.white
+                                      : sActionButton,
+                                ),
+                              ),
+                              TextSpan(
+                                text: '.00',
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: CFONT.wRegular,
+                                  fontFamily: CFONT.FAMILY,
+                                  color: isDark? Colors.white
+                                      : sActionButton,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: widthSize(4)),
+                      GestureDetector(
+                        onTap: () => setState(() => _obscured = !_obscured),
+                        child: SvgPicture.asset(
+                          _obscured ? visibilityOff : hide,
+                          width: widthSize(18),
+                          height: heightSize(18),
+                          colorFilter: ColorFilter.mode(
+                            isDark ? Colors.white54 : Colors.black45,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
 
             SizedBox(height: heightSize(26.46)),
-            CText(text: 'Transfer', size: 19.85, fontWeight: FontWeight.w500, fontFamily: CFONT.MEDIUM, height: 22.05 / 19.85),
+            CText(
+              text: 'Transfer',
+              size: 19.85,
+              fontWeight: CFONT.wMedium,
+              fontFamily: CFONT.FAMILY,
+              height: 22.05 / 19.85,
+            ),
             SizedBox(height: heightSize(10)),
 
             // ── Other Banks / Sentro Tag toggle ─────────────────
@@ -274,7 +357,7 @@ class _TransferState extends State<Transfer> {
                     child: GestureDetector(
                       onTap: () => setState(() => isRecentSelected = false),
                       child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
+                        duration: const Duration(milliseconds: 180),
                         height: heightSize(48.05),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(44.7),
@@ -283,8 +366,8 @@ class _TransferState extends State<Transfer> {
                         child: Center(
                           child: CText(
                             text: 'Other Banks',
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             size: 15.64,
                             height: 15.04 / 15.64,
                             color: !isRecentSelected ? sNavContainer : Colors.white,
@@ -297,7 +380,7 @@ class _TransferState extends State<Transfer> {
                     child: GestureDetector(
                       onTap: () => setState(() => isRecentSelected = true),
                       child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
+                        duration: const Duration(milliseconds: 180),
                         height: heightSize(48.05),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(44.7),
@@ -306,7 +389,7 @@ class _TransferState extends State<Transfer> {
                         child: Center(
                           child: CText(
                             text: 'Sentro Tag',
-                            fontWeight: FontWeight.w400,
+                            fontWeight: CFONT.wRegular,
                             size: 14,
                             color: isRecentSelected ? sNavContainer : Colors.white,
                           ),
@@ -330,6 +413,7 @@ class _TransferState extends State<Transfer> {
                     hasBottomMargin: false,
                     height: heightSize(55),
                     hint: 'Account Number',
+                    hintColor: isDark?null:sGrey2,
                     controller: amountController,
                     inputType: TextInputType.number,
                     error: '',
@@ -353,81 +437,161 @@ class _TransferState extends State<Transfer> {
                         isDismissible: true,
                         isScrollControlled: true,
                         constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.75),
-                        builder: (_) {
-                          return Stack(
-                            children: [
-                              BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-                                child: Container(color: Colors.black.withOpacity(0.45)),
-                              ),
-                              TweenAnimationBuilder(
-                                duration: const Duration(milliseconds: 300),
-                                tween: Tween(begin: 0.0, end: 1.0),
-                                curve: Curves.easeOut,
-                                builder: (context, value, child) => Transform.translate(
-                                  offset: Offset(0, 100 * (1 - value)),
-                                  child: Opacity(opacity: value, child: child),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                          builder: (_) {
+                            return StatefulBuilder(
+                              builder: (context, setSheetState) {
+                                final TextEditingController sheetSearchController = TextEditingController();
+                                List<BankModel> filteredSheetBanks = _dummyBanks;
+
+                                return Stack(
                                   children: [
-                                    Container(
-                                      padding: EdgeInsets.all(widthSize(20)),
-                                      decoration: BoxDecoration(
-                                        color: isDark ? sModalColor : Colors.white,
-                                        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                                    BackdropFilter(
+                                      filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+                                      child: Container(color: Colors.black.withOpacity(0.45)),
+                                    ),
+                                    TweenAnimationBuilder(
+                                      duration: const Duration(milliseconds: 200),
+                                      tween: Tween(begin: 0.0, end: 1.0),
+                                      curve: Curves.easeOut,
+                                      builder: (context, value, child) => Transform.translate(
+                                        offset: Offset(0, 100 * (1 - value)),
+                                        child: Opacity(opacity: value, child: child),
                                       ),
                                       child: Column(
-                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
                                           Container(
-                                            width: widthSize(44),
-                                            height: heightSize(4),
-                                            margin: EdgeInsets.only(bottom: heightSize(16)),
-                                            decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(8)),
-                                          ),
-                                          Center(child: CText(text: 'Select Bank', fontFamily: CFONT.MEDIUM, fontWeight: FontWeight.w500, size: 18)),
-                                          SizedBox(height: heightSize(33)),
-                                          ..._dummyBanks.map((bank) {
-                                            return GestureDetector(
-                                              onTap: () {
-                                                setState(() => selectedBank = bank);
-                                                Navigator.pop(context);
-                                              },
-                                              child: AnimatedContainer(
-                                                duration: const Duration(milliseconds: 250),
-                                                margin: EdgeInsets.only(bottom: heightSize(13)),
-                                                padding: EdgeInsets.symmetric(horizontal: widthSize(24), vertical: heightSize(16.5)),
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(Values().buttonRadius10),
-                                                  color: isDark ? sDarkFill : Colors.transparent,
+                                            padding: EdgeInsets.all(widthSize(20)),
+                                            decoration: BoxDecoration(
+                                              color: isDark ? sModalColor : Colors.white,
+                                              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  width: widthSize(44),
+                                                  height: heightSize(4),
+                                                  margin: EdgeInsets.only(bottom: heightSize(16)),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.black,
+                                                    borderRadius: BorderRadius.circular(8),
+                                                  ),
                                                 ),
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      width: widthSize(42),
-                                                      height: heightSize(42),
-                                                      decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        image: DecorationImage(image: AssetImage(bank.image), fit: BoxFit.cover),
+                                                Center(
+                                                  child: CText(
+                                                    text: 'Select Bank',
+                                                    fontFamily: CFONT.FAMILY,
+                                                    fontWeight: CFONT.wMedium,
+                                                    size: 18,
+                                                  ),
+                                                ),
+                                                SizedBox(height: heightSize(16)),
+
+                                                // ── Search bar ──────────────────────────────
+                                                AuthSearchField(
+                                                  height: 56,
+                                                  color: sBeneficiaryColor,
+                                                  borderRadius: 124.89,
+                                                  hint: 'Search bank',
+                                                  inputType: TextInputType.text,
+                                                  error: '',
+                                                  validFunction: (v) => v!,
+                                                  controller: sheetSearchController,
+                                                  onChanged: (query) {
+                                                    setSheetState(() {
+                                                      filteredSheetBanks = query.isEmpty
+                                                          ? _dummyBanks
+                                                          : _dummyBanks
+                                                          .where((b) => b.bankName
+                                                          .toLowerCase()
+                                                          .contains(query.toLowerCase()))
+                                                          .toList();
+                                                    });
+                                                  },
+                                                  onSubmitFunction: (q) {},
+                                                ),
+
+                                                SizedBox(height: heightSize(16)),
+
+                                                // ── Bank list ───────────────────────────────
+                                                ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics: const NeverScrollableScrollPhysics(),
+                                                  itemCount: filteredSheetBanks.length,
+                                                  itemBuilder: (context, index) {
+                                                    final bank = filteredSheetBanks[index];
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        setState(() => selectedBank = bank);
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: AnimatedContainer(
+                                                        duration: const Duration(milliseconds: 180),
+                                                        margin: EdgeInsets.only(bottom: heightSize(13)),
+                                                        padding: EdgeInsets.symmetric(
+                                                          horizontal: widthSize(24),
+                                                          vertical: heightSize(16.5),
+                                                        ),
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.circular(Values().buttonRadius10),
+                                                          color: isDark ? sDarkFill : Colors.transparent,
+                                                        ),
+                                                        child: Row(
+                                                          children: [
+                                                            Container(
+                                                              width: widthSize(42),
+                                                              height: heightSize(42),
+                                                              decoration: BoxDecoration(
+                                                                shape: BoxShape.circle,
+                                                                image: DecorationImage(
+                                                                  image: AssetImage(bank.image),
+                                                                  fit: BoxFit.cover,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            SizedBox(width: widthSize(15)),
+                                                            Expanded(
+                                                              child: CText(
+                                                                text: bank.bankName,
+                                                                size: 16,
+                                                                fontWeight: CFONT.wRegular,
+                                                                fontFamily: CFONT.FAMILY,
+                                                                height: 16.67 / 16,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ),
-                                                    SizedBox(width: widthSize(15)),
-                                                    Expanded(child: CText(text: bank.bankName, size: 16, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, height: 16.67 / 16)),
-                                                  ],
+                                                    );
+                                                  },
                                                 ),
-                                              ),
-                                            );
-                                          }),
+
+                                                // ── Empty state ─────────────────────────────
+                                                if (filteredSheetBanks.isEmpty)
+                                                  Padding(
+                                                    padding: EdgeInsets.symmetric(vertical: heightSize(24)),
+                                                    child: CText(
+                                                      text: 'No bank found',
+                                                      size: 14,
+                                                      fontFamily: CFONT.FAMILY,
+                                                      fontWeight: CFONT.wRegular,
+                                                      color: sGrey2,
+                                                    ),
+                                                  ),
+
+                                                SizedBox(height: heightSize(16)),
+                                              ],
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
                                   ],
-                                ),
-                              ),
-                            ],
-                          );
-                        },
+                                );
+                              },
+                            );
+                          },
                       );
                       setState(() => isSheetOpen = false);
                     },
@@ -435,14 +599,14 @@ class _TransferState extends State<Transfer> {
                       padding: EdgeInsets.only(left: widthSize(15), top: heightSize(20.5), right: widthSize(19), bottom: heightSize(20.5)),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(Values().buttonRadius10),
-                        color: isDark ? sDarkFill : Colors.transparent,
+                        color: isDark ? sDarkFill : sLightFill,
                         border: Border.all(color: isDark ? sDarkBorder : sLightBorder),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 250),
+                            duration: const Duration(milliseconds: 180),
                             transitionBuilder: (child, animation) => FadeTransition(
                               opacity: animation,
                               child: SlideTransition(
@@ -454,13 +618,13 @@ class _TransferState extends State<Transfer> {
                               key: ValueKey(selectedBank?.bankName ?? "empty"),
                               text: selectedBank == null ? 'Select Bank' : selectedBank!.bankName,
                               size: 14,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: CFONT.REGULAR,
+                              fontWeight: CFONT.wRegular,
+                              fontFamily: CFONT.FAMILY,
                             ),
                           ),
                           AnimatedRotation(
                             turns: isSheetOpen ? 0.5 : 0,
-                            duration: const Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 200),
                             curve: Curves.easeInOut,
                             child: SvgPicture.asset(arrowDown, width: widthSize(20), height: heightSize(20)),
                           ),
@@ -477,13 +641,20 @@ class _TransferState extends State<Transfer> {
                       showNairaPrefix: true,
                       hasBottomMargin: false,
                       height: heightSize(55),
-                      hint: '₦0.00',
+                      hint: '0.00',
                       suffixWidth: 87,
                       suffixWidget: Container(
                         height: heightSize(25.86),
                         padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(124.89), color: sContainerColor),
-                        child: Center(child: CText(text: 'Min: N500', size: 14, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR)),
+                        child: Center(
+                          child: CText(
+                            text: 'Min: N500',
+                            size: 14,
+                            fontWeight: CFONT.wRegular,
+                            fontFamily: CFONT.FAMILY,
+                          ),
+                        ),
                       ),
                       controller: amountController,
                       inputType: TextInputType.number,
@@ -498,8 +669,24 @@ class _TransferState extends State<Transfer> {
                       title: RichText(
                         text: TextSpan(
                           children: [
-                            TextSpan(text: 'Note', style: TextStyle(fontSize: fontSize(17.88), fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: Theme.of(context).colorScheme.onSurface)),
-                            TextSpan(text: ' (Optional)', style: TextStyle(fontSize: fontSize(17.88), fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: Colors.white.withOpacity(0.2))),
+                            TextSpan(
+                              text: 'Note',
+                              style: TextStyle(
+                                fontSize: fontSize(17.88),
+                                fontWeight: CFONT.wRegular,
+                                fontFamily: CFONT.FAMILY,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' (Optional)',
+                              style: TextStyle(
+                                fontSize: fontSize(17.88),
+                                fontWeight: CFONT.wRegular,
+                                fontFamily: CFONT.FAMILY,
+                                color: Colors.white.withOpacity(0.2),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -542,7 +729,7 @@ class _TransferState extends State<Transfer> {
                             itemCount: _filtered.length,
                             separatorBuilder: (_, __) => Padding(
                               padding: EdgeInsets.symmetric(vertical: heightSize(10)),
-                              child: Container(height: 0.5, color: Colors.white.withOpacity(0.1)),
+                              child: Container(height: 1, color: sDarkBorder),
                             ),
                             itemBuilder: (context, index) {
                               final t = _filtered[index];
@@ -567,8 +754,19 @@ class _TransferState extends State<Transfer> {
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            CText(text: t.accountName, fontWeight: FontWeight.w500, fontFamily: CFONT.MEDIUM, size: 16),
-                                            CText(text: '${t.accountNumber} - ${t.bankName}', fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, size: 12, color: sGrey2),
+                                            CText(
+                                              text: t.accountName,
+                                              fontWeight: CFONT.wMedium,
+                                              fontFamily: CFONT.FAMILY,
+                                              size: 16,
+                                            ),
+                                            CText(
+                                              text: '${t.accountNumber} - ${t.bankName}',
+                                              fontFamily: CFONT.FAMILY,
+                                              fontWeight: CFONT.wRegular,
+                                              size: 12,
+                                              color: sGrey2,
+                                            ),
                                           ],
                                         ),
                                       ],
@@ -652,8 +850,19 @@ class _TransferState extends State<Transfer> {
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            CText(text: u.name, fontWeight: FontWeight.w500, fontFamily: CFONT.MEDIUM, size: 16),
-                                            CText(text: u.tag!, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, size: 12, color: sGrey2),
+                                            CText(
+                                              text: u.name,
+                                              fontWeight: CFONT.wMedium,
+                                              fontFamily: CFONT.FAMILY,
+                                              size: 16,
+                                            ),
+                                            CText(
+                                              text: u.tag!,
+                                              fontFamily: CFONT.FAMILY,
+                                              fontWeight: CFONT.wRegular,
+                                              size: 12,
+                                              color: sGrey2,
+                                            ),
                                           ],
                                         ),
                                       ],
@@ -678,13 +887,20 @@ class _TransferState extends State<Transfer> {
                       showNairaPrefix: true,
                       hasBottomMargin: false,
                       height: heightSize(55),
-                      hint: '₦0.00',
+                      hint: '0.00',
                       suffixWidth: 87,
                       suffixWidget: Container(
                         height: heightSize(25.86),
                         padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(124.89), color: sContainerColor),
-                        child: Center(child: CText(text: 'Fee: N500', size: 14, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR)),
+                        child: Center(
+                          child: CText(
+                            text: 'Fee: N500',
+                            size: 14,
+                            fontWeight: CFONT.wRegular,
+                            fontFamily: CFONT.FAMILY,
+                          ),
+                        ),
                       ),
                       controller: amountController,
                       inputType: TextInputType.number,

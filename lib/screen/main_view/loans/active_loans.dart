@@ -54,8 +54,8 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CText(text: type, size: 10, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: sGrey2),
-            CText(text: name, size: 12, fontFamily: CFONT.MEDIUM, fontWeight: FontWeight.w500),
+            CText(text: type, size: 10, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: sGrey2),
+            CText(text: name, size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
           ],
         ),
         const Expanded(child: SizedBox.shrink()),
@@ -67,7 +67,7 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
             color: statusColor.withOpacity(0.1),
           ),
           child: Center(
-            child: CText(text: status, size: 12.57, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: statusColor),
+            child: CText(text: status, size: 12.57, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: statusColor),
           ),
         ),
       ],
@@ -100,8 +100,8 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CText(text: showPercent ? '$percent% repaid' : leftLabel, size: 11, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2),
-                CText(text: rightLabel, size: 11, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2),
+                CText(text: showPercent ? '$percent% repaid' : leftLabel, size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
+                CText(text: rightLabel, size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
               ],
             ),
           ],
@@ -126,7 +126,8 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
           child: CText(
             text: 'Repay Loan',
             size: 14,
-            fontFamily: CFONT.MEDIUM,
+            fontFamily: CFONT.FAMILY,
+            fontWeight: CFONT.wMedium,
             color: Colors.white,
           ),
         ),
@@ -139,7 +140,7 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
+        padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
         child: Column(
           children: [
             SizedBox(height: heightSize(64)),
@@ -153,7 +154,7 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
-                    Get.toNamed(Routes.loanSummary);
+                    Get.toNamed(Routes.takeLoan);
                   },
                   child: Container(
                     width: widthSize(129),
@@ -168,8 +169,8 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
                         CText(
                           text: 'Take Loans',
                           size: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: CFONT.REGULAR,
+                          fontWeight: CFONT.wRegular,
+                          fontFamily: CFONT.FAMILY,
                         ),
                         SizedBox(width: widthSize(5),),
                         SvgPicture.asset(add, width: widthSize(24), height: heightSize(24),)
@@ -183,8 +184,8 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
             SizedBox(height: heightSize(23.33),),
             CText(
               text: 'Active Loans',
-              fontWeight: FontWeight.w500,
-              fontFamily: CFONT.MEDIUM,
+              fontWeight: CFONT.wMedium,
+              fontFamily: CFONT.FAMILY,
               size: 18,
               height: 20/18,
             ),
@@ -192,8 +193,8 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
             CText(
               text: 'Monitor your active loans',
               size: 14,
-              fontFamily: CFONT.REGULAR,
-              fontWeight: FontWeight.w400,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wRegular,
               color: sConfirmTextColor,
             ),
             SizedBox(height: heightSize(20.5)),
@@ -211,9 +212,9 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
                       children: [
                         _cardHeader(type: 'Personal Loan', name: '30 May 2026', status: 'Active', statusColor: sNavContainer),
                         SizedBox(height: heightSize(18)),
-                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.BOLD, fontWeight: FontWeight.w700),
+                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wBold),
                         SizedBox(height: heightSize(2.5)),
-                        CText(text: 'of N5,000,000 disbursed', size: 11, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: sGrey1),
+                        CText(text: 'of N5,000,000 disbursed', size: 11, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: sGrey1),
                         SizedBox(height: heightSize(8.5)),
                         _progressSection(
                           anim: _progressAnim1,
@@ -229,27 +230,27 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CText(text: 'Min. Amount', size: 10, fontFamily: CFONT.REGULAR, color: sGrey2),
+                                CText(text: 'Min. Amount', size: 10, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
                                 SizedBox(height: heightSize(0.5)),
-                                CText(text: 'N10,000', size: 12, fontFamily: CFONT.MEDIUM),
+                                CText(text: 'N10,000', size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
                               ],
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CText(text: 'Early Repayment', size: 10, fontFamily: CFONT.REGULAR, color: sGrey2),
+                                CText(text: 'Early Repayment', size: 10, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
                                 SizedBox(height: heightSize(0.5)),
-                                CText(text: '5% penalty', size: 12, fontFamily: CFONT.MEDIUM),
+                                CText(text: '5% penalty', size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
                               ],
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CText(text: 'Auto Repay', size: 10, fontFamily: CFONT.REGULAR, color: sGrey2),
+                                CText(text: 'Auto Repay', size: 10, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
                                 SizedBox(height: heightSize(0.5)),
                                 Row(
                                   children: [
-                                    CText(text: 'Yes', size: 12, fontFamily: CFONT.MEDIUM),
+                                    CText(text: 'Yes', size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
                                     SizedBox(width: widthSize(2.5)),
                                     SvgPicture.asset(tick, width: widthSize(12), height: heightSize(12)),
                                   ],
@@ -275,19 +276,19 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
                         SizedBox(height: heightSize(10)),
                         Padding(
                           padding: EdgeInsets.only(left: widthSize(41)),
-                          child: CText(text: 'Loan is overdue, late repayment fine may apply', size: 12, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: sCancel),
+                          child: CText(text: 'Loan is overdue, late repayment fine may apply', size: 12, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: sCancel),
                         ),
                         SizedBox(height: heightSize(14)),
-                        CText(text: 'N1,200,000', size: 18, fontFamily: CFONT.BOLD, fontWeight: FontWeight.w700),
+                        CText(text: 'N1,200,000', size: 18, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wBold),
                         SizedBox(height: heightSize(2.5)),
-                        CText(text: 'of N5,000,000 disbursed', size: 11, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: sGrey1),
+                        CText(text: 'of N5,000,000 disbursed', size: 11, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: sGrey1),
                         SizedBox(height: heightSize(8.5)),
                         _progressSection(
                           anim: _progressAnim2,
                           leftLabel: '',
                           rightLabel: 'Due 30 Jun, 2026',
                           showPercent: true,
-                          activeColor: sNavContainer, // red for overdue
+                          activeColor: sNavContainer,
                         ),
                         SizedBox(height: heightSize(11)),
                         Row(
@@ -296,27 +297,27 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CText(text: 'Min. Amount', size: 10, fontFamily: CFONT.REGULAR, color: sGrey2),
+                                CText(text: 'Min. Amount', size: 10, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
                                 SizedBox(height: heightSize(0.5)),
-                                CText(text: 'N10,000', size: 12, fontFamily: CFONT.MEDIUM),
+                                CText(text: 'N10,000', size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
                               ],
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CText(text: 'Early Repayment', size: 10, fontFamily: CFONT.REGULAR, color: sGrey2),
+                                CText(text: 'Early Repayment', size: 10, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
                                 SizedBox(height: heightSize(0.5)),
-                                CText(text: '5% penalty', size: 12, fontFamily: CFONT.MEDIUM),
+                                CText(text: '5% penalty', size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
                               ],
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CText(text: 'Auto Repay', size: 10, fontFamily: CFONT.REGULAR, color: sGrey2),
+                                CText(text: 'Auto Repay', size: 10, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
                                 SizedBox(height: heightSize(0.5)),
                                 Row(
                                   children: [
-                                    CText(text: 'Yes', size: 12, fontFamily: CFONT.MEDIUM),
+                                    CText(text: 'Yes', size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
                                     SizedBox(width: widthSize(2.5)),
                                     SvgPicture.asset(tick, width: widthSize(12), height: heightSize(12)),
                                   ],

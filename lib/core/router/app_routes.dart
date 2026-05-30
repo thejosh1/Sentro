@@ -15,6 +15,7 @@ abstract class Routes {
   static const login = '/login';
   static const resetPassword = '/reset-password';
   static const confirmPin = '/confirm-pin';
+  static const continuosLogin = '/continuos-login';
 
 
   // dashboard screens
@@ -49,6 +50,38 @@ abstract class Routes {
   static const repayment = '/repayment';
   static const takeLoan = '/take-loan';
   static const loanSummary = '/loan-summary';
+
+  //qrpay
+  static const sendQr = '/send-qr';
+  static const qrPay = '/qr-pay';
+
+  //profile
+  static const profilePage = '/profile-page';
+  static const myQrPage = '/p-page';
+  static const terms = '/terms';
+
+  //security
+  static const security = '/security';
+  static const appLock = '/app-lock';
+  static const enableBiometrics = '/enable-biometrics';
+  static const changePassword = '/change-password';
+  static const changePin = '/change-pin';
+  static const linkedDevices = '/linked-devices';
+  static const permissions = '/permissions';
+
+  //verification
+  static const verification = '/verification';
+  static const upgradeAccount = '/upgrade-account';
+
+  //beneficiaries
+  static const beneficiaries = '/beneficiaries';
+
+  //accounts
+  static const accountStatements = '/account-statements';
+  static const accountLimit = '/account-limit';
+
+  //notifications
+  static const notification = '/notification';
 
   //widgets
   static const confirmTransaction = '/confirm-transaction';

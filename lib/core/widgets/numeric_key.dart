@@ -8,6 +8,7 @@ import 'package:sentro/core/utils/text.dart';
 typedef KeyboardTapCallback = void Function(String text);
 
 class NumericKeyboard extends StatefulWidget {
+  final bool showBiometric;
   /// Color of the text [default = Colors.black]
   final Color textColor;
 
@@ -30,15 +31,15 @@ class NumericKeyboard extends StatefulWidget {
   final MainAxisAlignment mainAxisAlignment;
 
   const NumericKeyboard(
-      {Key? key,
+      {super.key,
         required this.onKeyboardTap,
         this.textColor = Colors.black,
         this.rightButtonFn,
         this.rightIcon,
         this.leftButtonFn,
         this.leftIcon,
-        this.mainAxisAlignment = MainAxisAlignment.spaceEvenly})
-      : super(key: key);
+        this.showBiometric = true,
+        this.mainAxisAlignment = MainAxisAlignment.spaceEvenly});
 
   @override
   State<StatefulWidget> createState() {
@@ -86,12 +87,15 @@ class _NumericKeyboardState extends State<NumericKeyboard> {
             children: <Widget>[
               InkWell(
                 borderRadius: BorderRadius.circular(45),
-                onTap: widget.rightButtonFn,
+                onTap: widget.showBiometric ? widget.rightButtonFn : null,
                 child: Container(
-                    alignment: Alignment.center,
-                    width: 50,
-                    height: 50,
-                    child: SvgPicture.asset(fingerScan)),
+                  alignment: Alignment.center,
+                  width: 50,
+                  height: 50,
+                  child: widget.showBiometric
+                      ? SvgPicture.asset(fingerScan)
+                      : const SizedBox.shrink(), // ← invisible but keeps spacing
+                ),
               ),
               _calcButton('0'),
               InkWell(

@@ -17,6 +17,7 @@ class LoanSummary extends StatefulWidget {
 
 class _LoanSummaryState extends State<LoanSummary> {
   bool _isRead = false;
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -46,15 +47,15 @@ class _LoanSummaryState extends State<LoanSummary> {
                   children: [
                     CText(
                       text: 'Summary',
-                      fontWeight: FontWeight.w400,
-                      fontFamily: CFONT.REGULAR,
+                      fontWeight: CFONT.wRegular,
+                      fontFamily: CFONT.FAMILY,
                       size: 18,
                     ),
                     SizedBox(height: heightSize(7),),
                     CText(
                       text: '10 April, 2026',
-                      fontFamily: CFONT.MEDIUM,
-                      fontWeight: FontWeight.w500,
+                      fontFamily: CFONT.FAMILY,
+                      fontWeight: CFONT.wMedium,
                       size: 14,
                     ),
                   ],
@@ -98,8 +99,8 @@ class _LoanSummaryState extends State<LoanSummary> {
                             ),
                             CText(
                               text: '6 Months Loan',
-                              fontWeight: FontWeight.w500,
-                              fontFamily: CFONT.MEDIUM,
+                              fontWeight: CFONT.wMedium,
+                              fontFamily: CFONT.FAMILY,
                               size: 12,
                             ),
                           ],
@@ -116,21 +117,17 @@ class _LoanSummaryState extends State<LoanSummary> {
                           value: 'N0.00',
                           isColored: false,
                         ),
-
                         SizedBox(height: heightSize(11)),
                         Divider(color: isDark ? sButtonFillDark : sLightBorder),
                         SizedBox(height: heightSize(11)),
-
                         _receiptRow(
                           title: 'Loan Rate',
                           value: '20%',
                           isColored: false,
                         ),
-
                         SizedBox(height: heightSize(11)),
                         Divider(color: isDark ? sButtonFillDark : sLightBorder),
                         SizedBox(height: heightSize(11)),
-
                         _receiptRow(
                           title: 'Monthly',
                           value: '1.7%',
@@ -139,57 +136,58 @@ class _LoanSummaryState extends State<LoanSummary> {
                         SizedBox(height: heightSize(11)),
                         Divider(color: isDark ? sButtonFillDark : sLightBorder),
                         SizedBox(height: heightSize(11)),
-
                         _receiptRow(
                           title: 'Total Interest (1 year)',
                           value: 'N10',
                           isColored: true,
                         ),
-
                         SizedBox(height: heightSize(11)),
                         Divider(color: isDark ? sButtonFillDark : sLightBorder),
                         SizedBox(height: heightSize(11)),
-
                         _receiptRow(
                           title: 'First Repayment Amount',
                           value: 'N10',
                           isColored: true,
                         ),
-
                         SizedBox(height: heightSize(11)),
                         Divider(color: isDark ? sButtonFillDark : sLightBorder),
                         SizedBox(height: heightSize(11)),
-
                         _receiptRow(
                           title: 'First Repayment Date',
                           value: '30 July, 2026',
                           isColored: false,
                         ),
-
                         SizedBox(height: heightSize(11)),
                         Divider(color: isDark ? sButtonFillDark : sLightBorder),
                         SizedBox(height: heightSize(11)),
-
                         _receiptRow(
                           title: 'Loan Fee',
                           value: 'N10',
                           isColored: false,
                         ),
-
                         SizedBox(height: heightSize(32)),
                         Divider(color: isDark ? sButtonFillDark : sLightBorder),
                         SizedBox(height: heightSize(23)),
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CText(text: 'Receivable Loan', fontWeight: FontWeight.w500, fontFamily: CFONT.MEDIUM, size: 14,),
-                            CText(text: 'N9,990', fontWeight: FontWeight.w700, fontFamily: CFONT.BOLD, size: 18, color: sNavContainer,),
+                            CText(
+                              text: 'Receivable Loan',
+                              fontWeight: CFONT.wMedium,
+                              fontFamily: CFONT.FAMILY,
+                              size: 14,
+                            ),
+                            CText(
+                              text: 'N9,990',
+                              fontWeight: CFONT.wBold,
+                              fontFamily: CFONT.FAMILY,
+                              size: 18,
+                              color: sNavContainer,
+                            ),
                           ],
                         ),
                         SizedBox(height: heightSize(30.5),)
                       ]
-
                   )
                 ],
               ),
@@ -214,17 +212,17 @@ class _LoanSummaryState extends State<LoanSummary> {
                       CText(
                         text: 'Terms and conditions',
                         size: 14,
-                        fontFamily: CFONT.MEDIUM,
-                        fontWeight: FontWeight.w500,
+                        fontFamily: CFONT.FAMILY,
+                        fontWeight: CFONT.wMedium,
                       ),
                       SizedBox(height: heightSize(5),),
                       SizedBox(
                         width: widthSize(263),
                         child: CText(
-                          text: 'By confirming, you authorise Sentro to debit your selected funding source. For Fixed Deposits and T-Bills, funds are locked until maturity. ',
+                          text: 'By confirming, you authorise Sentro to debit your selected funding source. For Fixed Deposits and T-Bills, funds are locked until maturity.',
                           size: 12,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: CFONT.REGULAR,
+                          fontWeight: CFONT.wRegular,
+                          fontFamily: CFONT.FAMILY,
                         ),
                       )
                     ],
@@ -233,7 +231,7 @@ class _LoanSummaryState extends State<LoanSummary> {
                   GestureDetector(
                     onTap: () => setState(() => _isRead = !_isRead),
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
+                      duration: const Duration(milliseconds: 180),
                       curve: Curves.easeInOut,
                       width: widthSize(54),
                       height: heightSize(28),
@@ -251,7 +249,7 @@ class _LoanSummaryState extends State<LoanSummary> {
                             : MainAxisAlignment.start,
                         children: [
                           AnimatedContainer(
-                            duration: const Duration(milliseconds: 250),
+                            duration: const Duration(milliseconds: 180),
                             curve: Curves.easeInOut,
                             width: widthSize(22),
                             height: heightSize(22),
@@ -293,17 +291,17 @@ class _LoanSummaryState extends State<LoanSummary> {
       children: [
         CText(
           text: title,
-          fontFamily: CFONT.REGULAR,
-          fontWeight: FontWeight.w400,
+          fontFamily: CFONT.FAMILY,
+          fontWeight: CFONT.wRegular,
           size: 14,
           color: sConfirmTextColor,
         ),
         CText(
           text: value,
-          fontWeight: FontWeight.w500,
+          fontWeight: CFONT.wMedium,
           size: 16,
-          fontFamily: CFONT.MEDIUM,
-          color: isColored?sNavContainer:Theme.of(context).colorScheme.onSurface,
+          fontFamily: CFONT.FAMILY,
+          color: isColored ? sNavContainer : Theme.of(context).colorScheme.onSurface,
         ),
       ],
     );

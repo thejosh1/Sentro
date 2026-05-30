@@ -9,6 +9,7 @@ import 'package:sentro/core/models/disco.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/action_button.dart';
 import 'package:sentro/core/utils/text.dart';
+import 'package:sentro/core/widgets/balance_pill.dart';
 import 'package:sentro/core/widgets/text_field.dart';
 
 class WasteManagement extends StatefulWidget {
@@ -22,6 +23,7 @@ class _WasteManagementState extends State<WasteManagement> {
   bool isPostpaidSelected = false;
   bool isPlanSheetOpen = false;
   DiscoModel? selectedDisco;
+  bool _obscured = false;
 
   final List<DiscoModel> discos = [
     DiscoModel(
@@ -43,12 +45,14 @@ class _WasteManagementState extends State<WasteManagement> {
 
   TextEditingController metreController = TextEditingController();
   TextEditingController amountController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
@@ -64,50 +68,13 @@ class _WasteManagementState extends State<WasteManagement> {
                     Get.back();
                   },
                   child: SvgPicture.asset(
-                    arrowBackWhite,
+                    isDark?arrowBackWhite:arrowBack,
                     width: widthSize(42),
                     height: heightSize(42),
                   ),
                 ),
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      wallet,
-                      width: widthSize(24),
-                      height: heightSize(24),
-                    ),
-                    SizedBox(width: widthSize(3.4),),
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: '₦50,000',
-                            style: TextStyle(
-                              fontSize: 15.86,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: CFONT.REGULAR,
-                              height: 22.65 / 15.86,
-                            ),
-                          ),
-
-                          TextSpan(
-                            text: '.00',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: CFONT.REGULAR,
-                              height: 22.65 / 10,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SvgPicture.asset(
-                      visibilityOff,
-                      width: widthSize(24),
-                      height: heightSize(24),
-                    ),
-                  ],
+                BalancePill(
+                  isDark: isDark,
                 ),
               ],
             ),
@@ -116,16 +83,16 @@ class _WasteManagementState extends State<WasteManagement> {
             CText(
               text: 'Waste Management',
               size: 19.85,
-              fontWeight: FontWeight.w500,
-              fontFamily: CFONT.MEDIUM,
+              fontWeight: CFONT.wMedium,
+              fontFamily: CFONT.FAMILY,
               height: 22.05/19.85,
             ),
             SizedBox(height: heightSize(2.76)),
             CText(
-              text: 'Pay for your preferred internet service provider',
+              text: 'Pay for your preferred waste management service',
               size: 16,
-              fontWeight: FontWeight.w400,
-              fontFamily: CFONT.REGULAR,
+              fontWeight: CFONT.wRegular,
+              fontFamily: CFONT.FAMILY,
               height: 22.05/16,
               color: sConfirmTextColor,
             ),
@@ -137,22 +104,22 @@ class _WasteManagementState extends State<WasteManagement> {
                 CText(
                   text: 'Select Provider',
                   size: 17.88,
-                  fontFamily: CFONT.REGULAR,
-                  fontWeight: FontWeight.w400,
+                  fontFamily: CFONT.FAMILY,
+                  fontWeight: CFONT.wRegular,
                 ),
                 Container(
                   width: widthSize(126),
                   height: heightSize(30.86),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(124.89),
-                    color: sBeneficiaryColor,
+                    color: isDark?sBeneficiaryColor:sLightFill,
                   ),
                   child: Center(
                     child: CText(
                       text: 'Beneficiaries',
-                      fontWeight: FontWeight.w400,
+                      fontWeight: CFONT.wRegular,
                       size: 17.84,
-                      fontFamily: CFONT.REGULAR,
+                      fontFamily: CFONT.FAMILY,
                     ),
                   ),
                 )
@@ -173,7 +140,7 @@ class _WasteManagementState extends State<WasteManagement> {
                   ),
                   builder: (_) {
                     return TweenAnimationBuilder(
-                      duration: const Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 200),
                       tween: Tween(begin: 0.0, end: 1.0),
                       curve: Curves.easeOut,
                       builder: (context, value, child) {
@@ -207,7 +174,7 @@ class _WasteManagementState extends State<WasteManagement> {
                             ),
                             Center(
                               child: AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 250),
+                                duration: const Duration(milliseconds: 180),
                                 transitionBuilder: (child, animation) {
                                   return FadeTransition(
                                     opacity: animation,
@@ -226,26 +193,24 @@ class _WasteManagementState extends State<WasteManagement> {
                                       ? 'Select Disco'
                                       : '${selectedDisco!.name} (${selectedDisco!.duration} Day)',
                                   size: 14,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: CFONT.REGULAR,
+                                  fontWeight: CFONT.wRegular,
+                                  fontFamily: CFONT.FAMILY,
                                 ),
                               ),
                             ),
                             SizedBox(height: heightSize(33),),
 
                             ...discos.map((disco) {
-
                               return GestureDetector(
                                 onTap: () {
                                   setState(() {
                                     selectedDisco = disco;
                                   });
-
                                   Navigator.pop(context);
                                 },
                                 child: AnimatedContainer(
                                   width: double.maxFinite,
-                                  duration: const Duration(milliseconds: 250),
+                                  duration: const Duration(milliseconds: 180),
                                   margin: EdgeInsets.only(
                                     bottom: heightSize(13),
                                   ),
@@ -263,15 +228,15 @@ class _WasteManagementState extends State<WasteManagement> {
                                       CText(
                                         text: disco.name,
                                         size: 16,
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: CFONT.REGULAR,
+                                        fontWeight: CFONT.wRegular,
+                                        fontFamily: CFONT.FAMILY,
                                         height: 16.67 / 16,
                                       ),
                                       SizedBox(height: heightSize(10),),
                                       CText(
                                         text: 'N${disco.amount}',
-                                        fontFamily: CFONT.MEDIUM,
-                                        fontWeight: FontWeight.w500,
+                                        fontFamily: CFONT.FAMILY,
+                                        fontWeight: CFONT.wMedium,
                                         size: 16,
                                         color: sNavContainer,
                                       ),
@@ -302,7 +267,7 @@ class _WasteManagementState extends State<WasteManagement> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 250),
+                      duration: const Duration(milliseconds: 180),
                       transitionBuilder: (child, animation) {
                         return FadeTransition(
                           opacity: animation,
@@ -321,14 +286,13 @@ class _WasteManagementState extends State<WasteManagement> {
                             ? 'Select Disco'
                             : '${selectedDisco!.name} (${selectedDisco!.duration} Day) - N${selectedDisco!.amount}',
                         size: 14,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: CFONT.REGULAR,
+                        fontWeight: CFONT.wRegular,
+                        fontFamily: CFONT.FAMILY,
                       ),
                     ),
-
                     AnimatedRotation(
                       turns: isPlanSheetOpen ? 0.5 : 0,
-                      duration: const Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 200),
                       curve: Curves.easeInOut,
                       child: SvgPicture.asset(
                         arrowDown,
@@ -344,9 +308,9 @@ class _WasteManagementState extends State<WasteManagement> {
             AppTextField(
               title: CText(
                 text: 'Address',
-                fontWeight: FontWeight.w400,
+                fontWeight: CFONT.wRegular,
                 size: 17.88,
-                fontFamily: CFONT.REGULAR,
+                fontFamily: CFONT.FAMILY,
               ),
               hasBottomMargin: false,
               height: heightSize(55),
@@ -376,7 +340,7 @@ class _WasteManagementState extends State<WasteManagement> {
                 if (value == null || value
                     .trim()
                     .isEmpty) {
-                  return "Input your meter number.";
+                  return "Input your amount.";
                 }
                 return null;
               },
@@ -386,11 +350,12 @@ class _WasteManagementState extends State<WasteManagement> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  width: widthSize(113.75),
+                  //width: widthSize(113.75),
                   height: heightSize(33.86),
+                  padding: EdgeInsets.only(left: widthSize(8), right: widthSize(8),),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(124.89),
-                    color: sBeneficiaryColor,
+                    color: isDark?sBeneficiaryColor:sLightFill,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -404,8 +369,8 @@ class _WasteManagementState extends State<WasteManagement> {
                       CText(
                         text: 'Save Info',
                         size: 17.48,
-                        fontFamily: CFONT.REGULAR,
-                        fontWeight: FontWeight.w400,
+                        fontFamily: CFONT.FAMILY,
+                        fontWeight: CFONT.wRegular,
                       ),
                     ],
                   ),
@@ -417,6 +382,7 @@ class _WasteManagementState extends State<WasteManagement> {
               text: 'Continue',
               color: sNavContainer,
               textColor: sActionButton,
+              borderColor: sNavContainer,
               callback: () {
                 Get.toNamed(Routes.confirmation);
               },

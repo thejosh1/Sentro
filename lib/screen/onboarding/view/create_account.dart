@@ -19,6 +19,7 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccountState extends State<CreateAccount> {
   TextEditingController bvnController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -33,12 +34,13 @@ class _CreateAccountState extends State<CreateAccount> {
             Padding(
               padding: EdgeInsets.only(right: widthSize(7)),
               child: PageHeader(
+                isDark: false,
                 trailing: CText(
                   text: 'Why is BVN required?',
-                  color: sTextGreen,
+                  color: isDark?sNavContainer:sActionButton,
                   size: 16,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: CFONT.MEDIUM,
+                  fontWeight: CFONT.wMedium,
+                  fontFamily: CFONT.FAMILY,
                 ),
               ),
             ),
@@ -46,15 +48,18 @@ class _CreateAccountState extends State<CreateAccount> {
             CText(
               text: 'Create account with BVN',
               size: 22,
-              fontFamily: CFONT.BOLD,
-              fontWeight: FontWeight.w700,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wBold,
             ),
             SizedBox(height: heightSize(5),),
             CText(
               text: 'You will receive a verification code to your phone used to register your BVN',
-              fontWeight: FontWeight.w400, size: 18, fontFamily: CFONT.REGULAR, color: Theme.of(context).brightness == Brightness.dark
-                ? sDarkModeMutedText // dark mode muted text
-                : sLightModeMutedText,
+              fontWeight: CFONT.wRegular,
+              size: 18,
+              fontFamily: CFONT.FAMILY,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? sDarkModeMutedText // dark mode muted text
+                  : sLightModeMutedText,
             ),
             SizedBox(height: heightSize(30),),
             AppTextField(
@@ -63,16 +68,16 @@ class _CreateAccountState extends State<CreateAccount> {
                 children: [
                   CText(
                     text: 'BVN',
-                    fontWeight: FontWeight.w500,
-                    fontFamily: CFONT.MEDIUM,
+                    fontWeight: CFONT.wMedium,
+                    fontFamily: CFONT.FAMILY,
                     size: 16,
                   ),
                   CText(
                     text: 'Bank Verification Number',
                     size: 16,
-                    fontFamily: CFONT.REGULAR,
-                    fontWeight: FontWeight.w400,
-                    color: isDark?sDarkHintText:sLightHintText,
+                    fontFamily: CFONT.FAMILY,
+                    fontWeight: CFONT.wRegular,
+                    color: isDark ? sDarkHintText : sLightHintText,
                   ),
                 ],
               ),
@@ -89,7 +94,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 return null;
               },
             ),
-            SizedBox(height: heightSize(20),),
+            SizedBox(height: heightSize(30),),
             SizedBox(
               height: heightSize(42),
               width: widthSize(155),
@@ -103,7 +108,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     borderRadius: BorderRadius.circular(21),
                     side: BorderSide(
                       color: sLemon,
-                    )
+                    ),
                   ),
                 ),
                 child: Row(
@@ -113,32 +118,35 @@ class _CreateAccountState extends State<CreateAccount> {
                       call,
                       width: widthSize(20),
                       height: heightSize(20),
-                      colorFilter: isDark?ColorFilter.mode(Colors.white, BlendMode.srcIn):null),
+                      colorFilter: isDark ? ColorFilter.mode(Colors.white, BlendMode.srcIn) : null,
+                    ),
                     CText(
                       text: 'Dial *565*0#',
                       size: 13,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: CFONT.REGULAR,
+                      fontWeight: CFONT.wRegular,
+                      fontFamily: CFONT.FAMILY,
                     ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(
-            left: widthSize(25),
-            right: widthSize(25),
-            bottom: heightSize(10)),
+          left: widthSize(25),
+          right: widthSize(25),
+          bottom: heightSize(10),
+        ),
         child: ActionButton(
           text: "Continue",
+          textColor: sNavContainer,
           callback: () {
             Get.toNamed(
               Routes.confirmPhoneNumber,
               arguments: {
-              "flow": "bvn",
+                "flow": "bvn",
               },
             );
           },

@@ -1,30 +1,51 @@
-// lib/core/models/transfer_recipient.dart
-
 class TransferRecipient {
-  final String image;
   final String name;
+  final String image;
   final bool isSentroTag;
-
-  // Other Banks fields
+  final String? tag;
   final String? bankName;
   final int? accountNumber;
+  final bool fromBeneficiary; // ← new flag
 
-  // Sentro Tag fields
-  final String? tag;
-
-  const TransferRecipient.bank({
-    required this.image,
+  const TransferRecipient._({
     required this.name,
-    required this.bankName,
-    required this.accountNumber,
-  })  : isSentroTag = false,
-        tag = null;
-
-  const TransferRecipient.sentro({
     required this.image,
-    required this.name,
-    required this.tag,
-  })  : isSentroTag = true,
-        bankName = null,
-        accountNumber = null;
+    required this.isSentroTag,
+    this.tag,
+    this.bankName,
+    this.accountNumber,
+    this.fromBeneficiary = false,
+  });
+
+  /// Sentro tag recipient
+  factory TransferRecipient.sentro({
+    required String image,
+    required String name,
+    required String tag,
+    bool fromBeneficiary = false,
+  }) =>
+      TransferRecipient._(
+        name: name,
+        image: image,
+        isSentroTag: true,
+        tag: tag,
+        fromBeneficiary: fromBeneficiary,
+      );
+
+  /// Bank account recipient
+  factory TransferRecipient.bank({
+    required String image,
+    required String name,
+    required String bankName,
+    required int accountNumber,
+    bool fromBeneficiary = false,
+  }) =>
+      TransferRecipient._(
+        name: name,
+        image: image,
+        isSentroTag: false,
+        bankName: bankName,
+        accountNumber: accountNumber,
+        fromBeneficiary: fromBeneficiary,
+      );
 }

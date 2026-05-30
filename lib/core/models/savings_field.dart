@@ -30,6 +30,8 @@ class SavingsField {
 
   final bool showIcon;
 
+  final List<String>? dropdownItems;
+
   // ── Toggle ─────────────────────────────
   final bool toggleState;
 
@@ -47,6 +49,7 @@ class SavingsField {
     this.toggleState = false,
     this.showIcon = false,
     this.description,
+    this.dropdownItems,
 
     // card
     this.cardItems,

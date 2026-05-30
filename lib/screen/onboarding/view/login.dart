@@ -19,6 +19,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   TextEditingController loginPasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -30,41 +31,79 @@ class _LoginState extends State<Login> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: heightSize(64),),
-            Padding(
-              padding: EdgeInsets.only(right: widthSize(7)),
-              child: PageHeader(
-                trailing: SvgPicture.asset(
-                  headPhone,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () => Get.back(),
+                  child: SvgPicture.asset(
+                    isDark?arrowBackWhite:arrowBack,
+                    width: widthSize(42),
+                    height: heightSize(42),
+                  ),
+                ),
+                SvgPicture.asset(
+                  logoLight,
+                  width: widthSize(116.39),
+                  height: heightSize(28),
+                  colorFilter: isDark?ColorFilter.mode(
+                    sNavContainer,
+                    BlendMode.srcIn,
+                  ):null,
+                ),
+                SvgPicture.asset(
+                  isDark?headPhoneWhite:headPhone,
                   width: widthSize(43.52),
                   height: heightSize(50),
-
-                ),
-              ),
+                )
+              ],
             ),
             SizedBox(height: heightSize(34),),
             CText(
               text: 'Login password',
               size: 22,
-              fontFamily: CFONT.BOLD,
-              fontWeight: FontWeight.w700,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wBold,
             ),
             SizedBox(height: heightSize(5),),
             CText(
               text: 'Enter your account password',
-              fontWeight: FontWeight.w400, size: 18, fontFamily: CFONT.REGULAR, color: Theme.of(context).brightness == Brightness.dark
-                ? sDarkModeMutedText // dark mode muted text
-                : sLightModeMutedText,
+              fontWeight: CFONT.wRegular,
+              size: 18,
+              fontFamily: CFONT.FAMILY,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? sDarkModeMutedText // dark mode muted text
+                  : sLightModeMutedText,
             ),
             SizedBox(height: heightSize(30),),
             AppTextField(
               obscureText: true,
               title: CText(
                 text: 'Password',
-                fontWeight: FontWeight.w500,
-                fontFamily: CFONT.MEDIUM,
+                fontWeight: CFONT.wMedium,
+                fontFamily: CFONT.FAMILY,
                 size: 16,
               ),
               hint: '●●●●●●●●●●',
+              hintColor: isDark?Colors.white:sActionButton,
+              obscureOnIcon: SvgPicture.asset(
+                hide,
+                width: widthSize(24),
+                height: heightSize(24),
+                colorFilter: isDark?null:ColorFilter.mode(
+                  Theme.of(context).primaryColor,
+                  BlendMode.srcIn,
+                ),
+              ),
+              obscureOffIcon: SvgPicture.asset(
+                visibilityOff,
+                width: widthSize(24),
+                height: heightSize(24),
+                colorFilter: isDark?null:ColorFilter.mode(
+                  Theme.of(context).primaryColor,
+                  BlendMode.srcIn,
+                ),
+              ),
               color: sActionButton,
               controller: loginPasswordController,
               inputType: TextInputType.visiblePassword,
@@ -93,24 +132,27 @@ class _LoginState extends State<Login> {
                   },
                   child: CText(
                     text: 'Forgot Password?',
-                    fontFamily: CFONT.MEDIUM,
-                    fontWeight: FontWeight.w500,
+                    fontFamily: CFONT.FAMILY,
+                    fontWeight: CFONT.wMedium,
                     color: sCancel,
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(
-            left: widthSize(25),
-            right: widthSize(25),
-            bottom: heightSize(10)),
+          left: widthSize(25),
+          right: widthSize(25),
+          bottom: heightSize(10),
+        ),
         child: ActionButton(
           text: "Continue",
+          textColor: sNavContainer,
           callback: () {
+            FocusScope.of(context).unfocus();
             Get.toNamed(Routes.confirmPin);
           },
           load: false,

@@ -4,10 +4,12 @@ import 'package:sentro/core/constants/sizes.dart';
 
 class CFONT {
   static const SEMIBOLD = "perfectly-vintages-font-by-keithzo";
-  static const BOLD = "Satoshi-Bold";
-  static const MEDIUM = "Satoshi-Medium";
-  static const REGULAR = "Satoshi-Regular";
-  static const ITALIC = "Satoshi";
+  static const FAMILY = "Satoshi";
+
+  static const wLight    = FontWeight.w300;
+  static const wRegular  = FontWeight.w400;
+  static const wMedium   = FontWeight.w500;
+  static const wBold     = FontWeight.w700;
 }
 
 class CText extends StatelessWidget {
@@ -175,8 +177,9 @@ class TextNaira extends StatelessWidget {
           text,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            fontWeight: fontWeight ?? FontWeight.w700,
+            fontWeight: fontWeight ?? CFONT.wBold,
             fontSize: size ?? 16,
+            fontFamily: CFONT.FAMILY,
             color: resolvedColor,
             height: 1.2,
           ),

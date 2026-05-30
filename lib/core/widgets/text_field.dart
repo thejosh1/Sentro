@@ -1,12 +1,12 @@
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/constants/values.dart';
 import 'package:sentro/core/utils/text.dart';
-
-import '../constants/asset_path.dart';
 
 class AppTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -32,6 +32,8 @@ class AppTextField extends StatefulWidget {
   final bool showNairaPrefix;
   final int? maxLines;
   final num? suffixWidth;
+  final List<TextInputFormatter>? inputFormatters;
+  final double? verticalPadding;
 
   const AppTextField({
     super.key,
@@ -58,6 +60,8 @@ class AppTextField extends StatefulWidget {
     this.showNairaPrefix = false,
     this.maxLines,
     this.suffixWidth,
+    this.inputFormatters,
+    this.verticalPadding,
   });
 
   @override
@@ -70,13 +74,15 @@ class _AppTextFieldState extends State<AppTextField> {
   @override
   void initState() {
     super.initState();
-    _isObscured = widget.obscureText!;
+    _isObscured = widget.obscureText ?? false;
   }
 
   void _toggle() {
     setState(() => _isObscured = !_isObscured);
     widget.onToggle?.call(_isObscured);
   }
+
+  bool get _isMultiline => (widget.maxLines ?? 1) > 1;
 
   Widget? _resolveSuffix(Color iconColor) {
     if (widget.obscureText == true) {
@@ -89,9 +95,14 @@ class _AppTextFieldState extends State<AppTextField> {
             splashRadius: 20,
             onPressed: _toggle,
             icon: _isObscured
-                ? (widget.obscureOnIcon ?? Icon(Icons.visibility_off, color: iconColor))
+                ? (widget.obscureOnIcon ??
+                Icon(Icons.visibility_off, color: iconColor))
                 : (widget.obscureOffIcon ??
-                SvgPicture.asset(hide, width: widthSize(24), height: heightSize(24))),
+                SvgPicture.asset(
+                  hide,
+                  width: widthSize(24),
+                  height: heightSize(24),
+                )),
           ),
         ),
       );
@@ -101,7 +112,7 @@ class _AppTextFieldState extends State<AppTextField> {
       return Padding(
         padding: EdgeInsets.only(right: widthSize(21.23)),
         child: SizedBox(
-          width: widthSize(widget.suffixWidth??48),
+          width: widthSize(widget.suffixWidth ?? 48),
           child: Center(child: widget.suffixWidget),
         ),
       );
@@ -110,58 +121,49 @@ class _AppTextFieldState extends State<AppTextField> {
     return null;
   }
 
-  Widget? _resolvePrefix() {
-    if (widget.prefixWidget == null) return null;
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: widget.prefixWidget,
-    );
-  }
-
-  final inputBorder = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(Values().buttonRadius10),
-    borderSide: BorderSide.none, // ← no visible stroke, just the shape
-  );
-
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final Size size = MediaQuery.of(context).size;
 
+    final hintColor =
+        widget.hintColor ?? (isDark ? sDarkHintText : sLightHintText);
+    final textColor = Theme.of(context).colorScheme.onSurface;
+    final iconColor = isDark ? sDarkHintText : sLightHintText;
     final borderColor = isDark ? sDarkBorder : sLightBorder;
-    final hintColor   = widget.hintColor ?? (isDark ? sDarkHintText : sLightHintText);
-    final textColor   = Theme.of(context).colorScheme.onSurface;
-    final iconColor   = isDark ? sDarkHintText : sLightHintText;
+    final fillColor = isDark ? sDarkFill : Colors.transparent;
+
+    // Vertical padding drives the field height on all platforms.
+    // target ~58px: fontSize(14) ≈ 17px + 2*20px padding = 57px ✓
+    const double _vPad = 20;
+
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(Values().buttonRadius10),
+      borderSide: BorderSide(color: borderColor),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // ── Optional title ──────────────────────────────
         if (widget.title != null) ...[
           widget.title!,
-          const SizedBox(height: 6),
+          SizedBox(height: heightSize(8)),
         ],
+
+        // ── Field ───────────────────────────────────────
         Container(
-          height: (widget.maxLines ?? 1) > 1 ? null : heightSize(widget.height ?? 58),
-          width: size.width,
+          // Fixed height only for multiline (null = wrap content)
+          height: _isMultiline ? (widget.height != null ? heightSize(widget.height!) : null) : null,
           margin: widget.hasBottomMargin
               ? const EdgeInsets.only(bottom: 10)
               : EdgeInsets.zero,
-          decoration: BoxDecoration(
-            color: isDark ? sDarkFill : Colors.transparent,
-            border: Border.all(
-              color: isDark ? sDarkBorder : sLightBorder,
-            ),
-            borderRadius: BorderRadius.circular(
-              Values().buttonRadius10,
-            ),
-          ),
           child: TextFormField(
-            textAlignVertical: (widget.maxLines ?? 1) > 1
+            textAlignVertical: _isMultiline
                 ? TextAlignVertical.top
                 : TextAlignVertical.center,
-            expands: !_isObscured && widget.maxLines == null ? false : false, // ← always false now unless explicitly multiline
             maxLines: _isObscured ? 1 : widget.maxLines,
             minLines: null,
+            expands: false,
             readOnly: widget.readOnly,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             enabled: widget.enabled,
@@ -170,38 +172,90 @@ class _AppTextFieldState extends State<AppTextField> {
             validator: widget.validFunction,
             onChanged: widget.onSavedFunction,
             keyboardType: widget.inputType,
+            inputFormatters: widget.inputFormatters,
             cursorColor: Theme.of(context).colorScheme.primary,
-            style: TextStyle(color: textColor, fontSize: fontSize(14)),
+            cursorHeight: fontSize(18),
+            style: TextStyle(
+              color: textColor,
+              fontSize: fontSize(14),
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wRegular,
+              height: 1.0, // tight line height — prevents internal offset
+            ),
             decoration: InputDecoration(
               filled: true,
-              fillColor: Colors.transparent,
+              fillColor: fillColor,
 
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: widthSize(16),
-                vertical: (widget.maxLines ?? 1) > 1
-                    ? heightSize(16)   // ← more vertical padding for multiline
-                    : heightSize(12),
+              contentPadding: _isMultiline
+                  ? EdgeInsets.symmetric(
+                horizontal: widthSize(16.76),
+                vertical: heightSize(16),
+              )
+                  : EdgeInsets.only(
+                left: widget.showNairaPrefix
+                    ? widthSize(4)
+                    : widthSize(16.76),
+                right: widthSize(24),
+                top: widget.verticalPadding ?? _vPad,
+                bottom: widget.verticalPadding ?? _vPad,
               ),
 
               hintText: widget.hint,
-              hintStyle: TextStyle(color: hintColor),
-
-              border: inputBorder,
-              enabledBorder: inputBorder,
-              focusedBorder: inputBorder,
-              errorBorder: inputBorder,
-              focusedErrorBorder: inputBorder,
-              disabledBorder: inputBorder,
-
-              errorStyle: const TextStyle(
-                height: 0,
-                fontSize: 0,
+              hintStyle: TextStyle(
+                color: hintColor,
+                fontSize: fontSize(14),
+                fontFamily: CFONT.FAMILY,
+                fontWeight: CFONT.wRegular,
+                height: 1.0,
               ),
 
-              // ── Naira prefix ──────────────────────────────────
-              prefixIcon: widget.prefixWidget != null
+              // Same border for all states — visual border on container
+              border: border,
+              enabledBorder: border,
+              focusedBorder: OutlineInputBorder(
+                borderRadius:
+                BorderRadius.circular(Values().buttonRadius10),
+                borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.primary,
+                  width: 1.5,
+                ),
+              ),
+              errorBorder: border,
+              focusedErrorBorder: border,
+              disabledBorder: border,
+
+              errorStyle:
+              const TextStyle(height: 0, fontSize: 0),
+
+              // ── Prefix icon (custom widget) ────────────
+              prefixIcon: widget.showNairaPrefix
                   ? Padding(
-                padding: EdgeInsets.only(left: widthSize(12), right: widthSize(4)),
+                padding: EdgeInsets.only(
+                  left: widthSize(16.76),
+                  right: widthSize(6),
+                ),
+                child: IntrinsicWidth(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '₦',
+                      style: TextStyle(
+                        inherit: false,
+                        fontSize: fontSize(14),
+                        fontWeight: FontWeight.w400,
+                        color: textColor,
+                        height: 1.0,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+                  : widget.prefixWidget != null          // ← add this
+                  ? Padding(
+                padding: EdgeInsets.only(
+                  left: widthSize(12),
+                  right: widthSize(4),
+                ),
                 child: IntrinsicWidth(
                   child: Align(
                     alignment: Alignment.center,
@@ -209,28 +263,37 @@ class _AppTextFieldState extends State<AppTextField> {
                   ),
                 ),
               )
-                  : widget.showNairaPrefix
-                  ? Padding(
-                padding: EdgeInsets.only(left: widthSize(16), right: widthSize(4)),
-                child: IntrinsicWidth(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      '₦',
-                      style: TextStyle(
-                        fontSize: fontSize(14),
-                        fontWeight: FontWeight.w400,
-                        fontFamily: CFONT.REGULAR,
-                        color: textColor,
-                      ),
-                    ),
-                  ),
-                ),
-              )
                   : null,
-              prefixIconConstraints: const BoxConstraints(minHeight: 0),
-              suffixIcon: _resolveSuffix(iconColor),
+              prefixIconConstraints: const BoxConstraints(
+                minHeight: 0,
+                minWidth: 0,
+              ),
 
+              // ── Naira symbol prefix ────────────────────
+              // prefix: widget.showNairaPrefix
+              //     ? Row(
+              //   mainAxisSize: MainAxisSize.min,
+              //   children: [
+              //     Text(
+              //       '₦',
+              //       style: TextStyle(
+              //         // inherit: false breaks the Satoshi inheritance
+              //         // chain completely, forcing Flutter to use the
+              //         // platform system font which has the ₦ glyph.
+              //         inherit: false,
+              //         fontSize: fontSize(14),
+              //         fontWeight: FontWeight.w400,
+              //         color: textColor,
+              //         height: 1.0,
+              //       ),
+              //     ),
+              //     SizedBox(width: widthSize(4)),
+              //   ],
+              // )
+              //     : null,
+
+              // ── Suffix ─────────────────────────────────
+              suffixIcon: _resolveSuffix(iconColor),
               suffixIconConstraints: const BoxConstraints(
                 minWidth: 40,
                 minHeight: 40,
@@ -242,6 +305,53 @@ class _AppTextFieldState extends State<AppTextField> {
     );
   }
 }
+
+// ── Date formatter ────────────────────────────────────────────────────────────
+
+class DateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue,
+      TextEditingValue newValue,
+      ) {
+    String text = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    if (text.length > 8) text = text.substring(0, 8);
+
+    final buffer = StringBuffer();
+    for (int i = 0; i < text.length; i++) {
+      buffer.write(text[i]);
+      if ((i == 1 || i == 3) && i != text.length - 1) buffer.write('/');
+    }
+
+    final formatted = buffer.toString();
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
+}
+
+// ── Naira formatter ───────────────────────────────────────────────────────────
+
+class NairaInputFormatter extends TextInputFormatter {
+  final _formatter = NumberFormat('#,###');
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue,
+      TextEditingValue newValue,
+      ) {
+    final digits = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    if (digits.isEmpty) return const TextEditingValue(text: '');
+    final formatted = _formatter.format(int.parse(digits));
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
+}
+
+// ── Search field ──────────────────────────────────────────────────────────────
 
 class AuthSearchField extends StatelessWidget {
   final TextEditingController? controller;
@@ -257,6 +367,7 @@ class AuthSearchField extends StatelessWidget {
   final bool? enabled;
   final double? height;
   final double? width;
+  final double? borderRadius;
   final Color? borderColor;
 
   const AuthSearchField({
@@ -275,22 +386,23 @@ class AuthSearchField extends StatelessWidget {
     this.width,
     this.hintColor,
     this.borderColor,
+    this.borderRadius,
   });
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    final textColor   = Theme.of(context).colorScheme.onSurface;
+    final textColor = Theme.of(context).colorScheme.onSurface;
 
     return Container(
-      width: width ?? size.width,
+      width: width ?? double.maxFinite,
+      height: height != null ? heightSize(height!) : null, // ← use height
       padding: EdgeInsets.symmetric(
         vertical: heightSize(12),
         horizontal: widthSize(16),
       ),
       decoration: BoxDecoration(
         color: color ?? Colors.transparent,
-        borderRadius: BorderRadius.circular(7.5),
+        borderRadius: BorderRadius.circular(borderRadius ?? 7.5), // ← use radius
         border: Border.all(color: borderColor ?? sDarkBorder),
       ),
       child: Row(
@@ -308,28 +420,35 @@ class AuthSearchField extends StatelessWidget {
               controller: controller,
               autovalidateMode: AutovalidateMode.disabled,
               enabled: enabled,
-              validator: (value) => null,
-              onChanged: (value) {
-                if (onSavedFunction != null) onSavedFunction!(value);
-                if (onChanged != null) onChanged!(value);
+              validator: (_) => null,
+              onChanged: (v) {
+                onSavedFunction?.call(v);
+                onChanged?.call(v);
               },
               onFieldSubmitted: onSubmitFunction,
               keyboardType: inputType,
               textAlignVertical: TextAlignVertical.center,
               showCursor: true,
               cursorColor: Theme.of(context).colorScheme.primary,
+              cursorHeight: fontSize(16),
               textInputAction: TextInputAction.search,
-              style: TextStyle(color: textColor, fontSize: fontSize(14)),
+              style: TextStyle(
+                color: textColor,
+                fontSize: fontSize(14),
+                fontFamily: CFONT.FAMILY,
+                height: 1.0,
+              ),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.zero,
-                filled: true,                          // ← add this
+                filled: true,
                 fillColor: Colors.transparent,
                 hintText: hint,
                 hintStyle: TextStyle(
                   color: hintColor ?? sGrey2,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: CFONT.REGULAR,
+                  fontSize: fontSize(12),
+                  fontWeight: CFONT.wRegular,
+                  fontFamily: CFONT.FAMILY,
+                  height: 1.0,
                 ),
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,
@@ -340,7 +459,6 @@ class AuthSearchField extends StatelessWidget {
                 isDense: true,
                 isCollapsed: true,
                 errorStyle: const TextStyle(height: 0, fontSize: 0),
-                errorMaxLines: 0,
               ),
             ),
           ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/constants/values.dart';
+import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/text.dart';
 
 class InvestmentCategories extends StatelessWidget {
@@ -24,9 +26,8 @@ class InvestmentCategories extends StatelessWidget {
         bottom: heightSize(15),
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Values().buttonRadius10),
-        // Dark: existing dark container; Light: AppTheme surface
-        color: isDark ? sContainerColor : colorScheme.surface,
+        borderRadius: BorderRadius.circular(Values().buttonRadius20),
+        color: isDark ? sContainerColor : sLightFill,
         boxShadow: isDark
             ? null
             : [
@@ -39,82 +40,102 @@ class InvestmentCategories extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // ── Header row ───────────────────────────────────────────
+          // ── Header ───────────────────────────────────────────────
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CText(
                 text: 'Investment & Savings',
-                fontFamily: CFONT.MEDIUM,
-                fontWeight: FontWeight.w500,
+                fontFamily: CFONT.FAMILY,
+                fontWeight: CFONT.wMedium,
                 size: 14,
                 height: 1.67,
                 color: colorScheme.onSurface,
               ),
-              Row(
-                children: [
-                  CText(
-                    text: 'New Goal',
-                    size: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: CFONT.REGULAR,
-                    // Light: use primary green for the action label
-                    color: isDark
-                        ? colorScheme.onSurface
-                        : colorScheme.primary,
-                  ),
-                  SizedBox(width: widthSize(5)),
-                  SvgPicture.asset(
-                    addition,
-                    width: widthSize(24),
-                    height: heightSize(24),
-                    // Light: tint the + icon with primary green
-                    colorFilter: isDark
-                        ? null
-                        : ColorFilter.mode(
-                      colorScheme.primary,
-                      BlendMode.srcIn,
+              InkWell(
+                onTap: () {
+                  Get.toNamed(Routes.startSaving);
+                },
+                child: Row(
+                  children: [
+                    CText(
+                      text: 'New Goal',
+                      size: 14,
+                      fontWeight: CFONT.wRegular,
+                      fontFamily: CFONT.FAMILY,
+                      color: isDark
+                          ? colorScheme.onSurface
+                          : colorScheme.primary,
                     ),
-                  ),
-                ],
-              ),
+                    SizedBox(width: widthSize(5)),
+                    SvgPicture.asset(
+                      addition,
+                      width: widthSize(24),
+                      height: heightSize(24),
+                      colorFilter: isDark
+                          ? null
+                          : ColorFilter.mode(
+                        colorScheme.primary,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
 
-          SizedBox(height: heightSize(14)),
+          SizedBox(height: heightSize(10)),
 
-          // ── Investment items row ──────────────────────────────────
-          // Investment icons are colourful illustrations (birthday cake,
-          // car, house, plane, utilities) — no tinting applied so their
-          // original Figma palette shows through in both themes.
+          // ── Items row ────────────────────────────────────────────
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               investmentItem(
-                  assetName: birthday,
-                  title: 'My Birthday',
-                  colorScheme: colorScheme,
-                  callback: () {}),
+                assetName: birthday,
+                title: 'My Birthday',
+                progress: 0.75,
+                colorScheme: colorScheme,
+                callback: () {
+                  Get.toNamed(Routes.activeGoals);
+                },
+              ),
               investmentItem(
-                  assetName: car,
-                  title: 'New Car',
-                  colorScheme: colorScheme,
-                  callback: () {}),
+                assetName: car,
+                title: 'New Car',
+                progress: 0.45,
+                colorScheme: colorScheme,
+                callback: () {
+                  Get.toNamed(Routes.activeGoals);
+                },
+              ),
               investmentItem(
-                  assetName: house,
-                  title: 'New House',
-                  colorScheme: colorScheme,
-                  callback: () {}),
+                assetName: house,
+                title: 'New House',
+                progress: 0.90,
+                colorScheme: colorScheme,
+                callback: () {
+                  Get.toNamed(Routes.activeGoals);
+                },
+              ),
               investmentItem(
-                  assetName: plane,
-                  title: 'Travel Plans',
-                  colorScheme: colorScheme,
-                  callback: () {}),
+                assetName: plane,
+                title: 'Travel Plans',
+                colorScheme: colorScheme,
+                progress: 0.25,
+                callback: () {
+                  Get.toNamed(Routes.activeGoals);
+                },
+              ),
               investmentItem(
-                  assetName: utilities,
-                  title: 'Utilities',
-                  colorScheme: colorScheme,
-                  callback: () {}),
+                assetName: utilities,
+                title: 'Utilities',
+                progress: 0.50,
+                colorScheme: colorScheme,
+                callback: () {
+                  Get.toNamed(Routes.activeGoals);
+                },
+              ),
             ],
           ),
         ],
@@ -123,31 +144,39 @@ class InvestmentCategories extends StatelessWidget {
   }
 }
 
+// ── ITEM WRAPPER ───────────────────────────────────────────────
+
 Widget investmentItem({
   required String assetName,
   required String title,
   required ColorScheme colorScheme,
   required VoidCallback callback,
+  double progress = 0.0,
 }) {
   return _AnimatedCategoryItem(
     assetName: assetName,
     title: title,
     colorScheme: colorScheme,
     onTap: callback,
+    progress: progress,
   );
 }
+
+// ── ANIMATED ITEM ──────────────────────────────────────────────
 
 class _AnimatedCategoryItem extends StatefulWidget {
   final String assetName;
   final String title;
   final ColorScheme colorScheme;
   final VoidCallback onTap;
+  final double progress;
 
   const _AnimatedCategoryItem({
     required this.assetName,
     required this.title,
     required this.colorScheme,
     required this.onTap,
+    this.progress = 0.0,
   });
 
   @override
@@ -163,6 +192,7 @@ class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return AnimatedScale(
       scale: _pressed ? 0.92 : 1.0,
       duration: const Duration(milliseconds: 120),
@@ -176,27 +206,49 @@ class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
           onTapUp: _onTapUp,
           onTapCancel: _onTapCancel,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               AnimatedScale(
                 scale: _pressed ? 0.9 : 1.0,
                 duration: const Duration(milliseconds: 120),
-                // Investment icons are full-colour illustrations —
-                // no colorFilter so they render with their original hues.
-                child: SvgPicture.asset(
-                  widget.assetName,
-                  height: heightSize(55.88),
-                  width: widthSize(55.88),
-                  fit: BoxFit.contain,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      width: widthSize(54),
+                      height: heightSize(54),
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween(begin: 0, end: widget.progress),
+                        duration: const Duration(milliseconds: 700),
+                        curve: Curves.easeOut,
+                        builder: (context, value, child) {
+                          return CustomPaint(
+                            painter: _RoundedRectProgressPainter(
+                              progress: value,
+                              activeColor: isDark?sNavContainer:sActionButton,
+                              inactiveColor: isDark?sNavContainer.withOpacity(0.4):sActionButton.withOpacity(0.4),
+                              strokeWidth: 3,
+                              radius: 16,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                    SvgPicture.asset(
+                      widget.assetName,
+                      height: heightSize(49),
+                      width: widthSize(49),
+                      fit: BoxFit.contain,
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: heightSize(5)),
               CText(
                 text: widget.title,
                 size: 12,
-                fontWeight: FontWeight.w400,
-                fontFamily: CFONT.REGULAR,
+                fontWeight: CFONT.wRegular,
+                fontFamily: CFONT.FAMILY,
                 height: 1.67,
                 color: widget.colorScheme.onSurface,
               ),
@@ -205,5 +257,62 @@ class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
         ),
       ),
     );
+  }
+}
+
+class _RoundedRectProgressPainter extends CustomPainter {
+  final double progress;
+  final Color activeColor;
+  final Color inactiveColor;
+  final double strokeWidth;
+  final double radius;
+
+  _RoundedRectProgressPainter({
+    required this.progress,
+    required this.activeColor,
+    required this.inactiveColor,
+    required this.strokeWidth,
+    required this.radius,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+
+    final rrect = RRect.fromRectAndRadius(
+      rect.deflate(strokeWidth / 2),
+      Radius.circular(radius),
+    );
+
+    // ── inactive border ─────────────────────────
+    final bgPaint = Paint()
+      ..color = inactiveColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth;
+
+    canvas.drawRRect(rrect, bgPaint);
+
+    // ── active progress border ──────────────────
+    final fgPaint = Paint()
+      ..color = activeColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.round;
+
+    final path = Path()..addRRect(rrect);
+
+    final metric = path.computeMetrics().first;
+
+    final extractPath = metric.extractPath(
+      0,
+      metric.length * progress.clamp(0.0, 1.0),
+    );
+
+    canvas.drawPath(extractPath, fgPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _RoundedRectProgressPainter oldDelegate) {
+    return oldDelegate.progress != progress;
   }
 }

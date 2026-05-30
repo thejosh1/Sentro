@@ -67,7 +67,7 @@ class ActionButton extends StatelessWidget {
               ? const _RollingLogo()  // always uses the baked-in SVG
               : CText(
             text: text,
-            fontFamily: CFONT.MEDIUM,
+            fontFamily: CFONT.FAMILY,
             fontWeight: fontWeight ?? FontWeight.w600,
             size: fontSize ?? 16,
             color: txtCol,

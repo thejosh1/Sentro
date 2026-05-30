@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
@@ -20,6 +21,7 @@ class SavingsType extends StatefulWidget {
 }
 
 class _SavingsTypeState extends State<SavingsType> {
+  final Map<String, String> _dropdownValues = {};
   late SavingsOption option;
   late List<SavingsOption> allOptions;
   final Map<String, TextEditingController> _controllers = {};
@@ -32,6 +34,17 @@ class _SavingsTypeState extends State<SavingsType> {
     );
   }
 
+  bool _isFrequencyOpen = false;
+  String _selectedFrequency = 'Monthly (on the 1st)';
+
+  final List<String> _frequencies = [
+    'Daily',
+    'Weekly (every Monday)',
+    'Monthly (on the 1st)',
+    'Monthly (on the 15th)',
+    'Quarterly',
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -40,6 +53,14 @@ class _SavingsTypeState extends State<SavingsType> {
 
     option = args["selected"];
     allOptions = List<SavingsOption>.from(args["all"]);
+  }
+
+  @override
+  void dispose() {
+    for (final c in _controllers.values) {
+      c.dispose();
+    }
+    super.dispose();
   }
 
   TextEditingController _getController(String key) {
@@ -85,7 +106,15 @@ class _SavingsTypeState extends State<SavingsType> {
         return allOptions.map((type) {
           return PopupMenuItem<SavingsOption>(
             value: type,
-            child: CText(text: type.title),
+            padding: EdgeInsets.symmetric(
+              horizontal: widthSize(12),
+              vertical: heightSize(4),
+            ),
+            height: heightSize(36),
+            child: CText(
+              text: type.title,
+              color: Colors.white,
+            ),
           );
         }).toList();
       },
@@ -103,7 +132,7 @@ class _SavingsTypeState extends State<SavingsType> {
               child: CText(
                 text: option.title,
                 size: 15,
-                fontFamily: CFONT.REGULAR,
+                fontFamily: CFONT.FAMILY,
                 color: sNavContainer,
               ),
             ),
@@ -119,12 +148,12 @@ class _SavingsTypeState extends State<SavingsType> {
     );
   }
 
-  Widget _buildField(SavingsField field) {
+  Widget _buildField(SavingsField field, bool isDark) {
     switch (field.type) {
       case SavingsFieldType.text:
         return AppTextField(
           hasBottomMargin: false,
-          height: heightSize(55),
+          verticalPadding: 19,
           hint: field.hint ?? field.label,
           controller: TextEditingController(),
           inputType: TextInputType.text,
@@ -133,18 +162,34 @@ class _SavingsTypeState extends State<SavingsType> {
         );
 
       case SavingsFieldType.amount:
+        final controller = _getController(field.label);
         return AppTextField(
           showNairaPrefix: true,
           hasBottomMargin: false,
-          height: heightSize(55),
-          hint: field.hint ?? '₦0.00',
-          controller: TextEditingController(),
-          suffixWidth: 102,
+          verticalPadding: 19,
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            NairaInputFormatter(),
+          ],
+          hint: field.hint ?? '0.00',
+          controller: controller,
+          suffixWidth: 112,
           suffixWidget: Container(
             height: heightSize(25.86),
-            padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(124.89), color: sContainerColor),
-            child: Center(child: CText(text: 'Min: N10,000', size: 14, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR)),
+            padding: EdgeInsets.symmetric(
+              horizontal: widthSize(10),
+              vertical: heightSize(5),
+            ),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(124.89),
+                color: isDark?sContainerColor:sLightFill,
+            ),
+            child: CText(
+              text: 'Min: N10,000',
+              size: 14,
+              fontWeight: CFONT.wRegular,
+              fontFamily: CFONT.FAMILY,
+            ),
           ),
           inputType: TextInputType.number,
           error: '',
@@ -152,108 +197,81 @@ class _SavingsTypeState extends State<SavingsType> {
         );
 
       case SavingsFieldType.dropdown:
-        return GestureDetector(
+        final isOpen = _toggleStates['__dropdown_${field.label}__'] == true;
+        final selectedValue = _dropdownValues[field.label];
+        return _SelectorBox(
+          isDark: isDark,
+          isOpen: isOpen,
+          label: selectedValue ?? field.hint ?? field.label,
+          isEmpty: selectedValue == null,
           onTap: () async {
-            // setState(() {
-            //   isPlanSheetOpen = true;
-            // });
-            // await showModalBottomSheet(
-            //   context: context,
-            //   backgroundColor: Colors.transparent,
-            //   isScrollControlled: true,
-            //   constraints: BoxConstraints(
-            //     minHeight: MediaQuery.of(context).size.height*0.75,
-            //   ),
-            //   builder: (_) {
-            //     return TweenAnimationBuilder(
-            //       duration: const Duration(milliseconds: 300),
-            //       tween: Tween(begin: 0.0, end: 1.0),
-            //       curve: Curves.easeOut,
-            //       builder: (context, value, child) {
-            //         return Transform.translate(
-            //           offset: Offset(0, 100 * (1 - value)),
-            //           child: Opacity(
-            //             opacity: value,
-            //             child: child,
-            //           ),
-            //         );
-            //       },
-            //       child: Container(
-            //         padding: EdgeInsets.all(widthSize(20)),
-            //         decoration: BoxDecoration(
-            //           color: sModalColor,
-            //           borderRadius: const BorderRadius.vertical(
-            //             top: Radius.circular(24),
-            //           ),
-            //         ),
-            //         child: Column(
-            //           mainAxisSize: MainAxisSize.min,
-            //           children: [
-            //             Container(
-            //               width: widthSize(44),
-            //               height: heightSize(4),
-            //               margin: EdgeInsets.only(bottom: heightSize(16)),
-            //               decoration: BoxDecoration(
-            //                 color: Colors.black,
-            //                 borderRadius: BorderRadius.circular(8),
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //     );
-            //   },
-            // );
-
-            // setState(() {
-            //   isPlanSheetOpen = false;
-            // });
+            FocusScope.of(context).unfocus();
+            setState(() => _toggleStates['__dropdown_${field.label}__'] = true);
+            await showModalBottomSheet(
+              context: context,
+              backgroundColor: Colors.transparent,
+              isScrollControlled: true,
+              builder: (_) => StatefulBuilder(
+                builder: (context, setSheetState) {
+                  return _BottomSheet(
+                    isDark: isDark,
+                    title: field.label,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: (field.dropdownItems ?? []).map((item) {
+                        final isSelected = item == (_dropdownValues[field.label] ?? field.hint);
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() => _dropdownValues[field.label] = item);
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: double.maxFinite,
+                            margin: EdgeInsets.only(bottom: heightSize(10)),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: widthSize(16),
+                              vertical: heightSize(14),
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: (isDark ? sDarkFill : const Color(0xFFF7F7F7)),
+                              border: Border.all(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CText(
+                                  text: item,
+                                  size: 14,
+                                  fontFamily: CFONT.FAMILY,
+                                  fontWeight: isSelected ? CFONT.wMedium : CFONT.wRegular,
+                                  color: isSelected
+                                      ? sNavContainer
+                                      : (isDark ? Colors.white : sActionButton),
+                                ),
+                                if (isSelected)
+                                  SvgPicture.asset(
+                                    tickLight,
+                                    width: widthSize(18),
+                                    height: heightSize(18),
+                                    colorFilter: const ColorFilter.mode(
+                                      sNavContainer, BlendMode.srcIn,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  );
+                },
+              ),
+            );
+            setState(() => _toggleStates['__dropdown_${field.label}__'] = false);
           },
-          child: Container(
-            padding: EdgeInsets.only(left: widthSize(15), top: heightSize(20.5), right: widthSize(19), bottom: heightSize(20.5)),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Values().buttonRadius10,),
-              color: sDarkFill,
-              border: Border.all(color:sDarkBorder,),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 250),
-                  transitionBuilder: (child, animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: SlideTransition(
-                        position: Tween<Offset>(
-                          begin: const Offset(0, 0.3),
-                          end: Offset.zero,
-                        ).animate(animation),
-                        child: child,
-                      ),
-                    );
-                  },
-                  child: CText(
-                    text: field.hint??'',
-                    size: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: CFONT.REGULAR,
-                  ),
-                ),
-
-                AnimatedRotation(
-                  turns: 0,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  child: SvgPicture.asset(
-                    arrowDown,
-                    width: widthSize(20),
-                    height: heightSize(20),
-                  ),
-                ),
-              ],
-            ),
-          ),
         );
 
       case SavingsFieldType.info:
@@ -264,8 +282,8 @@ class _SavingsTypeState extends State<SavingsType> {
           padding: EdgeInsets.only(left: widthSize(10), top: heightSize(15),),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(11.17),
-            color: sDarkFill,
-            border: Border.all(color: sDarkBorder),
+            color: isDark?sDarkFill:sLightFill,
+            border: Border.all(color: isDark?sDarkBorder:sLightBorder),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -276,8 +294,8 @@ class _SavingsTypeState extends State<SavingsType> {
                   CText(
                     text: field.label,
                     size: 18,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: CFONT.MEDIUM,
+                    fontWeight: CFONT.wMedium,
+                    fontFamily: CFONT.FAMILY,
                   ),
                   SizedBox(height: 6,),
                   SizedBox(
@@ -285,8 +303,8 @@ class _SavingsTypeState extends State<SavingsType> {
                     child: CText(
                       text: field.description??'',
                       size: 12,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: CFONT.REGULAR,
+                      fontWeight: CFONT.wRegular,
+                      fontFamily: CFONT.FAMILY,
                     ),
                   ),
                 ],
@@ -299,7 +317,7 @@ class _SavingsTypeState extends State<SavingsType> {
                   });
                 },
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
+                  duration: const Duration(milliseconds: 180),
                   curve: Curves.easeInOut,
                   width: widthSize(54),
                   height: heightSize(28),
@@ -317,7 +335,7 @@ class _SavingsTypeState extends State<SavingsType> {
                         : MainAxisAlignment.start,
                     children: [
                       AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
+                        duration: const Duration(milliseconds: 180),
                         curve: Curves.easeInOut,
                         width: widthSize(22),
                         height: heightSize(22),
@@ -343,6 +361,10 @@ class _SavingsTypeState extends State<SavingsType> {
           height: heightSize(55),
           hint: field.hint ?? 'dd/mm/yyyy',
           controller: controller,
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            DateInputFormatter(),
+          ],
           suffixWidth: 24,
           suffixWidget: GestureDetector(
             onTap: () async {
@@ -368,26 +390,24 @@ class _SavingsTypeState extends State<SavingsType> {
           ),
           inputType: TextInputType.datetime,
           error: '',
-          validFunction: (_) => null,
+          validFunction: (_) =>null,
         );
+
       case SavingsFieldType.card:
         return Column(
           children: [
+            SizedBox(height: heightSize(2)),
+            Divider(color: isDark?sDarkBorder:sLightBorder),
             SizedBox(height: heightSize(12.5)),
-
-            Divider(color: sDarkBorder),
-
-            SizedBox(height: heightSize(12.5)),
-
             Container(
               width: double.maxFinite,
               padding: EdgeInsets.symmetric(
                 horizontal: widthSize(15),
-                vertical: heightSize(18),
+                vertical: heightSize(10),
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(11.17),
-                color: sDarkFill,
+                color: isDark?sDarkFill:sLightFill,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -396,11 +416,11 @@ class _SavingsTypeState extends State<SavingsType> {
                   CText(
                     text: field.label,
                     size: 16,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: CFONT.MEDIUM,
-                    color: sNavContainer,
+                    fontWeight: CFONT.wMedium,
+                    fontFamily: CFONT.FAMILY,
+                    color: isDark?sNavContainer:sActionButton,
                   ),
-                  SizedBox(height: heightSize(15),),
+                  SizedBox(height: heightSize(5),),
                   // ── Items ──────────────────────────────────
                   ListView.separated(
                     shrinkWrap: true,
@@ -409,7 +429,6 @@ class _SavingsTypeState extends State<SavingsType> {
                       horizontal: widthSize(7),
                     ),
                     itemCount: field.cardItems?.length ?? 0,
-
                     separatorBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(
@@ -421,28 +440,25 @@ class _SavingsTypeState extends State<SavingsType> {
                         ),
                       );
                     },
-
                     itemBuilder: (context, index) {
                       final item = field.cardItems![index];
 
                       return Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: item.label,
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
-                            color: sGrey1,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
+                            color: isDark?sGrey1:sGrey2,
                           ),
-
                           CText(
                             text: item.value,
                             size: 14,
-                            fontFamily: CFONT.MEDIUM,
-                            fontWeight: FontWeight.w500,
-                            color: item.isColored==true?sNavContainer:Theme.of(context).colorScheme.onSurface,
+                            //fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
+                            color: item.isColored==true ? (isDark?sNavContainer:sActionButton) : Theme.of(context).colorScheme.onSurface,
                           ),
                         ],
                       );
@@ -454,9 +470,20 @@ class _SavingsTypeState extends State<SavingsType> {
             SizedBox(height: heightSize(8)),
             Row(
               children: [
-                SvgPicture.asset(tickLight, width: widthSize(24), height: heightSize(24),),
+                SvgPicture.asset(
+                  tickLight,
+                  width: widthSize(24),
+                  height: heightSize(24),
+                  colorFilter: isDark?null:ColorFilter.mode(sTextGreen, BlendMode.srcIn),
+                ),
                 SizedBox(width: widthSize(2.5),),
-                CText(text: 'Interest will be reinvested automatically at maturity', size: 14, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sNavContainer,)
+                CText(
+                  text: 'Interest will be reinvested automatically at maturity',
+                  size: 14,
+                  fontFamily: CFONT.FAMILY,
+                  fontWeight: CFONT.wRegular,
+                  color: isDark?sNavContainer:sTextGreen,
+                )
               ],
             )
           ],
@@ -464,7 +491,7 @@ class _SavingsTypeState extends State<SavingsType> {
     }
   }
 
-  Widget _content() {
+  Widget _content(bool isDark) {
     return Column(
       children: [
         SizedBox(height: heightSize(64)),
@@ -473,7 +500,7 @@ class _SavingsTypeState extends State<SavingsType> {
           children: [
             GestureDetector(
               onTap: () => Get.back(),
-              child: SvgPicture.asset(arrowBackWhite, width: widthSize(42), height: heightSize(42)),
+              child: SvgPicture.asset(isDark?arrowBackWhite:arrowBack, width: widthSize(42), height: heightSize(42)),
             ),
             const Spacer(),
             _typeSelector(),
@@ -482,9 +509,9 @@ class _SavingsTypeState extends State<SavingsType> {
 
         SizedBox(height: heightSize(23.46)),
 
-        CText(text: option.title, size: 20, fontFamily: CFONT.MEDIUM, fontWeight: FontWeight.w500),
+        CText(text: option.title, size: 19.85, height: 22.05/19.85, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
         SizedBox(height: heightSize(2.76)),
-        CText(text: option.description, size: 13, fontFamily: CFONT.REGULAR, color: sGrey1),
+        CText(text: option.description, size: 14, fontFamily: CFONT.FAMILY, color: isDark?sConfirmTextColor:sGrey2),
 
         SizedBox(height: heightSize(16)),
 
@@ -493,11 +520,11 @@ class _SavingsTypeState extends State<SavingsType> {
           CText(
             text: '${option.interest}%',
             size: 12,
-            fontFamily: CFONT.MEDIUM,
-            fontWeight: FontWeight.w500,
-            color: option.interestColor ?? sNavContainer,
+            fontFamily: CFONT.FAMILY,
+            fontWeight: CFONT.wMedium,
+            color: option.interestColor ??
+                (isDark ? sNavContainer : sActionButton),
           ),
-
         SizedBox(height: heightSize(33.46)),
 
         // ── Fields ──────────────────────────────────────────────
@@ -525,121 +552,90 @@ class _SavingsTypeState extends State<SavingsType> {
                   child: Column(
                     key: const ValueKey("extra_fields"),
                     children: [
-
                       Padding(
-                        padding: EdgeInsets.only(bottom: heightSize(15)),
+                        padding: EdgeInsets.only(bottom: heightSize(10)),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GestureDetector(
+                            _SelectorBox(
+                              isDark: isDark,
+                              isOpen: _isFrequencyOpen,
+                              label: _dropdownValues[field.label] ?? field.hint ?? field.label,
+                              isEmpty: !_dropdownValues.containsKey(field.label),
                               onTap: () async {
-                                // setState(() {
-                                //   isPlanSheetOpen = true;
-                                // });
-                                // await showModalBottomSheet(
-                                //   context: context,
-                                //   backgroundColor: Colors.transparent,
-                                //   isScrollControlled: true,
-                                //   constraints: BoxConstraints(
-                                //     minHeight: MediaQuery.of(context).size.height*0.75,
-                                //   ),
-                                //   builder: (_) {
-                                //     return TweenAnimationBuilder(
-                                //       duration: const Duration(milliseconds: 300),
-                                //       tween: Tween(begin: 0.0, end: 1.0),
-                                //       curve: Curves.easeOut,
-                                //       builder: (context, value, child) {
-                                //         return Transform.translate(
-                                //           offset: Offset(0, 100 * (1 - value)),
-                                //           child: Opacity(
-                                //             opacity: value,
-                                //             child: child,
-                                //           ),
-                                //         );
-                                //       },
-                                //       child: Container(
-                                //         padding: EdgeInsets.all(widthSize(20)),
-                                //         decoration: BoxDecoration(
-                                //           color: sModalColor,
-                                //           borderRadius: const BorderRadius.vertical(
-                                //             top: Radius.circular(24),
-                                //           ),
-                                //         ),
-                                //         child: Column(
-                                //           mainAxisSize: MainAxisSize.min,
-                                //           children: [
-                                //             Container(
-                                //               width: widthSize(44),
-                                //               height: heightSize(4),
-                                //               margin: EdgeInsets.only(bottom: heightSize(16)),
-                                //               decoration: BoxDecoration(
-                                //                 color: Colors.black,
-                                //                 borderRadius: BorderRadius.circular(8),
-                                //               ),
-                                //             ),
-                                //           ],
-                                //         ),
-                                //       ),
-                                //     );
-                                //   },
-                                // );
-
-                                // setState(() {
-                                //   isPlanSheetOpen = false;
-                                // });
-                              },
-                              child: Container(
-                                padding: EdgeInsets.only(left: widthSize(15), top: heightSize(20.5), right: widthSize(19), bottom: heightSize(20.5)),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(Values().buttonRadius10,),
-                                  color: sDarkFill,
-                                  border: Border.all(color:sDarkBorder,),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    AnimatedSwitcher(
-                                      duration: const Duration(milliseconds: 250),
-                                      transitionBuilder: (child, animation) {
-                                        return FadeTransition(
-                                          opacity: animation,
-                                          child: SlideTransition(
-                                            position: Tween<Offset>(
-                                              begin: const Offset(0, 0.3),
-                                              end: Offset.zero,
-                                            ).animate(animation),
-                                            child: child,
+                                FocusScope.of(context).unfocus();
+                                setState(() => _isFrequencyOpen = true);
+                                await showModalBottomSheet(
+                                  context: context,
+                                  backgroundColor: Colors.transparent,
+                                  isScrollControlled: true,
+                                  builder: (_) => _BottomSheet(
+                                    isDark: isDark,
+                                    title: 'Frequency',
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: _frequencies.map((f) {
+                                        final isSelected = f == _selectedFrequency;
+                                        return GestureDetector(
+                                          onTap: () {
+                                            setState(() => _selectedFrequency = f);
+                                            Navigator.pop(context);
+                                          },
+                                          child: Container(
+                                            width: double.maxFinite,
+                                            margin: EdgeInsets.only(bottom: heightSize(10)),
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: widthSize(16),
+                                              vertical: heightSize(14),
+                                            ),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              color: isSelected
+                                                  ? sNavContainer.withOpacity(0.10)
+                                                  : (isDark ? sDarkFill : const Color(0xFFF7F7F7)),
+                                              border: Border.all(
+                                                color: isSelected
+                                                    ? sNavContainer.withOpacity(0.4)
+                                                    : Colors.transparent,
+                                              ),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                CText(
+                                                  text: f,
+                                                  size: 14,
+                                                  fontFamily: CFONT.FAMILY,
+                                                  fontWeight: isSelected ? CFONT.wMedium : CFONT.wRegular,
+                                                  color: isSelected
+                                                      ? sNavContainer
+                                                      : (isDark ? Colors.white : sActionButton),
+                                                ),
+                                                if (isSelected)
+                                                  SvgPicture.asset(
+                                                    tickLight,
+                                                    width: widthSize(18),
+                                                    height: heightSize(18),
+                                                    colorFilter: const ColorFilter.mode(
+                                                      sNavContainer, BlendMode.srcIn,
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
                                           ),
                                         );
-                                      },
-                                      child: CText(
-                                        text: 'Monthly (on the 1st)',
-                                        size: 14,
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: CFONT.REGULAR,
-                                      ),
+                                      }).toList(),
                                     ),
-
-                                    AnimatedRotation(
-                                      turns: 0,
-                                      duration: const Duration(milliseconds: 300),
-                                      curve: Curves.easeInOut,
-                                      child: SvgPicture.asset(
-                                        arrowDown,
-                                        width: widthSize(20),
-                                        height: heightSize(20),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                  ),
+                                );
+                                setState(() => _isFrequencyOpen = false);
+                              },
                             ),
                           ],
                         ),
                       ),
-
                       Padding(
-                        padding: EdgeInsets.only(bottom: heightSize(15)),
+                        padding: EdgeInsets.only(bottom: heightSize(10)),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -647,8 +643,8 @@ class _SavingsTypeState extends State<SavingsType> {
                               title: CText(
                                 text: 'Amount per circle (N)',
                                 size: 14,
-                                fontFamily: CFONT.REGULAR,
-                                fontWeight: FontWeight.w400,
+                                fontFamily: CFONT.FAMILY,
+                                fontWeight: CFONT.wRegular,
                               ),
                               showNairaPrefix: true,
                               hasBottomMargin: false,
@@ -671,7 +667,7 @@ class _SavingsTypeState extends State<SavingsType> {
             // ── Original field ───────────────────────────────────────
             widgets.add(
               Padding(
-                padding: EdgeInsets.only(bottom: heightSize(15)),
+                padding: EdgeInsets.only(bottom: heightSize(10)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -683,12 +679,11 @@ class _SavingsTypeState extends State<SavingsType> {
                               ? ''
                               : field.label,
                           size: 14,
-                          fontFamily: CFONT.REGULAR,
-                          fontWeight: FontWeight.w400,
+                          fontFamily: CFONT.FAMILY,
+                          fontWeight: CFONT.wRegular,
                         ),
                       ),
-
-                    _buildField(field),
+                    _buildField(field, isDark),
                   ],
                 ),
               ),
@@ -705,6 +700,7 @@ class _SavingsTypeState extends State<SavingsType> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -712,10 +708,9 @@ class _SavingsTypeState extends State<SavingsType> {
           Expanded(
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
-              child: _content(),
+              child: _content(isDark),
             ),
           ),
-
           // ── Bottom CTA ─────────────────────────────────────────
           Padding(
             padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
@@ -736,8 +731,8 @@ class _SavingsTypeState extends State<SavingsType> {
                       child: CText(
                         text: 'Continue',
                         size: 16,
-                        fontFamily: CFONT.MEDIUM,
-                        fontWeight: FontWeight.w500,
+                        fontFamily: CFONT.FAMILY,
+                        fontWeight: CFONT.wMedium,
                         color: Colors.white,
                       ),
                     ),
@@ -747,6 +742,148 @@ class _SavingsTypeState extends State<SavingsType> {
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+// Add these two classes at the bottom of savings_type.dart
+// (after the closing brace of _SavingsTypeState)
+
+class _SelectorBox extends StatelessWidget {
+  final bool isDark;
+  final bool isOpen;
+  final String label;
+  final bool isEmpty;
+  final VoidCallback? onTap;
+
+  const _SelectorBox({
+    required this.isDark,
+    required this.isOpen,
+    required this.label,
+    required this.isEmpty,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final disabled = onTap == null;
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: EdgeInsets.symmetric(
+          horizontal: widthSize(15),
+          vertical:   heightSize(18),
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(Values().buttonRadius10),
+          color: isDark
+              ? sDarkFill
+              : (disabled ? const Color(0xFFF5F5F5) : Colors.transparent),
+          border: Border.all(
+            color: isOpen
+                ? sNavContainer
+                : (isDark ? sDarkBorder : sLightBorder),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: CText(
+                text: label,
+                size: 14,
+                fontWeight: CFONT.wRegular,
+                fontFamily: CFONT.FAMILY,
+                color: isEmpty || disabled
+                    ? (isDark ? Colors.white38 : Colors.black38)
+                    : (isDark ? Colors.white : sActionButton),
+              ),
+            ),
+            AnimatedRotation(
+              turns:    isOpen ? 0.5 : 0,
+              duration: const Duration(milliseconds: 180),
+              child: SvgPicture.asset(
+                arrowDown,
+                width:  widthSize(20),
+                height: heightSize(20),
+                colorFilter: ColorFilter.mode(
+                  isDark ? Colors.white54 : Colors.black45,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BottomSheet extends StatelessWidget {
+  final bool isDark;
+  final String title;
+  final Widget child;
+
+  const _BottomSheet({
+    required this.isDark,
+    required this.title,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bg = isDark ? sModalColor : Colors.white;
+
+    return Container(
+      width: double.maxFinite,
+      padding: EdgeInsets.fromLTRB(
+        widthSize(20),
+        heightSize(16),
+        widthSize(20),
+        heightSize(32),
+      ),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(24),
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ── Drag handle ──────────────────────────────
+          Center(
+            child: Container(
+              width:  widthSize(44),
+              height: heightSize(4),
+              margin: EdgeInsets.only(bottom: heightSize(16)),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? Colors.white24
+                    : Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          // ── Title ────────────────────────────────────
+          Center(
+            child: CText(
+              text: title,
+              size: 18,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wMedium,
+              color: isDark ? Colors.white : sActionButton,
+            ),
+          ),
+
+          SizedBox(height: heightSize(20)),
+
+          child,
         ],
       ),
     );

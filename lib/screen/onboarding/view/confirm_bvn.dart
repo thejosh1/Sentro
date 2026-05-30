@@ -25,36 +25,54 @@ class ConfirmBvn extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: heightSize(64),),
-            PageHeader(
-              trailing: SvgPicture.asset(
-                headPhone,
-                width: widthSize(43.52),
-                height: heightSize(50),
-
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () => Get.back(),
+                  child: SvgPicture.asset(
+                    isDark?arrowBackWhite:arrowBack,
+                    width: widthSize(42),
+                    height: heightSize(42),
+                  ),
+                ),
+                SvgPicture.asset(
+                  logoLight,
+                  width: widthSize(116.39),
+                  height: heightSize(28),
+                  colorFilter: isDark?ColorFilter.mode(
+                    sNavContainer,
+                    BlendMode.srcIn,
+                  ):null,
+                ),
+                SvgPicture.asset(
+                  isDark?headPhoneWhite:headPhone,
+                  width: widthSize(43.52),
+                  height: heightSize(50),
+                )
+              ],
             ),
             SizedBox(height: heightSize(30),),
             CText(
               text: 'Confirm Bvn Information',
-              fontWeight: FontWeight.w700,
-              fontFamily: CFONT.BOLD,
+              fontWeight: CFONT.wBold,
+              fontFamily: CFONT.FAMILY,
               size: 22,
             ),
             SizedBox(height: heightSize(5),),
             CText(
-              text: 'This is the biodata we found on your BVN, kindly\nconfirm by choosing continue',
-              fontWeight: FontWeight.w400,
-              fontFamily: CFONT.REGULAR,
+              text: 'This is the biodata we found on your BVN, kindly confirm by choosing continue',
+              fontWeight: CFONT.wRegular,
+              fontFamily: CFONT.FAMILY,
               size: 18,
-              color: isDark?sDarkModeMutedText:sLightModeMutedText,
+              color: isDark ? sDarkModeMutedText : sLightModeMutedText,
             ),
             SizedBox(height: heightSize(30),),
             AppTextField(
-              height: heightSize(58),
               title: CText(
                 text: 'BVN - Full Names',
-                fontWeight: FontWeight.w500,
-                fontFamily: CFONT.MEDIUM,
+                fontWeight: CFONT.wMedium,
+                fontFamily: CFONT.FAMILY,
                 size: 16,
               ),
               hint: 'John James Doe',
@@ -75,12 +93,14 @@ class ConfirmBvn extends StatelessWidget {
       ),
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(
-            left: widthSize(25),
-            right: widthSize(25),
-            bottom: heightSize(10)),
+          left: widthSize(25),
+          right: widthSize(25),
+          bottom: heightSize(10),
+        ),
         child: ActionButton(
           text: "Continue",
           callback: () {
+            FocusScope.of(context).unfocus();
             Get.toNamed(Routes.createPassword);
           },
           load: false,

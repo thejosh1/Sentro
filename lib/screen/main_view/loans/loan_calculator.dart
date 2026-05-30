@@ -29,16 +29,27 @@ class _LoanCalculatorState extends State<LoanCalculator> {
         child: Column(
           children: [
             SizedBox(height: heightSize(90.46)),
-            CText(text: 'Loan Calculator', size: 19.85, fontWeight: FontWeight.w500, fontFamily: CFONT.MEDIUM,),
+            CText(
+              text: 'Loan Calculator',
+              size: 19.85,
+              fontWeight: CFONT.wMedium,
+              fontFamily: CFONT.FAMILY,
+            ),
             SizedBox(height: heightSize(2.76)),
-            CText(text: '20% Interest Rate', size: 18, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: sNavContainer,),
+            CText(
+              text: '20% Interest Rate',
+              size: 18,
+              fontWeight: CFONT.wRegular,
+              fontFamily: CFONT.FAMILY,
+              color: sNavContainer,
+            ),
             SizedBox(height: heightSize(47.78)),
             AppTextField(
               title: CText(
                 text: 'Loan Amount (N)',
                 size: 16,
-                fontFamily: CFONT.REGULAR,
-                fontWeight: FontWeight.w400,
+                fontFamily: CFONT.FAMILY,
+                fontWeight: CFONT.wRegular,
               ),
               showNairaPrefix: true,
               hasBottomMargin: false,
@@ -56,66 +67,13 @@ class _LoanCalculatorState extends State<LoanCalculator> {
                 CText(
                   text: 'Duration',
                   size: 16,
-                  fontFamily: CFONT.REGULAR,
-                  fontWeight: FontWeight.w400,
+                  fontFamily: CFONT.FAMILY,
+                  fontWeight: CFONT.wRegular,
                 ),
                 SizedBox(height: heightSize(5),),
                 GestureDetector(
                   onTap: () async {
-                    // setState(() {
-                    //   isPlanSheetOpen = true;
-                    // });
-                    // await showModalBottomSheet(
-                    //   context: context,
-                    //   backgroundColor: Colors.transparent,
-                    //   isScrollControlled: true,
-                    //   constraints: BoxConstraints(
-                    //     minHeight: MediaQuery.of(context).size.height*0.75,
-                    //   ),
-                    //   builder: (_) {
-                    //     return TweenAnimationBuilder(
-                    //       duration: const Duration(milliseconds: 300),
-                    //       tween: Tween(begin: 0.0, end: 1.0),
-                    //       curve: Curves.easeOut,
-                    //       builder: (context, value, child) {
-                    //         return Transform.translate(
-                    //           offset: Offset(0, 100 * (1 - value)),
-                    //           child: Opacity(
-                    //             opacity: value,
-                    //             child: child,
-                    //           ),
-                    //         );
-                    //       },
-                    //       child: Container(
-                    //         padding: EdgeInsets.all(widthSize(20)),
-                    //         decoration: BoxDecoration(
-                    //           color: sModalColor,
-                    //           borderRadius: const BorderRadius.vertical(
-                    //             top: Radius.circular(24),
-                    //           ),
-                    //         ),
-                    //         child: Column(
-                    //           mainAxisSize: MainAxisSize.min,
-                    //           children: [
-                    //             Container(
-                    //               width: widthSize(44),
-                    //               height: heightSize(4),
-                    //               margin: EdgeInsets.only(bottom: heightSize(16)),
-                    //               decoration: BoxDecoration(
-                    //                 color: Colors.black,
-                    //                 borderRadius: BorderRadius.circular(8),
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       ),
-                    //     );
-                    //   },
-                    // );
-
-                    // setState(() {
-                    //   isPlanSheetOpen = false;
-                    // });
+                    // Bottom sheet code commented out
                   },
                   child: Container(
                     padding: EdgeInsets.only(left: widthSize(15), top: heightSize(20.5), right: widthSize(19), bottom: heightSize(20.5)),
@@ -128,7 +86,7 @@ class _LoanCalculatorState extends State<LoanCalculator> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 250),
+                          duration: const Duration(milliseconds: 180),
                           transitionBuilder: (child, animation) {
                             return FadeTransition(
                               opacity: animation,
@@ -144,14 +102,13 @@ class _LoanCalculatorState extends State<LoanCalculator> {
                           child: CText(
                             text: '6 Month',
                             size: 14,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: CFONT.REGULAR,
+                            fontWeight: CFONT.wRegular,
+                            fontFamily: CFONT.FAMILY,
                           ),
                         ),
-
                         AnimatedRotation(
                           turns: 0,
-                          duration: const Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 200),
                           curve: Curves.easeInOut,
                           child: SvgPicture.asset(
                             arrowDown,
@@ -185,29 +142,27 @@ class _LoanCalculatorState extends State<LoanCalculator> {
                       CText(
                         text: 'Interest Preview',
                         size: 16,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: CFONT.MEDIUM,
+                        fontWeight: CFONT.wMedium,
+                        fontFamily: CFONT.FAMILY,
                         color: sNavContainer,
                       ),
                       SizedBox(height: heightSize(15),),
                       // ── Items ──────────────────────────────────
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'Loan Amount',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: 'N0.00',
                             size: 14,
-                            fontFamily: CFONT.MEDIUM,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
                           ),
                         ],
                       ),
@@ -215,22 +170,20 @@ class _LoanCalculatorState extends State<LoanCalculator> {
                       Divider(color: sDarkBorder,),
                       SizedBox(height: heightSize(10),),
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'Loan Rate',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: '20%',
                             size: 14,
-                            fontFamily: CFONT.MEDIUM,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
                           ),
                         ],
                       ),
@@ -238,22 +191,20 @@ class _LoanCalculatorState extends State<LoanCalculator> {
                       Divider(color: sDarkBorder,),
                       SizedBox(height: heightSize(10),),
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'Monthly',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: '1.7%',
                             size: 14,
-                            fontFamily: CFONT.MEDIUM,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
                           ),
                         ],
                       ),
@@ -261,22 +212,20 @@ class _LoanCalculatorState extends State<LoanCalculator> {
                       Divider(color: sDarkBorder,),
                       SizedBox(height: heightSize(10),),
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'Total Interest (1 year)',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: 'N10',
                             size: 14,
-                            fontFamily: CFONT.MEDIUM,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wMedium,
                             color: sNavContainer,
                           ),
                         ],
@@ -285,22 +234,20 @@ class _LoanCalculatorState extends State<LoanCalculator> {
                       Divider(color: sDarkBorder,),
                       SizedBox(height: heightSize(17),),
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CText(
                             text: 'Total Payback',
                             size: 13,
-                            fontFamily: CFONT.REGULAR,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
                             color: sGrey1,
                           ),
-
                           CText(
                             text: 'N0.00',
                             size: 16,
-                            fontFamily: CFONT.BOLD,
-                            fontWeight: FontWeight.w700,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wBold,
                             color: sNavContainer,
                           ),
                         ],
@@ -310,8 +257,13 @@ class _LoanCalculatorState extends State<LoanCalculator> {
                   ),
                 ),
                 SizedBox(height: heightSize(8)),
-                CText(text: 'This is just an interest calculator, fines for late payment is not included. Late payment penalty is 1% of total loan collected',
-                  size: 14, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2,),
+                CText(
+                  text: 'This is just an interest calculator, fines for late payment is not included. Late payment penalty is 1% of total loan collected',
+                  size: 14,
+                  fontFamily: CFONT.FAMILY,
+                  fontWeight: CFONT.wRegular,
+                  color: sGrey2,
+                ),
               ],
             ),
             Spacer(),

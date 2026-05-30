@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
-
-import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/utils/text.dart';
@@ -34,18 +32,18 @@ class Decision extends StatelessWidget {
             SvgPicture.asset(infoCircle, width: widthSize(77), height: heightSize(77),),
             SizedBox(height: heightSize(35)),
             CText(
-              text: 'You’re not eligible for loans, yet.',
+              text: 'You\'re not eligible for loans, yet.',
               size: 18,
-              fontFamily: CFONT.MEDIUM,
+              fontFamily: CFONT.FAMILY,
               height: 20/18,
-              fontWeight: FontWeight.w500,
+              fontWeight: CFONT.wMedium,
             ),
             SizedBox(height: heightSize(5)),
             CText(
-              text: 'We’re unable to offer you loans at moment, continue to use Sentro. ',
+              text: 'We\'re unable to offer you loans at moment, continue to use Sentro.',
               size: 14,
-              fontFamily: CFONT.REGULAR,
-              fontWeight: FontWeight.w400,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wRegular,
               height: 20/14,
               textAlign: TextAlign.center,
               color: sConfirmTextColor,
@@ -55,17 +53,18 @@ class Decision extends StatelessWidget {
             CText(
               text: 'If your employer uses Sentro Business, you can easily\nrequest for Overdraft.',
               size: 14,
-              fontFamily: CFONT.REGULAR,
-              fontWeight: FontWeight.w400,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wRegular,
               height: 20/14,
               textAlign: TextAlign.center,
               color: sConfirmTextColor,
             ),
             SizedBox(height: heightSize(23.79),),
-            CText(text: 'Try Overdraft',
+            CText(
+              text: 'Try Overdraft',
               size: 15,
-              fontFamily: CFONT.MEDIUM,
-              fontWeight: FontWeight.w500,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wMedium,
               color: sNavContainer,
             ),
             SizedBox(height: heightSize(71.95),),

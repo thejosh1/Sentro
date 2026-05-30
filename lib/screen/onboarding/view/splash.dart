@@ -18,7 +18,7 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 4), () {
+    Timer(const Duration(seconds: 2), () {
       _checkFirstTimeUser();
     });
   }
@@ -39,11 +39,7 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: SvgPicture.asset(splash),
-      ),
+      body: SvgPicture.asset(splash, fit: BoxFit.cover, width: double.maxFinite, height: double.maxFinite,),
     );
   }
 }

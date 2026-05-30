@@ -54,6 +54,7 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
     required String name,
     required String status,
     required Color statusColor,
+    required bool isDark
   }) {
     return Row(
       children: [
@@ -62,8 +63,8 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CText(text: type, size: 10, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: sGrey2),
-            CText(text: name, size: 12, fontFamily: CFONT.MEDIUM, fontWeight: FontWeight.w500),
+            CText(text: type, size: 10, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: sGrey2),
+            CText(text: name, size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
           ],
         ),
         const Expanded(child: SizedBox.shrink()),
@@ -72,10 +73,10 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
           height: heightSize(21),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            color: statusColor.withOpacity(0.1),
+            color: isDark?statusColor.withOpacity(0.1):statusColor.withOpacity(0.2),
           ),
           child: Center(
-            child: CText(text: status, size: 12.57, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: statusColor),
+            child: CText(text: status, size: 12.57, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: isDark?statusColor:sActionButton),
           ),
         ),
       ],
@@ -94,24 +95,24 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CText(text: 'Interest Rate', fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, size: 10, color: sGrey2),
-            CText(text: interestRate, fontFamily: CFONT.MEDIUM, fontWeight: FontWeight.w500, size: 12, color: rateColor),
+            CText(text: 'Interest Rate', fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, size: 10, color: sGrey2),
+            CText(text: interestRate, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium, size: 12, color: rateColor),
           ],
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CText(text: 'Interest Paid', fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, size: 10, color: sGrey2),
-            CText(text: interestPaid, fontFamily: CFONT.MEDIUM, fontWeight: FontWeight.w500, size: 12),
+            CText(text: 'Interest Paid', fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, size: 10, color: sGrey2),
+            CText(text: interestPaid, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium, size: 12),
           ],
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CText(text: 'Reinvest', fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, size: 10, color: sGrey2),
+            CText(text: 'Reinvest', fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, size: 10, color: sGrey2),
             Row(
               children: [
-                CText(text: reinvest ? 'Yes' : 'No', fontFamily: CFONT.MEDIUM, fontWeight: FontWeight.w500, size: 12),
+                CText(text: reinvest ? 'Yes' : 'No', fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium, size: 12),
                 if (reinvest) ...[
                   SizedBox(width: widthSize(2.5)),
                   SvgPicture.asset(tick, width: widthSize(12), height: heightSize(12)),
@@ -141,9 +142,9 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CText(text: label, size: 10, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: sGrey2),
+          CText(text: label, size: 10, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: sGrey2),
           SizedBox(height: heightSize(2)),
-          CText(text: value, size: 15, fontWeight: FontWeight.w500, fontFamily: CFONT.MEDIUM, color: color),
+          CText(text: value, size: 15, fontWeight: CFONT.wMedium, fontFamily: CFONT.FAMILY, color: color),
         ],
       ),
     );
@@ -174,8 +175,8 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CText(text: showPercent ? '$percent% complete' : leftLabel, size: 11, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2),
-                CText(text: rightLabel, size: 11, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2),
+                CText(text: showPercent ? '$percent% complete' : leftLabel, size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
+                CText(text: rightLabel, size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
               ],
             ),
           ],
@@ -184,7 +185,7 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
     );
   }
 
-  Widget _cardShell({required Widget child, required GoalModel goal}) {
+  Widget _cardShell({required Widget child, required GoalModel goal, required bool isDark}) {
     return GestureDetector(
       onTap: () => Get.toNamed(Routes.goalsDetails, arguments: goal),
       child: Container(
@@ -196,7 +197,7 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.72),
-          color: sSavingsColor,
+          color: isDark?sSavingsColor:sLightFill,
         ),
         child: child,
       ),
@@ -205,10 +206,11 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
+        padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
         child: Column(
           children: [
             SizedBox(height: heightSize(64)),
@@ -217,7 +219,7 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
               children: [
                 GestureDetector(
                   onTap: () => Get.back(),
-                  child: SvgPicture.asset(arrowBackWhite, width: widthSize(42), height: heightSize(42)),
+                  child: SvgPicture.asset(isDark?arrowBackWhite:arrowBack, width: widthSize(42), height: heightSize(42)),
                 ),
                 GestureDetector(
                   onTap: () => Get.toNamed(Routes.startSaving),
@@ -226,12 +228,12 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                     height: heightSize(35.67),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(83.34),
-                      color: Colors.white.withOpacity(0.1),
+                      color: isDark?Colors.white.withOpacity(0.1):Colors.black.withOpacity(0.1),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CText(text: 'New Goal', size: 14, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR),
+                        CText(text: 'New Goal', size: 14, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY),
                         SizedBox(width: widthSize(5)),
                         SvgPicture.asset(add, width: widthSize(24), height: heightSize(24)),
                       ],
@@ -241,14 +243,14 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
               ],
             ),
             SizedBox(height: heightSize(23.3)),
-            CText(text: 'Active Goals', fontFamily: CFONT.MEDIUM, size: 18, fontWeight: FontWeight.w500),
+            CText(text: 'Active Goals', fontFamily: CFONT.FAMILY, size: 18, fontWeight: CFONT.wMedium),
             SizedBox(height: heightSize(2.5)),
-            CText(text: 'Monitor your savings progress', fontFamily: CFONT.REGULAR, size: 14, fontWeight: FontWeight.w400, height: 20 / 14, color: sConfirmTextColor),
+            CText(text: 'Monitor your savings progress', fontFamily: CFONT.FAMILY, size: 14, fontWeight: CFONT.wRegular, height: 20 / 14, color: isDark?sConfirmTextColor:sGrey2),
             SizedBox(height: heightSize(20.5)),
 
             Container(
               padding: EdgeInsets.symmetric(horizontal: widthSize(11), vertical: heightSize(11)),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.63), color: sDarkFill),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.63), color: isDark?sDarkFill:Colors.black.withOpacity(0.1)),
               child: Column(
                 children: [
 
@@ -272,11 +274,11 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _cardHeader(type: 'Target Savings', name: 'Equipment Funds', status: 'Active', statusColor: sNavContainer),
+                        _cardHeader(type: 'Target Savings', name: 'Equipment Funds', status: 'Active', statusColor: sNavContainer, isDark: isDark,),
                         SizedBox(height: heightSize(18)),
-                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.BOLD, fontWeight: FontWeight.w700),
+                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wBold),
                         SizedBox(height: heightSize(2.5)),
-                        CText(text: 'of N5,000,000 goal', size: 11, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: sGrey1),
+                        CText(text: 'of N5,000,000 goal', size: 11, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: isDark?sGrey1:sGrey2),
                         SizedBox(height: heightSize(8.5)),
                         _progressSection(anim: _progressAnim, leftLabel: '', rightLabel: 'Matures 30 Jun, 2026', showPercent: true),
                         SizedBox(height: heightSize(11)),
@@ -285,6 +287,7 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                         _cardFooter(interestRate: '10% p.a', interestPaid: 'Monthly', reinvest: true),
                       ],
                     ),
+                    isDark: isDark,
                   ),
 
                   SizedBox(height: heightSize(13)),
@@ -308,19 +311,19 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _cardHeader(type: 'FGN TREASURY BILLS', name: 'Q2 2026 T-Bills', status: 'Active', statusColor: sNavContainer),
+                        _cardHeader(type: 'FGN TREASURY BILLS', name: 'Q2 2026 T-Bills', status: 'Active', statusColor: sNavContainer, isDark: isDark,),
                         SizedBox(height: heightSize(18)),
-                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.BOLD, fontWeight: FontWeight.w700),
+                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wBold),
                         SizedBox(height: heightSize(2.5)),
-                        CText(text: 'CBN-backed · Zero risk', size: 11, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: sGrey1),
+                        CText(text: 'CBN-backed · Zero risk', size: 11, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: isDark?sGrey1:sGrey2),
                         SizedBox(height: heightSize(8.5)),
                         _payoutBox(label: 'Next interest payout', value: 'N578,125 on July 15', color: sPurple),
                         SizedBox(height: heightSize(9)),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CText(text: '91 days tenor', size: 11, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2),
-                            CText(text: 'Matures 30 Jun, 2026', size: 11, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2),
+                            CText(text: '91 days tenor', size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
+                            CText(text: 'Matures 30 Jun, 2026', size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
                           ],
                         ),
                         SizedBox(height: heightSize(11)),
@@ -329,6 +332,7 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                         _cardFooter(interestRate: '10% p.a', interestPaid: 'Monthly', reinvest: true, rateColor: sPurple),
                       ],
                     ),
+                    isDark: isDark,
                   ),
 
                   SizedBox(height: heightSize(13)),
@@ -353,11 +357,11 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _cardHeader(type: 'DOLLAR SAVINGS', name: 'USD Savings Vault', status: 'Active', statusColor: sNavContainer),
+                        _cardHeader(type: 'DOLLAR SAVINGS', name: 'USD Savings Vault', status: 'Active', statusColor: sNavContainer, isDark: isDark,),
                         SizedBox(height: heightSize(18)),
-                        CText(text: 'N8,200.00', size: 18, fontFamily: CFONT.BOLD, fontWeight: FontWeight.w700),
+                        CText(text: 'N8,200.00', size: 18, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wBold),
                         SizedBox(height: heightSize(2.5)),
-                        CText(text: '~ N12,382,000 at current rate (N135)', size: 11, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: sGrey1),
+                        CText(text: '~ N12,382,000 at current rate (N135)', size: 11, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: isDark?sGrey1:sGrey2),
                         SizedBox(height: heightSize(8.5)),
                         _progressSection(
                           anim: _dollarProgressAnim,
@@ -371,6 +375,7 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                         _cardFooter(interestRate: '5.7% p.a', interestPaid: 'Monthly', reinvest: false),
                       ],
                     ),
+                    isDark: isDark,
                   ),
 
                   SizedBox(height: heightSize(13)),
@@ -394,19 +399,19 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _cardHeader(type: 'FIXED DEPOSIT', name: 'New Car Lock', status: 'Locked', statusColor: sNavContainer),
+                        _cardHeader(type: 'FIXED DEPOSIT', name: 'New Car Lock', status: 'Locked', statusColor: sNavContainer, isDark: isDark,),
                         SizedBox(height: heightSize(18)),
-                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.BOLD, fontWeight: FontWeight.w700),
+                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wBold),
                         SizedBox(height: heightSize(2.5)),
-                        CText(text: 'Locked until 30 Jun, 2026', size: 11, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: sGrey1),
+                        CText(text: 'Locked until 30 Jun, 2026', size: 11, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: isDark?sGrey1:sGrey2),
                         SizedBox(height: heightSize(8.5)),
                         _payoutBox(label: 'Projected total at maturity', value: 'N578,125 on July 15', color: sLightBlue),
                         SizedBox(height: heightSize(9)),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CText(text: '180 days', size: 11, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2),
-                            CText(text: 'Matures 30 Jun, 2026', size: 11, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2),
+                            CText(text: '180 days', size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
+                            CText(text: 'Matures 30 Jun, 2026', size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
                           ],
                         ),
                         SizedBox(height: heightSize(11)),
@@ -418,17 +423,17 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CText(text: 'Interest Rate', fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, size: 10, color: sGrey2),
-                                CText(text: '10% p.a', fontFamily: CFONT.MEDIUM, fontWeight: FontWeight.w500, size: 12, color: sLightBlue),
+                                CText(text: 'Interest Rate', fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, size: 10, color: sGrey2),
+                                CText(text: '10% p.a', fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium, size: 12, color: sLightBlue),
                               ],
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CText(text: 'Reinvest', fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, size: 10, color: sGrey2),
+                                CText(text: 'Reinvest', fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, size: 10, color: sGrey2),
                                 Row(
                                   children: [
-                                    CText(text: 'Yes', fontFamily: CFONT.MEDIUM, fontWeight: FontWeight.w500, size: 12),
+                                    CText(text: 'Yes', fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium, size: 12),
                                     SizedBox(width: widthSize(2.5)),
                                     SvgPicture.asset(tick, width: widthSize(12), height: heightSize(12)),
                                   ],
@@ -439,6 +444,7 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                         ),
                       ],
                     ),
+                    isDark: isDark,
                   ),
 
                   SizedBox(height: heightSize(13)),
@@ -462,19 +468,19 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _cardHeader(type: 'FLEXIBLE SAVINGS', name: 'Business Vault', status: 'Active', statusColor: sNavContainer),
+                        _cardHeader(type: 'FLEXIBLE SAVINGS', name: 'Business Vault', status: 'Active', statusColor: sNavContainer, isDark: isDark,),
                         SizedBox(height: heightSize(18)),
-                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.BOLD, fontWeight: FontWeight.w700),
+                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wBold),
                         SizedBox(height: heightSize(2.5)),
-                        CText(text: 'CBN-backed · Zero risk', size: 11, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: sGrey1),
+                        CText(text: 'CBN-backed · Zero risk', size: 11, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: isDark?sGrey1:sGrey2),
                         SizedBox(height: heightSize(8.5)),
                         _payoutBox(label: 'Next interest payout', value: 'N578,125 on July 15', color: sAmber),
                         SizedBox(height: heightSize(9)),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CText(text: '91 days', size: 11, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2),
-                            CText(text: 'Matures 30 Jun, 2026', size: 11, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2),
+                            CText(text: '91 days', size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
+                            CText(text: 'Matures 30 Jun, 2026', size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
                           ],
                         ),
                         SizedBox(height: heightSize(11)),
@@ -483,6 +489,7 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                         _cardFooter(interestRate: '10% p.a', interestPaid: 'Monthly', reinvest: true, rateColor: sAmber),
                       ],
                     ),
+                    isDark: isDark,
                   ),
 
                   SizedBox(height: heightSize(13)),
@@ -506,19 +513,19 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _cardHeader(type: 'MUTUAL FUND', name: 'New Car Lock', status: 'Active', statusColor: sNavContainer),
+                        _cardHeader(type: 'MUTUAL FUND', name: 'New Car Lock', status: 'Active', statusColor: sNavContainer, isDark: isDark,),
                         SizedBox(height: heightSize(18)),
-                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.BOLD, fontWeight: FontWeight.w700),
+                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wBold),
                         SizedBox(height: heightSize(2.5)),
-                        CText(text: '+ ₦246,700 interest earned', size: 11, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: sGrey1),
+                        CText(text: '+ ₦246,700 interest earned', size: 11, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: isDark?sGrey1:sGrey2),
                         SizedBox(height: heightSize(8.5)),
                         _payoutBox(label: 'Portfolio value today', value: 'N578,125,000', color: sLilac),
                         SizedBox(height: heightSize(9)),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CText(text: 'Open-ended', size: 11, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2),
-                            CText(text: 'Withdraw anytime', size: 11, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2),
+                            CText(text: 'Open-ended', size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
+                            CText(text: 'Withdraw anytime', size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
                           ],
                         ),
                         SizedBox(height: heightSize(11)),
@@ -527,6 +534,7 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                         _cardFooter(interestRate: '10% p.a', interestPaid: 'Monthly', reinvest: true, rateColor: sLilac),
                       ],
                     ),
+                    isDark: isDark,
                   ),
 
                   SizedBox(height: heightSize(13)),
@@ -550,19 +558,19 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _cardHeader(type: 'FLEXIBLE SAVINGS', name: 'Business Vault', status: 'Active', statusColor: sNavContainer),
+                        _cardHeader(type: 'FLEXIBLE SAVINGS', name: 'Business Vault', status: 'Active', statusColor: sNavContainer, isDark: isDark,),
                         SizedBox(height: heightSize(18)),
-                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.BOLD, fontWeight: FontWeight.w700),
+                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wBold),
                         SizedBox(height: heightSize(2.5)),
-                        CText(text: 'No lock-in · Withdraw anytime', size: 11, fontWeight: FontWeight.w400, fontFamily: CFONT.REGULAR, color: sGrey1),
+                        CText(text: 'No lock-in · Withdraw anytime', size: 11, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: isDark?sGrey1:sGrey2),
                         SizedBox(height: heightSize(8.5)),
                         _payoutBox(label: 'Portfolio value today', value: 'N578,125,000', color: sSeaGreen),
                         SizedBox(height: heightSize(9)),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CText(text: 'Open-ended', size: 11, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2),
-                            CText(text: 'Withdraw anytime', size: 11, fontFamily: CFONT.REGULAR, fontWeight: FontWeight.w400, color: sGrey2),
+                            CText(text: 'Open-ended', size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
+                            CText(text: 'Withdraw anytime', size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
                           ],
                         ),
                         SizedBox(height: heightSize(11)),
@@ -571,6 +579,7 @@ class _ActiveGoalsState extends State<ActiveGoals> with SingleTickerProviderStat
                         _cardFooter(interestRate: '10% p.a', interestPaid: 'Monthly', reinvest: true, rateColor: sSeaGreen),
                       ],
                     ),
+                    isDark: isDark,
                   ),
 
                   SizedBox(height: heightSize(36)),

@@ -69,6 +69,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  mobile_scanner: ^7.2.0
+  google_fonts: ^6.3.2
 
 dev_dependencies:
   flutter_test:
@@ -80,7 +82,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -135,15 +136,29 @@ flutter:
         - asset: assets/fonts/vintage/perfectly-vintages-font-by-keithzo.otf
     - family: Satoshi
       fonts:
+        - asset: assets/fonts/Satoshi/Satoshi-Regular.otf
+          weight: 400
+        - asset: assets/fonts/Satoshi/Satoshi-Light.otf
+          weight: 300
+        - asset: assets/fonts/Satoshi/Satoshi-Medium.otf
+          weight: 500
         - asset: assets/fonts/Satoshi/Satoshi-Bold.otf
-        - asset: assets/fonts/Satoshi/Satoshi-BoldItalic.otf
-          style: italic
+          weight: 700
         - asset: assets/fonts/Satoshi/Satoshi-Italic.otf
           style: italic
-        - asset: assets/fonts/Satoshi/Satoshi-Light.otf
         - asset: assets/fonts/Satoshi/Satoshi-LightItalic.otf
+          weight: 300
           style: italic
-        - asset: assets/fonts/Satoshi/Satoshi-Medium.otf
         - asset: assets/fonts/Satoshi/Satoshi-MediumItalic.otf
+          weight: 500
           style: italic
-        - asset: assets/fonts/Satoshi/Satoshi-Regular.otf
+        - asset: assets/fonts/Satoshi/Satoshi-BoldItalic.otf
+          weight: 700
+          style: italic
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/sentro_icon.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/icon/sentro_icon.png"

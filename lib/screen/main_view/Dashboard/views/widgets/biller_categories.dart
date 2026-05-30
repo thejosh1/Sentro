@@ -10,36 +10,42 @@ import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/constants/values.dart';
 import 'package:sentro/core/utils/label_container.dart';
 import 'package:sentro/core/utils/text.dart';
+import 'package:sentro/core/widgets/bill_payment.dart';
 import 'package:sentro/core/widgets/loan_dialog.dart';
 import 'package:sentro/core/widgets/top_up.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/home_page.dart';
+import 'package:sentro/screen/main_view/controller/main_controller.dart';
+
 
 import '../../../../../core/router/app_pages.dart';
+import 'home_widgets.dart';
+final MainController controller = Get.put(MainController());
 
 class BillerCategories extends StatelessWidget {
   const BillerCategories({super.key});
 
+
   @override
   Widget build(BuildContext context) {
+    final MainController controller = Get.put(MainController());
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colorScheme = Theme.of(context).colorScheme;
-    final chipBg = isDark ? sContainerColor : colorScheme.surface;
+    final chipBg = isDark ? sContainerColor : sLightFill;
+
+    Get.put(MainController());
 
     return Padding(
       padding: EdgeInsets.only(bottom: heightSize(8)),
       child: SizedBox(
-        height: heightSize(111 + 30), // card + chip space
+        height: heightSize(141),
         child: Stack(
-          alignment: Alignment.center,
           clipBehavior: Clip.none,
           children: [
-            // Main card
             Positioned(
               top: 0,
               left: 0,
               right: 0,
               child: Container(
-                width: double.maxFinite,
                 height: heightSize(111),
                 padding: EdgeInsets.symmetric(horizontal: widthSize(12)),
                 decoration: BoxDecoration(
@@ -61,595 +67,163 @@ class BillerCategories extends StatelessWidget {
                     billerItem(
                       assetName: mobile,
                       title: 'Top Up',
+                      color: sLightBlue,
                       isDark: isDark,
                       colorScheme: colorScheme,
                       callback: () {
                         showMobileTopupDialog(context: context, isDark: isDark);
                       },
-                      color: sLightBlue,
                     ),
+
                     billerItem(
                       assetName: electricity,
                       title: 'Pay Bills',
+                      color: sYello,
                       isDark: isDark,
                       colorScheme: colorScheme,
                       callback: () {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          barrierColor: Colors.black.withOpacity(0.45),
-                          builder: (context) {
-                            return StatefulBuilder(
-                              builder: (context, setDialogState) {
-                                return Dialog(
-                                  backgroundColor: isDark
-                                      ? sContainerColor
-                                      : Theme.of(context).scaffoldBackgroundColor,
-                                  insetPadding: EdgeInsets.symmetric(horizontal: widthSize(20)),
-                                  child: Container(
-                                    height: heightSize(629),
-                                    width: double.maxFinite,
-                                    padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
-                                    decoration: BoxDecoration(
-                                      color: isDark
-                                          ? sContainerColor
-                                          : Theme.of(context).scaffoldBackgroundColor,
-                                      borderRadius: BorderRadius.circular(24),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        SizedBox(height: heightSize(15),),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Container(
-                                              width: widthSize(156.8),
-                                              height: heightSize(31),
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(113.27),
-                                                  color: sButtonFillDark,
-                                                  border: Border.all(color: sDarkBorder)
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  SvgPicture.asset(
-                                                    wallet,
-                                                    width: widthSize(24),
-                                                    height: heightSize(24),
-                                                  ),
-                                                  SizedBox(width: widthSize(3.4),),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      children: [
-                                                        TextSpan(
-                                                          text: '₦50,000',
-                                                          style: TextStyle(
-                                                            fontSize: 15.86,
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: CFONT.REGULAR,
-                                                            height: 22.65 / 15.86,
-                                                          ),
-                                                        ),
-
-                                                        TextSpan(
-                                                          text: '.00',
-                                                          style: TextStyle(
-                                                            fontSize: 10,
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: CFONT.REGULAR,
-                                                            height: 22.65 / 10,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  // SvgPicture.asset(
-                                                  //   visibilityOff,
-                                                  //   width: widthSize(24),
-                                                  //   height: heightSize(24),
-                                                  // ),
-                                                ],
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Get.back();
-                                              },
-                                              child: Container(
-                                                width: widthSize(33.33),
-                                                height: heightSize(33.33),
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.white.withOpacity(0.1),
-                                                ),
-                                                child: Center(
-                                                  child: SvgPicture.asset(cancelWhite),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: heightSize(21)),
-                                        CText(
-                                          text: 'Bill Payment',
-                                          size: 18,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: CFONT.MEDIUM,
-                                          height: 20/18,
-                                        ),
-                                        SizedBox(height: heightSize(2.5)),
-                                        CText(
-                                          text: 'Pay for all types of utility bills easy and quick   ',
-                                          size: 14,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: CFONT.REGULAR,
-                                          height: 20/14,
-                                          color: sConfirmTextColor,
-                                        ),
-                                        SizedBox(height: heightSize(27.5)),
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Get.toNamed(Routes.electricity);
-                                              },
-                                              child: Container(
-                                                width: double.maxFinite,
-                                                height: heightSize(70),
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: widthSize(12),
-                                                  vertical: heightSize(12),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  color: sDarkFill,
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      electricity,
-                                                      width: widthSize(46),
-                                                      height: heightSize(46),
-                                                      colorFilter: ColorFilter.mode(
-                                                        sNavContainer,
-                                                        BlendMode.srcIn,
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: widthSize(10),),
-                                                    Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        CText(
-                                                          text: 'Electricity',
-                                                          fontFamily: CFONT.MEDIUM,
-                                                          fontWeight: FontWeight.w500,
-                                                          size: 14,
-                                                        ),
-                                                        CText(
-                                                          text: 'Keep your lights on, buy light token',
-                                                          fontWeight: FontWeight.w400,
-                                                          size: 12,
-                                                          fontFamily: CFONT.REGULAR,
-                                                          color: Color(0xFF979797),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(height: heightSize(10),),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Get.toNamed(Routes.betting);
-                                              },
-                                              child: Container(
-                                                width: double.maxFinite,
-                                                height: heightSize(70),
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: widthSize(12),
-                                                  vertical: heightSize(12),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  color: sDarkFill,
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      betting,
-                                                      width: widthSize(46),
-                                                      height: heightSize(46),
-                                                      colorFilter: ColorFilter.mode(
-                                                        sNavContainer,
-                                                        BlendMode.srcIn,
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: widthSize(10),),
-                                                    Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        CText(
-                                                          text: 'Betting',
-                                                          fontFamily: CFONT.MEDIUM,
-                                                          fontWeight: FontWeight.w500,
-                                                          size: 14,
-                                                        ),
-                                                        CText(
-                                                          text: 'Bet your best, fund your betting wallet',
-                                                          fontWeight: FontWeight.w400,
-                                                          size: 12,
-                                                          fontFamily: CFONT.REGULAR,
-                                                          color: Color(0xFF979797),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(height: heightSize(10),),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Get.toNamed(Routes.cableTV);
-                                              },
-                                              child: Container(
-                                                width: double.maxFinite,
-                                                height: heightSize(70),
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: widthSize(12),
-                                                  vertical: heightSize(12),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  color: sDarkFill,
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      devices,
-                                                      width: widthSize(46),
-                                                      height: heightSize(46),
-                                                      colorFilter: ColorFilter.mode(
-                                                        sNavContainer,
-                                                        BlendMode.srcIn,
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: widthSize(10),),
-                                                    Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        CText(
-                                                          text: 'Cable TV',
-                                                          fontFamily: CFONT.MEDIUM,
-                                                          fontWeight: FontWeight.w500,
-                                                          size: 14,
-                                                        ),
-                                                        CText(
-                                                          text: 'Subscribe for your DSTV, GOTV, Startimes etc',
-                                                          fontWeight: FontWeight.w400,
-                                                          size: 12,
-                                                          fontFamily: CFONT.REGULAR,
-                                                          color: Color(0xFF979797),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(height: heightSize(10),),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Get.toNamed(Routes.academics);
-                                              },
-                                              child: Container(
-                                                width: double.maxFinite,
-                                                height: heightSize(70),
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: widthSize(12),
-                                                  vertical: heightSize(12),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  color: sDarkFill,
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      teacher,
-                                                      width: widthSize(46),
-                                                      height: heightSize(46),
-                                                      colorFilter: ColorFilter.mode(
-                                                        sNavContainer,
-                                                        BlendMode.srcIn,
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: widthSize(10),),
-                                                    Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        CText(
-                                                          text: 'Academics',
-                                                          fontFamily: CFONT.MEDIUM,
-                                                          fontWeight: FontWeight.w500,
-                                                          size: 14,
-                                                        ),
-                                                        CText(
-                                                          text: 'Pay academics bills such as JAMB, WAEC, NECO',
-                                                          fontWeight: FontWeight.w400,
-                                                          size: 12,
-                                                          fontFamily: CFONT.REGULAR,
-                                                          color: Color(0xFF979797),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(height: heightSize(10),),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Get.toNamed(Routes.wastemanagent);
-                                              },
-                                              child: Container(
-                                                width: double.maxFinite,
-                                                height: heightSize(70),
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: widthSize(12),
-                                                  vertical: heightSize(12),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  color: sDarkFill,
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      trash,
-                                                      width: widthSize(46),
-                                                      height: heightSize(46),
-                                                      colorFilter: ColorFilter.mode(
-                                                        sNavContainer,
-                                                        BlendMode.srcIn,
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: widthSize(10),),
-                                                    Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        CText(
-                                                          text: 'Waste Management',
-                                                          fontFamily: CFONT.MEDIUM,
-                                                          fontWeight: FontWeight.w500,
-                                                          size: 14,
-                                                        ),
-                                                        CText(
-                                                          text: 'Pay for your waste to the right management',
-                                                          fontWeight: FontWeight.w400,
-                                                          size: 12,
-                                                          fontFamily: CFONT.REGULAR,
-                                                          color: Color(0xFF979797),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(height: heightSize(10),),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Get.toNamed(Routes.internetService);
-                                              },
-                                              child: Container(
-                                                width: double.maxFinite,
-                                                height: heightSize(70),
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: widthSize(12),
-                                                  vertical: heightSize(12),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  color: sDarkFill,
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      globalSearch,
-                                                      width: widthSize(46),
-                                                      height: heightSize(46),
-                                                      colorFilter: ColorFilter.mode(
-                                                        sNavContainer,
-                                                        BlendMode.srcIn,
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: widthSize(10),),
-                                                    Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        CText(
-                                                          text: 'Internet Provider',
-                                                          fontFamily: CFONT.MEDIUM,
-                                                          fontWeight: FontWeight.w500,
-                                                          size: 14,
-                                                        ),
-                                                        CText(
-                                                          text: 'Pay for your preferred internet service provider',
-                                                          fontWeight: FontWeight.w400,
-                                                          size: 12,
-                                                          fontFamily: CFONT.REGULAR,
-                                                          color: Color(0xFF979797),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        );
+                        showBillPaymentDialog(context: context, isDark: isDark);
                       },
-                      color: sYello,
                     ),
                     billerItem(
                       assetName: betting,
                       title: 'Betting',
+                      color: sOrange,
                       isDark: isDark,
                       colorScheme: colorScheme,
-                      callback: () {
-                        Get.toNamed(Routes.betting);
-                      },
-                      color: sOrange,
+                      callback: () => Get.toNamed(Routes.betting),
                     ),
                     billerItem(
                       assetName: savings,
                       title: 'Save Money',
+                      color: sPearl,
                       isDark: isDark,
                       colorScheme: colorScheme,
-                      callback: () {
-                        Get.toNamed(Routes.startSaving);
-                      },
-                      color: sPearl,
+                      callback: () => Get.toNamed(Routes.startSaving),
                     ),
                     billerItem(
                       assetName: loansService,
                       title: 'Loans',
+                      color: sNavContainer,
                       isDark: isDark,
                       colorScheme: colorScheme,
-                      callback: () {
-                        showLoanDialog(context: context, isDark: isDark);
-                      },
-                      color: sNavContainer,
+                      callback: () => showLoanDialog(
+                        context: context,
+                        isDark: isDark,
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-
-            // All Services chip
             Positioned(
               bottom: 1,
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(Values().buttonRadius10),
-                    bottomRight: Radius.circular(Values().buttonRadius10),
-                  ),
-                  onTap: () {
-                    showGeneralDialog(
-                      context: context,
-                      barrierDismissible: true,
-                      barrierLabel: 'All Services',
-                      barrierColor: Colors.transparent,   // ← we handle the overlay ourselves
-                      transitionDuration: const Duration(milliseconds: 350),
-                      pageBuilder: (ctx, anim1, anim2) {
-                        return Stack(
-                          children: [
-                            // ── Blur + dark overlay (tappable to dismiss) ──────────
-                            BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                              child: GestureDetector(
-                                onTap: () => Navigator.pop(ctx),
-                                child: Container(
-                                  color: Colors.black.withOpacity(isDark ? 0.45 : 0.3),
-                                ),
-                              ),
-                            ),
-
-                            // ── Sheet slides up from bottom ─────────────────────────
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: SlideTransition(
-                                position: Tween<Offset>(
-                                  begin: const Offset(0, 1),
-                                  end: Offset.zero,
-                                ).animate(
-                                  CurvedAnimation(
-                                    parent: anim1,
-                                    curve: Curves.easeOutCubic,
-                                  ),
-                                ),
-                                child: SafeArea(
-                                  top: false,
-                                  child: _AllServicesSheet(
-                                    isDark: isDark,
-                                    colorScheme: colorScheme,
-                                    context: ctx,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  child: Container(
-                    width: widthSize(145),
-                    height: heightSize(29),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(Values().buttonRadius10+2),
-                        bottomRight: Radius.circular(Values().buttonRadius10+2),
-                      ),
-                      color: chipBg,
-                      boxShadow: isDark
-                          ? null
-                          : [
-                        BoxShadow(
-                          color: colorScheme.primary.withOpacity(0.07),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(Values().buttonRadius10),
+                      bottomRight: Radius.circular(Values().buttonRadius10),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: widthSize(20),
-                          height: heightSize(20),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: sLightBlue.withOpacity(0.1),
+                    onTap: () {
+                      showGeneralDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        barrierLabel: 'All Services',
+                        barrierColor: Colors.transparent,   // ← we handle the overlay ourselves
+                        transitionDuration: const Duration(milliseconds: 350),
+                        pageBuilder: (ctx, anim1, anim2) {
+                          return Stack(
+                            children: [
+                              // ── Blur + dark overlay (tappable to dismiss) ──────────
+                              BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                                child: GestureDetector(
+                                  onTap: () => Navigator.pop(ctx),
+                                  child: Container(
+                                    color: Colors.black.withOpacity(isDark ? 0.45 : 0.3),
+                                  ),
+                                ),
+                              ),
+
+                              // ── Sheet slides up from bottom ─────────────────────────
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(0, 1),
+                                    end: Offset.zero,
+                                  ).animate(
+                                    CurvedAnimation(
+                                      parent: anim1,
+                                      curve: Curves.easeOutCubic,
+                                    ),
+                                  ),
+                                  child: SafeArea(
+                                    top: false,
+                                    child: _AllServicesSheet(
+                                      isDark: isDark,
+                                      colorScheme: colorScheme,
+                                      context: ctx, controller: controller,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      width: widthSize(112),
+                      height: heightSize(30),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(Values().buttonRadius10+2),
+                          bottomRight: Radius.circular(Values().buttonRadius10+2),
+                        ),
+                        color: chipBg,
+                        boxShadow: isDark
+                            ? null
+                            : [
+                          BoxShadow(
+                            color: colorScheme.primary.withOpacity(0.07),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
                           ),
-                          child: Center(
-                            child: SvgPicture.asset(
-                              more,
-                              width: widthSize(10),
-                              height: heightSize(8.13),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: widthSize(20),
+                            height: heightSize(20),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: sLightBlue.withOpacity(0.1),
+                            ),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                more,
+                                width: widthSize(10),
+                                height: heightSize(8.13),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: widthSize(10)),
-                        CText(
-                          text: 'All Services',
-                          fontWeight: FontWeight.w400,
-                          fontFamily: CFONT.REGULAR,
-                          size: 12,
-                          color: isDark ? Colors.white : colorScheme.primary,
-                        ),
-                      ],
+                          SizedBox(width: widthSize(10)),
+                          CText(
+                            text: 'All Services',
+                            fontWeight: CFONT.wRegular,
+                            fontFamily: CFONT.FAMILY,
+                            size: 12,
+                            color: isDark ? Colors.white : colorScheme.primary,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -665,6 +239,7 @@ class BillerCategories extends StatelessWidget {
 // ── MODAL SHEET ───────────────────────────────────────────────
 
 class _AllServicesSheet extends StatelessWidget {
+  final MainController controller;
   final bool isDark;
   final ColorScheme colorScheme;
   final BuildContext context;
@@ -673,6 +248,7 @@ class _AllServicesSheet extends StatelessWidget {
     required this.isDark,
     required this.colorScheme,
     required this.context,
+    required this.controller,
   });
 
   Color get _panelColor =>
@@ -682,21 +258,21 @@ class _AllServicesSheet extends StatelessWidget {
     return CText(
       text: text,
       size: 14,
-      fontWeight: FontWeight.w500,
-      fontFamily: CFONT.MEDIUM,
+      fontWeight: CFONT.wMedium,
+      fontFamily: CFONT.FAMILY,
       color: colorScheme.onSurface,
     );
   }
 
   Widget _row(List<Widget> children) {
-    final itemWidth = (MediaQuery.of(context).size.width - widthSize(26 + 36)) / 5;
-
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start, // ← always starts from left
-      children: children.map((child) => SizedBox(
-        width: itemWidth,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: children
+          .map((child) => SizedBox(
+        width: widthSize(68),
         child: child,
-      )).toList(),
+      ))
+          .toList(),
     );
   }
 
@@ -724,6 +300,7 @@ class _AllServicesSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return IntrinsicHeight(
       child: Container(
+        margin: EdgeInsets.symmetric(horizontal: widthSize(5)),
         decoration: BoxDecoration(
           color: _panelColor,
           borderRadius: BorderRadius.only(
@@ -751,7 +328,7 @@ class _AllServicesSheet extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: sContainerColor,
+                      color: isDark?sContainerColor:sLightFill,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -763,23 +340,30 @@ class _AllServicesSheet extends StatelessWidget {
                           _item(
                             assetName: mobileWhite,
                             title: 'Airtime',
-                            tintColor: Colors.white,
+                            tintColor: isDark?null:sActionButton,
                             callback: () {
-                              showMobileTopupDialog(context: context, isDark: isDark);
+                              showMobileTopupDialog(
+                                context: context,
+                                isDark: isDark,
+                              );
                             },
                           ),
                           _item(
                             assetName: data,
                             title: 'Data',
-                            tintColor: Colors.white,
+                            tintColor: isDark?null:sActionButton,
                             callback: () {
-                              showMobileTopupDialog(context: context, isDark: isDark, initialDataSelected: true);
-                            }
+                              showMobileTopupDialog(
+                                context: context,
+                                isDark: isDark,
+                                initialDataSelected: true,
+                              );
+                            },
                           ),
                           _item(
                             assetName: electricity,
                             title: 'Electricity',
-                            tintColor: Colors.white,
+                            tintColor: isDark?Colors.white:sActionButton,
                             callback: () {
                               Get.toNamed(Routes.electricity);
                             },
@@ -787,15 +371,18 @@ class _AllServicesSheet extends StatelessWidget {
                           _item(
                             assetName: gift,
                             title: 'Gift Cards',
-                            tintColor: Colors.white,
+                            tintColor: isDark?null:sActionButton,
                             callback: () {},
                           ),
                           _item(
                             assetName: loansService,
                             title: 'Loans',
-                            tintColor: Colors.white,
+                            tintColor: isDark?Colors.white:sActionButton,
                             callback: () {
-                              showLoanDialog(context: context, isDark: isDark);
+                              showLoanDialog(
+                                context: context,
+                                isDark: isDark,
+                              );
                             },
                           ),
                         ]),
@@ -814,7 +401,7 @@ class _AllServicesSheet extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: sContainerColor,
+                      color: isDark?sContainerColor:sLightFill,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -828,29 +415,39 @@ class _AllServicesSheet extends StatelessWidget {
                               _item(
                                 assetName: transfer,
                                 title: 'Transfer',
-                                callback: () {},
+                                tintColor: isDark?null:sActionButton,
+                                callback: () {
+                                  Get.toNamed(Routes.transfer);
+                                },
                               ),
                               _item(
                                 assetName: mobileWhite,
                                 title: 'Airtime',
-                                tintColor: Colors.white,
+                                tintColor: isDark?null:sActionButton,
                                 callback: () {
-                                  showMobileTopupDialog(context: context, isDark: isDark);
-                                  },
+                                  showMobileTopupDialog(
+                                    context: context,
+                                    isDark: isDark,
+                                  );
+                                },
                               ),
                               _item(
                                 assetName: data,
                                 title: 'Data',
-                                tintColor: Colors.white,
-                                callback: () {
-                                  showMobileTopupDialog(context: context, isDark: isDark, initialDataSelected: true);
-                                },
+                                tintColor: isDark?null:sActionButton,
                                 isNew: true,
+                                callback: () {
+                                  showMobileTopupDialog(
+                                    context: context,
+                                    isDark: isDark,
+                                    initialDataSelected: true,
+                                  );
+                                },
                               ),
                               _item(
                                 assetName: bettingWhite,
                                 title: 'Betting',
-                                tintColor: Colors.white,
+                                tintColor: isDark?null:sActionButton,
                                 callback: () {
                                   Get.toNamed(Routes.betting);
                                 },
@@ -858,7 +455,7 @@ class _AllServicesSheet extends StatelessWidget {
                               _item(
                                 assetName: electricity,
                                 title: 'Electricity',
-                                tintColor: Colors.white,
+                                tintColor: isDark?Colors.white:sActionButton,
                                 callback: () {
                                   Get.toNamed(Routes.electricity);
                                 },
@@ -871,34 +468,39 @@ class _AllServicesSheet extends StatelessWidget {
                               _item(
                                 assetName: gift,
                                 title: 'Gift Cards',
-                                tintColor: Colors.white,
+                                tintColor: isDark?null:sActionButton,
                                 callback: () {},
                               ),
                               _item(
                                 assetName: cardWhite,
                                 title: 'Cards',
-                                tintColor: Colors.white,
+                                tintColor: isDark?null:sActionButton,
                                 callback: () {},
                               ),
                               _item(
                                 assetName: loansService,
                                 title: 'Loans',
-                                tintColor: Colors.white,
+                                tintColor: isDark?Colors.white:sActionButton,
                                 callback: () {
-                                  showLoanDialog(context: context, isDark: isDark);
+                                  showLoanDialog(
+                                    context: context,
+                                    isDark: isDark,
+                                  );
                                 },
                               ),
                               _item(
                                 assetName: invest,
                                 title: 'Investment',
-                                tintColor: Colors.white,
+                                tintColor: isDark?null:sActionButton,
                                 callback: () {},
                               ),
                               _item(
                                 assetName: qrPayWhite,
                                 title: 'QR Pay',
-                                tintColor: Colors.white,
-                                callback: () {},
+                                tintColor: isDark?null:sActionButton,
+                                callback: () {
+                                  Get.toNamed(Routes.qrPay);
+                                },
                               ),
                             ]),
 
@@ -908,24 +510,25 @@ class _AllServicesSheet extends StatelessWidget {
                               _item(
                                 assetName: savingsWhite,
                                 title: 'Savings',
-                                tintColor: Colors.white,
+                                tintColor: isDark?null:sActionButton,
+                                isNew: true,
                                 callback: () {
                                   Get.toNamed(Routes.activeGoals);
                                 },
-                                isNew: true,
                               ),
                               _item(
                                 assetName: bnpl,
                                 title: 'BNPL',
-                                tintColor: Colors.white,
-                                callback: () {},
+                                tintColor: isDark?null:sActionButton,
                                 isNew: true,
+                                callback: () {},
                               ),
                               _item(
                                 assetName: julo,
                                 title: 'Julo Energy',
-                                callback: () {},
+                                tintColor: isDark?null:sActionButton,
                                 isNew: true,
+                                callback: () {},
                               ),
                             ]),
 
@@ -942,7 +545,7 @@ class _AllServicesSheet extends StatelessWidget {
             ),
 
             Positioned(
-              top: -20,
+              top: -23,
               left: 0,
               right: 0,
               child: Center(
@@ -951,19 +554,10 @@ class _AllServicesSheet extends StatelessWidget {
                   height: heightSize(30),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(Values().buttonRadius10+2),
-                      topRight: Radius.circular(Values().buttonRadius10+2),
+                      topLeft: Radius.circular(Values().buttonRadius10 + 2),
+                      topRight: Radius.circular(Values().buttonRadius10 + 2),
                     ),
                     color: _panelColor,
-                    boxShadow: isDark
-                        ? null
-                        : [
-                      BoxShadow(
-                        color: colorScheme.primary.withOpacity(0.07),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -986,10 +580,11 @@ class _AllServicesSheet extends StatelessWidget {
                       SizedBox(width: widthSize(8)),
                       CText(
                         text: 'All Services',
-                        fontWeight: FontWeight.w400,
-                        fontFamily: CFONT.REGULAR,
                         size: 12,
-                        color: isDark ? Colors.white : colorScheme.primary,
+                        fontWeight: CFONT.wRegular,
+                        fontFamily: CFONT.FAMILY,
+                        color:
+                        isDark ? Colors.white : colorScheme.primary,
                       ),
                     ],
                   ),
@@ -1001,7 +596,6 @@ class _AllServicesSheet extends StatelessWidget {
       ),
     );
   }
-
 }
 
 // ── BILLER ITEM ───────────────────────────────────────────────
@@ -1093,8 +687,8 @@ class _AnimatedCategoryItemState
                 ),
                 child: SvgPicture.asset(
                   widget.assetName,
-                  height: heightSize(46),
-                  width: widthSize(46),
+                  height: heightSize(55),
+                  width: widthSize(55),
                   fit: BoxFit.contain,
                   colorFilter: ColorFilter.mode(
                     iconTint,
@@ -1108,8 +702,8 @@ class _AnimatedCategoryItemState
               CText(
                 text: widget.title,
                 size: 12,
-                fontWeight: FontWeight.w400,
-                fontFamily: CFONT.REGULAR,
+                fontWeight: CFONT.wRegular,
+                fontFamily: CFONT.FAMILY,
                 height: 1.67,
                 color:
                 widget.colorScheme.onSurface,

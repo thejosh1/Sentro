@@ -20,6 +20,7 @@ class VerifyPhone extends StatefulWidget {
 
 class _VerifyPhoneState extends State<VerifyPhone> {
   TextEditingController ctrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -32,44 +33,64 @@ class _VerifyPhoneState extends State<VerifyPhone> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: heightSize(64),),
-            Padding(
-              padding: EdgeInsets.only(right: widthSize(7)),
-              child: PageHeader(
-                trailing: SvgPicture.asset(
-                  headPhone,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () => Get.back(),
+                  child: SvgPicture.asset(
+                    isDark?arrowBackWhite:arrowBack,
+                    width: widthSize(42),
+                    height: heightSize(42),
+                  ),
+                ),
+                SvgPicture.asset(
+                  logoLight,
+                  width: widthSize(116.39),
+                  height: heightSize(28),
+                  colorFilter: isDark?ColorFilter.mode(
+                    sNavContainer,
+                    BlendMode.srcIn,
+                  ):null,
+                ),
+                SvgPicture.asset(
+                  isDark?headPhoneWhite:headPhone,
                   width: widthSize(43.52),
                   height: heightSize(50),
-
-                ),
-              ),
+                )
+              ],
             ),
             SizedBox(height: heightSize(34),),
             CText(
               text: 'Verify phone number',
               size: 22,
-              fontFamily: CFONT.BOLD,
-              fontWeight: FontWeight.w700,
+              fontFamily: CFONT.FAMILY,
+              fontWeight: CFONT.wBold,
             ),
             SizedBox(height: heightSize(5),),
             CText(
               text: 'Verify your phone number that you registered, a code will be sent shortly',
-              fontWeight: FontWeight.w400, size: 18, fontFamily: CFONT.REGULAR, color: Theme.of(context).brightness == Brightness.dark
-                ? sDarkModeMutedText // dark mode muted text
-                : sLightModeMutedText,
+              fontWeight: CFONT.wRegular,
+              size: 18,
+              height: 1.5,
+              fontFamily: CFONT.FAMILY,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? sDarkModeMutedText // dark mode muted text
+                  : sLightModeMutedText,
             ),
             SizedBox(height: heightSize(30),),
             AppTextField(
               obscureText: false,
               title: CText(
                 text: 'Phone Number',
-                fontWeight: FontWeight.w500,
-                fontFamily: CFONT.MEDIUM,
+                fontWeight: CFONT.wMedium,
+                fontFamily: CFONT.FAMILY,
                 size: 16,
               ),
               prefixWidget: Container(
                 width: widthSize(56),
                 height: heightSize(28),
-                margin: EdgeInsets.only(left: widthSize(24),),
+               margin: EdgeInsets.only(left: widthSize(8),),
                 padding: EdgeInsets.symmetric(horizontal: widthSize(5), vertical: heightSize(4)),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
@@ -95,6 +116,7 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                             color: sActionButton,
                           ),
                         ),
+                        SizedBox(width: widthSize(3),),
                         Container(
                           width: widthSize(5),
                           height: heightSize(5),
@@ -103,6 +125,7 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                             color: sActionButton,
                           ),
                         ),
+                        SizedBox(width: widthSize(3),),
                         Container(
                           width: widthSize(5),
                           height: heightSize(5),
@@ -112,11 +135,12 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
               hint: '08...',
+              hintColor: sLightHintText,
               color: sActionButton,
               controller: ctrl,
               inputType: TextInputType.phone,
@@ -135,12 +159,15 @@ class _VerifyPhoneState extends State<VerifyPhone> {
       ),
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(
-            left: widthSize(25),
-            right: widthSize(25),
-            bottom: heightSize(10)),
+          left: widthSize(25),
+          right: widthSize(25),
+          bottom: heightSize(10),
+        ),
         child: ActionButton(
           text: "Continue",
+          textColor: sNavContainer,
           callback: () {
+            FocusScope.of(context).unfocus();
             Get.toNamed(
               Routes.confirmPhoneNumber,
               arguments: {
