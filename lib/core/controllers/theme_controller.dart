@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import 'accent_controller.dart';
+
 class ThemeController extends GetxController {
   final _storage = GetStorage();
 
@@ -34,6 +36,12 @@ class ThemeController extends GetxController {
     }
     _storage.write(_keyIsManual, true);
     _storage.write(_keyIsDark, mode == ThemeMode.dark);
+
+    final accent = Get.find<AccentController>().accent.value;
+    Get.changeTheme(mode == ThemeMode.dark
+        ? AccentController.darkWithAccent(accent)
+        : AccentController.lightWithAccent(accent));
+
     Get.changeThemeMode(mode);
     update();
   }

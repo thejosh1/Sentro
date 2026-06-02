@@ -21,6 +21,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   TextEditingController repeatPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
@@ -63,7 +64,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               fontWeight: CFONT.wRegular,
               size: 18,
               fontFamily: CFONT.FAMILY,
-              color: sGrey1,
+              color: isDark?sGrey1:sGrey2,
             ),
             SizedBox(height: heightSize(30),),
             AppTextField(

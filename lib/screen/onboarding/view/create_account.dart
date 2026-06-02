@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/action_button.dart';
 import 'package:sentro/core/utils/text.dart';
@@ -22,9 +23,13 @@ class _CreateAccountState extends State<CreateAccount> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = Theme
+        .of(context)
+        .brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
         child: Column(
@@ -35,13 +40,17 @@ class _CreateAccountState extends State<CreateAccount> {
               padding: EdgeInsets.only(right: widthSize(7)),
               child: PageHeader(
                 isDark: false,
-                trailing: CText(
-                  text: 'Why is BVN required?',
-                  color: isDark?sNavContainer:sActionButton,
-                  size: 16,
-                  fontWeight: CFONT.wMedium,
-                  fontFamily: CFONT.FAMILY,
-                ),
+                trailing: Obx(() {
+                  final accent = AccentController.to.accent.value;
+                  final isDefault = AccentController.options.first.value == accent.value;
+                  return CText(
+                    text: 'Why is BVN required?',
+                    color: isDefault?isDark ? sNavContainer : sActionButton:accent,
+                    size: 16,
+                    fontWeight: CFONT.wMedium,
+                    fontFamily: CFONT.FAMILY,
+                  );
+                }),
               ),
             ),
             SizedBox(height: heightSize(34),),
@@ -57,7 +66,9 @@ class _CreateAccountState extends State<CreateAccount> {
               fontWeight: CFONT.wRegular,
               size: 18,
               fontFamily: CFONT.FAMILY,
-              color: Theme.of(context).brightness == Brightness.dark
+              color: Theme
+                  .of(context)
+                  .brightness == Brightness.dark
                   ? sDarkModeMutedText // dark mode muted text
                   : sLightModeMutedText,
             ),
@@ -95,41 +106,47 @@ class _CreateAccountState extends State<CreateAccount> {
               },
             ),
             SizedBox(height: heightSize(30),),
-            SizedBox(
-              height: heightSize(42),
-              width: widthSize(155),
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: sLemon,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(21),
-                    side: BorderSide(
-                      color: sLemon,
+            Obx(() {
+              final accent = AccentController.to.accent.value;
+
+              return SizedBox(
+                height: heightSize(42),
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: accent,
+                    elevation: 0,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    minimumSize: Size.zero,
+                    padding: EdgeInsets.symmetric(horizontal: widthSize(24)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(21),
+                      side: BorderSide(color: accent),
                     ),
                   ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min, // 👈 KEY FIX
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SvgPicture.asset(
+                        call,
+                        width: widthSize(20),
+                        height: heightSize(20),
+                        colorFilter: ColorFilter.mode(accent, BlendMode.srcIn),
+                      ),
+                      SizedBox(width: widthSize(8)),
+                      CText(
+                        text: 'Dial *565*0#',
+                        size: 13,
+                        fontWeight: CFONT.wRegular,
+                        fontFamily: CFONT.FAMILY,
+                      ),
+                    ],
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SvgPicture.asset(
-                      call,
-                      width: widthSize(20),
-                      height: heightSize(20),
-                      colorFilter: isDark ? ColorFilter.mode(Colors.white, BlendMode.srcIn) : null,
-                    ),
-                    CText(
-                      text: 'Dial *565*0#',
-                      size: 13,
-                      fontWeight: CFONT.wRegular,
-                      fontFamily: CFONT.FAMILY,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+              );
+            })
           ],
         ),
       ),
@@ -139,19 +156,24 @@ class _CreateAccountState extends State<CreateAccount> {
           right: widthSize(25),
           bottom: heightSize(10),
         ),
-        child: ActionButton(
-          text: "Continue",
-          textColor: sNavContainer,
-          callback: () {
-            Get.toNamed(
-              Routes.confirmPhoneNumber,
-              arguments: {
-                "flow": "bvn",
-              },
-            );
-          },
-          load: false,
-        ),
+        child: Obx(() {
+          final accent = AccentController.to.accent.value;
+          return ActionButton(
+            text: "Continue",
+            color: accent,
+            borderColor: accent,
+            textColor: sNavContainer,
+            callback: () {
+              Get.toNamed(
+                Routes.confirmPhoneNumber,
+                arguments: {
+                  "flow": "bvn",
+                },
+              );
+            },
+            load: false,
+          );
+        }),
       ),
     );
   }

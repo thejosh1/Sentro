@@ -5,6 +5,7 @@ import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/constants/values.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/utils/appearance_toggle.dart';
 import 'package:sentro/core/utils/text.dart';
 import 'package:sentro/core/widgets/loan_dialog.dart';
@@ -39,11 +40,11 @@ class RecentlyUsedPanelState extends State<RecentlyUsedPanel>
   late Animation<double> _fadeAnim;
 
   static const double _collapsedH = 100;
-  static const double _expandedH  = 228;
+  static const double _expandedH = 228;
 
-  double _dragStartDy    = 0;
+  double _dragStartDy = 0;
   double _dragStartValue = 0;
-  bool _isExpanded       = false;
+  bool _isExpanded = false;
 
   void collapse() => _collapse();
 
@@ -54,12 +55,14 @@ class RecentlyUsedPanelState extends State<RecentlyUsedPanel>
       vsync: this,
       duration: const Duration(milliseconds: 180),
     );
-    _heightAnim = Tween<double>(begin: _collapsedH, end: _expandedH).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
-    );
-    _turnAnim = Tween<double>(begin: 0, end: 0.5).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
-    );
+    _heightAnim = Tween<double>(
+      begin: _collapsedH,
+      end: _expandedH,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+    _turnAnim = Tween<double>(
+      begin: 0,
+      end: 0.5,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
     _fadeAnim = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _controller,
@@ -88,7 +91,7 @@ class RecentlyUsedPanelState extends State<RecentlyUsedPanel>
 
   void _onDragStart(DragStartDetails d) {
     _controller.stop();
-    _dragStartDy    = d.globalPosition.dy;
+    _dragStartDy = d.globalPosition.dy;
     _dragStartValue = _controller.value;
   }
 
@@ -109,16 +112,14 @@ class RecentlyUsedPanelState extends State<RecentlyUsedPanel>
     }
   }
 
-  Color get _panelColor => widget.isDark
-      ? sContainerColor
-      : sLightFill;
+  Color get _panelColor => widget.isDark ? sContainerColor : sLightFill;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onVerticalDragStart:  _onDragStart,
+      onVerticalDragStart: _onDragStart,
       onVerticalDragUpdate: _onDragUpdate,
-      onVerticalDragEnd:    _onDragEnd,
+      onVerticalDragEnd: _onDragEnd,
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, _) {
@@ -131,14 +132,14 @@ class RecentlyUsedPanelState extends State<RecentlyUsedPanel>
                 Positioned.fill(
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
-                      topLeft:  Radius.circular(Values().buttonRadius11 + 1),
+                      topLeft: Radius.circular(Values().buttonRadius11 + 1),
                       topRight: Radius.circular(Values().buttonRadius11 + 1),
                     ),
                     child: Container(
                       color: _panelColor,
                       padding: EdgeInsets.only(
-                        top:   heightSize(13.5),
-                        left:  widthSize(11),
+                        top: heightSize(11),
+                        left: widthSize(11),
                         right: widthSize(11),
                       ),
                       child: Stack(
@@ -183,19 +184,21 @@ class RecentlyUsedPanelState extends State<RecentlyUsedPanel>
                       height: heightSize(28),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
-                          topLeft:  Radius.circular(Values().buttonRadius11 + 1),
-                          topRight: Radius.circular(Values().buttonRadius11 + 1),
+                          topLeft: Radius.circular(Values().buttonRadius11 + 1),
+                          topRight: Radius.circular(
+                            Values().buttonRadius11 + 1,
+                          ),
                         ),
                         color: _panelColor,
                         boxShadow: widget.isDark
                             ? null
                             : [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.06),
-                            blurRadius: 6,
-                            offset: const Offset(0, -2),
-                          ),
-                        ],
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.06),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, -2),
+                                ),
+                              ],
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -251,11 +254,9 @@ class ProfileSheet extends StatelessWidget {
 
   // ── Derived colors ──────────────────────────────────────────────────────────
 
-  Color get _panelColor =>
-      isDark ? sServicesColor : colorScheme.surface;
+  Color get _panelColor => isDark ? sServicesColor : colorScheme.surface;
 
-  Color get _cardBg =>
-      isDark ? sDarkFill : const Color(0xFFF5F5F5);
+  Color get _cardBg => isDark ? sDarkFill : const Color(0xFFF5F5F5);
 
   Color get _accountPillBg =>
       isDark ? sBeneficiaryColor : const Color(0xFFEEEEEE);
@@ -281,7 +282,7 @@ class ProfileSheet extends StatelessWidget {
     return investmentItem(
       assetName: assetName,
       iconContainerHeight: heightSize(50),
-      iconContainerWidth:  widthSize(50),
+      iconContainerWidth: widthSize(50),
       title: title,
       isDark: isDark,
       colorScheme: colorScheme,
@@ -293,10 +294,7 @@ class ProfileSheet extends StatelessWidget {
 
   void _goTo(String route) {
     Get.back();
-    Future.delayed(
-      const Duration(milliseconds: 150),
-          () => Get.toNamed(route),
-    );
+    Future.delayed(const Duration(milliseconds: 150), () => Get.toNamed(route));
   }
 
   // ── Build ────────────────────────────────────────────────────────────────────
@@ -309,27 +307,27 @@ class ProfileSheet extends StatelessWidget {
         decoration: BoxDecoration(
           color: _panelColor,
           borderRadius: BorderRadius.only(
-            topLeft:  Radius.circular(Values().buttonRadius20),
+            topLeft: Radius.circular(Values().buttonRadius20),
             topRight: Radius.circular(Values().buttonRadius20),
           ),
           boxShadow: isDark
               ? null
               : [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 20,
-              offset: const Offset(0, -4),
-            ),
-          ],
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 20,
+                    offset: const Offset(0, -4),
+                  ),
+                ],
         ),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
             Padding(
               padding: EdgeInsets.only(
-                top:    heightSize(16),
-                left:   widthSize(20),
-                right:  widthSize(20),
+                top: heightSize(16),
+                left: widthSize(20),
+                right: widthSize(20),
                 bottom: heightSize(13),
               ),
               child: Column(
@@ -339,7 +337,7 @@ class ProfileSheet extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        width:  widthSize(50),
+                        width: widthSize(50),
                         height: heightSize(50),
                         margin: EdgeInsets.only(left: widthSize(3)),
                         decoration: BoxDecoration(
@@ -373,7 +371,7 @@ class ProfileSheet extends StatelessWidget {
                               children: [
                                 SizedBox(width: widthSize(10)),
                                 Container(
-                                  width:  widthSize(14.67),
+                                  width: widthSize(14.67),
                                   height: heightSize(14.67),
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
@@ -383,7 +381,7 @@ class ProfileSheet extends StatelessWidget {
                                 SizedBox(width: widthSize(3)),
                                 SvgPicture.asset(
                                   arrowDown,
-                                  width:  widthSize(20),
+                                  width: widthSize(20),
                                   height: heightSize(20),
                                   colorFilter: ColorFilter.mode(
                                     colorScheme.onSurface,
@@ -396,8 +394,9 @@ class ProfileSheet extends StatelessWidget {
                                   size: 11.67,
                                   fontWeight: CFONT.wRegular,
                                   fontFamily: CFONT.FAMILY,
-                                  color: colorScheme.onSurface
-                                      .withOpacity(0.65),
+                                  color: colorScheme.onSurface.withOpacity(
+                                    0.65,
+                                  ),
                                 ),
                                 SizedBox(width: widthSize(17.83)),
                               ],
@@ -414,7 +413,7 @@ class ProfileSheet extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: widthSize(22),
-                      vertical:   heightSize(14),
+                      vertical: heightSize(14),
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
@@ -441,7 +440,7 @@ class ProfileSheet extends StatelessWidget {
                               children: [
                                 SvgPicture.asset(
                                   goldMedal,
-                                  width:  widthSize(14.3),
+                                  width: widthSize(14.3),
                                   height: heightSize(20),
                                 ),
                                 SizedBox(width: widthSize(4)),
@@ -467,10 +466,11 @@ class ProfileSheet extends StatelessWidget {
                               child: LinearProgressIndicator(
                                 value: value,
                                 minHeight: heightSize(8),
-                                backgroundColor:
-                                isDark?sNavContainer.withOpacity(0.2):sActionButton.withOpacity(0.2),
+                                backgroundColor: isDark
+                                    ? sNavContainer.withOpacity(0.2)
+                                    : sActionButton.withOpacity(0.2),
                                 valueColor: AlwaysStoppedAnimation(
-                                  isDark?sNavContainer:sActionButton,
+                                  isDark ? sNavContainer : sActionButton,
                                 ),
                               ),
                             );
@@ -485,7 +485,7 @@ class ProfileSheet extends StatelessWidget {
                               size: 14,
                               fontFamily: CFONT.FAMILY,
                               fontWeight: CFONT.wRegular,
-                              color: isDark?sNavContainer:sActionButton,
+                              color: isDark ? sNavContainer : sActionButton,
                             ),
                           ),
                         ),
@@ -570,7 +570,7 @@ class ProfileSheet extends StatelessWidget {
                       children: [
                         SvgPicture.asset(
                           logout,
-                          width:  widthSize(24),
+                          width: widthSize(24),
                           height: heightSize(24),
                           colorFilter: const ColorFilter.mode(
                             sLogout,
@@ -599,11 +599,11 @@ class ProfileSheet extends StatelessWidget {
               top: -23,
               left: 20,
               child: Container(
-                width:  widthSize(141),
+                width: widthSize(141),
                 height: heightSize(30),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft:  Radius.circular(Values().buttonRadius10 + 2),
+                    topLeft: Radius.circular(Values().buttonRadius10 + 2),
                     topRight: Radius.circular(Values().buttonRadius10 + 2),
                   ),
                   color: _panelColor,
@@ -613,7 +613,7 @@ class ProfileSheet extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       setting,
-                      width:  widthSize(24),
+                      width: widthSize(24),
                       height: heightSize(24),
                       colorFilter: ColorFilter.mode(
                         colorScheme.onSurface,
@@ -654,23 +654,22 @@ class _CollapsedRow extends StatelessWidget {
       children: [
         investmentItem(
           assetName: mobileWhite,
-          iconContainerWidth:  widthSize(46),
+          iconContainerWidth: widthSize(46),
           iconContainerHeight: heightSize(46),
           title: 'Airtime',
           isDark: isDark,
           colorScheme: colorScheme,
-
+          tintColor: isDark ? Colors.white : sActionButton,
           callback: () =>
               showMobileTopupDialog(context: context, isDark: isDark),
         ),
         investmentItem(
           assetName: data,
           iconContainerHeight: heightSize(46),
-          iconContainerWidth:  widthSize(46),
-          tintColor: isDark?Colors.white:sActionButton,
+          iconContainerWidth: widthSize(46),
+          tintColor: isDark ? Colors.white : sActionButton,
           title: 'Data',
           isDark: isDark,
-
           colorScheme: colorScheme,
           callback: () => showMobileTopupDialog(
             context: context,
@@ -681,45 +680,42 @@ class _CollapsedRow extends StatelessWidget {
         investmentItem(
           assetName: electricity,
           iconContainerHeight: heightSize(46),
-          iconContainerWidth:  widthSize(46),
-
+          iconContainerWidth: widthSize(46),
           title: 'Electricity',
           isDark: isDark,
           colorScheme: colorScheme,
-          tintColor: isDark?Colors.white:sActionButton,
+          tintColor: isDark ? Colors.white : sActionButton,
           callback: () => Get.toNamed(Routes.electricity),
         ),
         investmentItem(
           assetName: gift,
           iconContainerHeight: heightSize(46),
-          iconContainerWidth:  widthSize(46),
-
+          iconContainerWidth: widthSize(46),
           title: 'Gift Cards',
           isDark: isDark,
           colorScheme: colorScheme,
+          tintColor: isDark ? Colors.white : sActionButton,
           callback: () {},
         ),
         investmentItem(
           assetName: savingsWhite,
           iconContainerHeight: heightSize(46),
-          iconContainerWidth:  widthSize(46),
-
+          iconContainerWidth: widthSize(46),
           title: 'Save Money',
           isDark: isDark,
           colorScheme: colorScheme,
+          tintColor: isDark ? Colors.white : sActionButton,
           callback: () => Get.toNamed(Routes.startSaving),
         ),
         investmentItem(
           assetName: loansService,
           iconContainerHeight: heightSize(46),
-          iconContainerWidth:  widthSize(46),
-          tintColor: isDark?Colors.white:sActionButton,
+          iconContainerWidth: widthSize(46),
           title: 'Loans',
           isDark: isDark,
           colorScheme: colorScheme,
-
-          callback: () =>
-              showLoanDialog(context: context, isDark: isDark),
+          tintColor: isDark ? Colors.white : sActionButton,
+          callback: () => showLoanDialog(context: context, isDark: isDark),
         ),
       ],
     );
@@ -746,6 +742,7 @@ class _ExpandedContent extends StatelessWidget {
     double? iconH,
     Color? tintColor,
     VoidCallback? onTap,
+    required ColorScheme colorScheme,
   }) {
     return SizedBox(
       width: widthSize(68),
@@ -755,7 +752,7 @@ class _ExpandedContent extends StatelessWidget {
         isDark: isDark,
         colorScheme: colorScheme,
         callback: onTap ?? () {},
-        iconContainerWidth:  iconW ?? heightSize(46),
+        iconContainerWidth: iconW ?? heightSize(46),
         iconContainerHeight: iconH ?? heightSize(46),
         tintColor: tintColor,
       ),
@@ -784,13 +781,15 @@ class _ExpandedContent extends StatelessWidget {
             _item(
               assetName: mobileWhite,
               title: 'Airtime',
-
+              colorScheme: colorScheme,
+              tintColor: isDark ? Colors.white : sActionButton,
               onTap: () =>
                   showMobileTopupDialog(context: context, isDark: isDark),
             ),
             _item(
               assetName: data,
-
+              colorScheme: colorScheme,
+              tintColor: isDark ? Colors.white : sActionButton,
               title: 'Data',
               onTap: () => showMobileTopupDialog(
                 context: context,
@@ -801,16 +800,18 @@ class _ExpandedContent extends StatelessWidget {
             _item(
               assetName: electricity,
               title: 'Electricity',
-              tintColor: isDark?Colors.white:sActionButton,
+              colorScheme: colorScheme,
+              tintColor: isDark ? Colors.white : sActionButton,
               onTap: () => Get.toNamed(Routes.electricity),
             ),
-            _item(assetName: gift, title: 'Gift Cards', ),
+            _item(assetName: gift, title: 'Gift Cards', colorScheme: colorScheme,
+              tintColor: isDark ? Colors.white : sActionButton, ),
             _item(
               assetName: loansService,
               title: 'Loans',
-              tintColor: isDark?Colors.white:sActionButton,
-              onTap: () =>
-                  showLoanDialog(context: context, isDark: isDark),
+              colorScheme: colorScheme,
+              tintColor: isDark ? Colors.white : sActionButton,
+              onTap: () => showLoanDialog(context: context, isDark: isDark),
             ),
           ],
         ),
@@ -823,24 +824,29 @@ class _ExpandedContent extends StatelessWidget {
           children: [
             _item(
               assetName: savingsWhite,
-
+              colorScheme: colorScheme,
+              tintColor: isDark ? Colors.white : sActionButton,
               title: 'Savings',
               onTap: () => Get.toNamed(Routes.activeGoals),
             ),
             _item(
               assetName: invest,
               title: 'Save & Invest',
-
+              colorScheme: colorScheme,
+              tintColor: isDark ? Colors.white : sActionButton,
               onTap: () => Get.toNamed(Routes.activeGoals),
             ),
-            _item(assetName: cardWhite, title: 'Cards'),
+            _item(assetName: cardWhite, title: 'Cards', colorScheme: colorScheme,
+              tintColor: isDark ? Colors.white : sActionButton, ),
             _item(
               assetName: qrPayWhite,
-
+              colorScheme: colorScheme,
+              tintColor: isDark ? Colors.white : sActionButton,
               title: 'QR Pay',
               onTap: () => Get.toNamed(Routes.qrPay),
             ),
-            _item(assetName: transfer, title: 'Transfer'),
+            _item(assetName: transfer, title: 'Transfer', colorScheme: colorScheme,
+              tintColor: isDark ? Colors.white : sActionButton, ),
           ],
         ),
       ],
@@ -868,7 +874,7 @@ Widget investmentItem({
     colorScheme: colorScheme,
     onTap: callback,
     iconContainerHeight: iconContainerHeight,
-    iconContainerWidth:  iconContainerWidth,
+    iconContainerWidth: iconContainerWidth,
     isNew: isNew,
     tintColor: tintColor,
   );
@@ -907,59 +913,76 @@ class _AnimatedCategoryItem extends StatefulWidget {
 class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
   bool _pressed = false;
 
-  void _onTapDown(_)  => setState(() => _pressed = true);
-  void _onTapUp(_)    => setState(() => _pressed = false);
+  void _onTapDown(_) => setState(() => _pressed = true);
+  void _onTapUp(_) => setState(() => _pressed = false);
   void _onTapCancel() => setState(() => _pressed = false);
 
   @override
   Widget build(BuildContext context) {
     final h = widget.iconContainerHeight ?? heightSize(46);
-    final w = widget.iconContainerWidth  ?? widthSize(46);
-
-    // In light mode, tint icons with the primary color when no explicit tint
-    final tint = widget.tintColor ??
-        (widget.isDark ? null : widget.colorScheme.primary);
+    final w = widget.iconContainerWidth ?? widthSize(46);
 
     return AnimatedScale(
-      scale:    _pressed ? 0.92 : 1.0,
+      scale: _pressed ? 0.92 : 1.0,
       duration: const Duration(milliseconds: 120),
-      curve:    Curves.easeOut,
+      curve: Curves.easeOut,
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 120),
-        opacity:  _pressed ? 0.7 : 1.0,
+        opacity: _pressed ? 0.7 : 1.0,
         child: GestureDetector(
-          onTap:       widget.onTap,
-          onTapDown:   _onTapDown,
-          onTapUp:     _onTapUp,
+          onTap: widget.onTap,
+          onTapDown: _onTapDown,
+          onTapUp: _onTapUp,
           onTapCancel: _onTapCancel,
           child: Column(
-            mainAxisSize:      MainAxisSize.min,
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               AnimatedScale(
-                scale:    _pressed ? 0.9 : 1.0,
+                scale: _pressed ? 0.9 : 1.0,
                 duration: const Duration(milliseconds: 120),
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    SvgPicture.asset(
-                      widget.assetName,
-                      height: h,
-                      width:  w,
-                      fit:    BoxFit.contain,
-                      colorFilter: tint != null
-                          ? ColorFilter.mode(tint, BlendMode.srcIn)
-                          : null,
-                    ),
+                    // 👇 Obx makes it react to accent changes instantly
+                    Obx(() {
+                      final accentCtrl = AccentController.to;
+                      final accent     = accentCtrl.accent.value;
+                      final isDefault  = accentCtrl.isDefault;
+
+                      final Color tint;
+
+                      if (widget.tintColor != null) {
+                        // Explicit override provided (e.g. white or sActionButton)
+                        if (isDefault) {
+                          // On default accent → respect the hardcoded intention (white / sActionButton)
+                          tint = widget.tintColor!;
+                        } else {
+                          // Custom accent selected → use accent instead
+                          tint = accent;
+                        }
+                      } else {
+                        // No override → always use accent
+                        tint = accent;
+                      }
+
+                      return SvgPicture.asset(
+                        widget.assetName,
+                        height: h,
+                        width: w,
+                        fit: BoxFit.contain,
+                        colorFilter: ColorFilter.mode(tint, BlendMode.srcIn),
+                      );
+                    }),
                     if (widget.isNew)
                       Positioned(
-                        top:   -6,
-                        left:  5,
+                        top: -6,
+                        left: 5,
                         right: 5,
                         child: SvgPicture.asset(
                           newText,
-                          width:  widthSize(31.79),
+                          width: widthSize(31.79),
                           height: heightSize(12.5),
                         ),
                       ),
@@ -968,13 +991,14 @@ class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
               ),
               SizedBox(height: heightSize(5)),
               CText(
-                text:       widget.title,
-                size:       11.2,
+                text: widget.title,
+                size: 11.2,
                 fontWeight: FontWeight.w400,
                 fontFamily: CFONT.FAMILY,
-                textAlign:  TextAlign.center,
-                color:      widget.colorScheme.onSurface,
+                textAlign: TextAlign.center,
+                color: widget.colorScheme.onSurface,
               ),
+              SizedBox(height: heightSize(5)),
             ],
           ),
         ),

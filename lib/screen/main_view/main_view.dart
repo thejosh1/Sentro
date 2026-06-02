@@ -81,10 +81,10 @@ class _MainViewState extends State<MainView> {
 
   Widget _buildCenterAiButton() {
     return Transform.translate(
-      offset: const Offset(0, 8),
+      offset: const Offset(0, 4),
       child: SizedBox(
-        width: 53,
-        height: 53,
+        width: 47,
+        height: 47,
         child: FittedBox(
           fit: BoxFit.cover,
           child: Image.asset(aiIcon),
@@ -113,7 +113,7 @@ class _MainViewState extends State<MainView> {
         ),
 
         bottomNavigationBar: Container(
-          height: 84,
+          height: 78,
           padding: const EdgeInsets.only(
             top: 2,
             bottom: 0,
@@ -131,6 +131,8 @@ class _MainViewState extends State<MainView> {
             showUnselectedLabels: true,
             selectedItemColor: sLightGreen,
             unselectedItemColor: isDark?sDarkHintText:sLightHintText,
+            selectedFontSize: 12,
+            unselectedFontSize: 12,
             selectedLabelStyle: const TextStyle(
               fontSize: 12,
               fontFamily: CFONT.FAMILY,

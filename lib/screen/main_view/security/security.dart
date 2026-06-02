@@ -12,6 +12,7 @@ class Security extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Padding(
@@ -25,7 +26,7 @@ class Security extends StatelessWidget {
                 GestureDetector(
                   onTap: () => Get.back(),
                   child: SvgPicture.asset(
-                    arrowBackWhite,
+                    isDark ? arrowBackWhite : arrowBack,
                     width: widthSize(42),
                     height: heightSize(42),
                   ),
@@ -47,14 +48,14 @@ class Security extends StatelessWidget {
               size: 12,
               fontWeight: CFONT.wMedium,
               fontFamily: CFONT.FAMILY,
-              color: sGrey1,
+              color: isDark?sGrey1:sGrey2,
             ),
             SizedBox(height: heightSize(16),),
             Container(
               padding: EdgeInsets.symmetric(horizontal: widthSize(25), vertical: heightSize(25)),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: sDarkFill,
+                color: isDark?sDarkFill:sLightFill,
               ),
               child: Column(
                 children: [
@@ -64,7 +65,12 @@ class Security extends StatelessWidget {
                     },
                     child: Row(
                       children: [
-                        SvgPicture.asset(appLock, width: widthSize(38), height: heightSize(38),),
+                        SvgPicture.asset(
+                          appLock,
+                          width: widthSize(38),
+                          height: heightSize(38),
+                          colorFilter: isDark?null:ColorFilter.mode(sActionButton, BlendMode.srcIn),
+                        ),
                         SizedBox(width: widthSize(10),),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +93,12 @@ class Security extends StatelessWidget {
                           ],
                         ),
                         Spacer(),
-                        SvgPicture.asset(arrowForward, width: widthSize(7.57), height: heightSize(13.64),),
+                        SvgPicture.asset(
+                          arrowForward,
+                          width: widthSize(7.57),
+                          height: heightSize(13.64),
+                          colorFilter: isDark?null:ColorFilter.mode(sActionButton, BlendMode.srcIn),
+                        ),
                       ],
                     ),
                   ),
@@ -100,7 +111,12 @@ class Security extends StatelessWidget {
                     },
                     child: Row(
                       children: [
-                        SvgPicture.asset(pinChange, width: widthSize(38), height: heightSize(38),),
+                        SvgPicture.asset(
+                          pinChange,
+                          width: widthSize(38),
+                          height: heightSize(38),
+                          colorFilter: isDark?null:ColorFilter.mode(sActionButton, BlendMode.srcIn),
+                        ),
                         SizedBox(width: widthSize(10),),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +139,12 @@ class Security extends StatelessWidget {
                           ],
                         ),
                         Spacer(),
-                        SvgPicture.asset(arrowForward, width: widthSize(7.57), height: heightSize(13.64),),
+                        SvgPicture.asset(
+                          arrowForward,
+                          width: widthSize(7.57),
+                          height: heightSize(13.64),
+                          colorFilter: isDark?null:ColorFilter.mode(sActionButton, BlendMode.srcIn),
+                        ),
                       ],
                     ),
                   ),
@@ -136,7 +157,12 @@ class Security extends StatelessWidget {
                     },
                     child: Row(
                       children: [
-                        SvgPicture.asset(passwordChange, width: widthSize(38), height: heightSize(38),),
+                        SvgPicture.asset(
+                          passwordChange,
+                          width: widthSize(38),
+                          height: heightSize(38),
+                          colorFilter: isDark?null:ColorFilter.mode(sActionButton, BlendMode.srcIn),
+                        ),
                         SizedBox(width: widthSize(10),),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,7 +185,12 @@ class Security extends StatelessWidget {
                           ],
                         ),
                         Spacer(),
-                        SvgPicture.asset(arrowForward, width: widthSize(7.57), height: heightSize(13.64),),
+                        SvgPicture.asset(
+                          arrowForward,
+                          width: widthSize(7.57),
+                          height: heightSize(13.64),
+                          colorFilter: isDark?null:ColorFilter.mode(sActionButton, BlendMode.srcIn),
+                        ),
                       ],
                     ),
                   ),
@@ -172,7 +203,12 @@ class Security extends StatelessWidget {
                     },
                     child: Row(
                       children: [
-                        SvgPicture.asset(linkedDevices, width: widthSize(38), height: heightSize(38),),
+                        SvgPicture.asset(
+                          linkedDevices,
+                          width: widthSize(38),
+                          height: heightSize(38),
+                          colorFilter: isDark?null:ColorFilter.mode(sActionButton, BlendMode.srcIn),
+                        ),
                         SizedBox(width: widthSize(10),),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,7 +231,12 @@ class Security extends StatelessWidget {
                           ],
                         ),
                         Spacer(),
-                        SvgPicture.asset(arrowForward, width: widthSize(7.57), height: heightSize(13.64),),
+                        SvgPicture.asset(
+                          arrowForward,
+                          width: widthSize(7.57),
+                          height: heightSize(13.64),
+                          colorFilter: isDark?null:ColorFilter.mode(sActionButton, BlendMode.srcIn),
+                        ),
                       ],
                     ),
                   ),
@@ -208,7 +249,12 @@ class Security extends StatelessWidget {
                     },
                     child: Row(
                       children: [
-                        SvgPicture.asset(visibility, width: widthSize(38), height: heightSize(38),),
+                        SvgPicture.asset(
+                          visibility,
+                          width: widthSize(38),
+                          height: heightSize(38),
+                          colorFilter: isDark?null:ColorFilter.mode(sActionButton, BlendMode.srcIn),
+                        ),
                         SizedBox(width: widthSize(10),),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,7 +277,12 @@ class Security extends StatelessWidget {
                           ],
                         ),
                         Spacer(),
-                        SvgPicture.asset(arrowForward, width: widthSize(7.57), height: heightSize(13.64),),
+                        SvgPicture.asset(
+                          arrowForward,
+                          width: widthSize(7.57),
+                          height: heightSize(13.64),
+                          colorFilter: isDark?null:ColorFilter.mode(sActionButton, BlendMode.srcIn),
+                        ),
                       ],
                     ),
                   ),

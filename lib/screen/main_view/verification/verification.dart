@@ -18,6 +18,7 @@ class Verification extends StatefulWidget {
 class _VerificationState extends State<Verification> {
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Padding(
@@ -31,7 +32,7 @@ class _VerificationState extends State<Verification> {
                 GestureDetector(
                   onTap: () => Get.back(),
                   child: SvgPicture.asset(
-                    arrowBackWhite,
+                    isDark?arrowBackWhite:arrowBack,
                     width: widthSize(42),
                     height: heightSize(42),
                   ),
@@ -53,14 +54,14 @@ class _VerificationState extends State<Verification> {
               size: 12,
               fontWeight: CFONT.wMedium,
               fontFamily: CFONT.FAMILY,
-              color: sGrey1,
+              color: isDark?sGrey1:sGrey2,
             ),
             SizedBox(height: heightSize(16),),
             Container(
               padding: EdgeInsets.symmetric(horizontal: widthSize(25), vertical: heightSize(25)),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: sDarkFill,
+                color: isDark?sDarkFill:sLightFill,
               ),
               child: Column(
                 children: [

@@ -174,7 +174,7 @@ class _ChangePinState extends State<ChangePin>
                           Get.back();
                         },
                         child: SvgPicture.asset(
-                          arrowBackWhite,
+                          isDark?arrowBackWhite:arrowBack,
                           width: widthSize(42),
                           height: heightSize(42),
                         ),
@@ -253,6 +253,7 @@ class _ChangePinState extends State<ChangePin>
                         key: ValueKey(_step),
                         controller: _activeCtrl,
                         onTap: () => FocusScope.of(context).requestFocus(_focusNode),
+                        isDark: isDark,
                       ),
                     ),
                   ),
@@ -291,8 +292,9 @@ class _ChangePinState extends State<ChangePin>
 class _PinBoxes extends StatefulWidget {
   final TextEditingController controller;
   final VoidCallback onTap;
+  final bool isDark;
 
-  const _PinBoxes({super.key, required this.controller, required this.onTap});
+  const _PinBoxes({super.key, required this.controller, required this.onTap, required this.isDark});
 
   @override
   State<_PinBoxes> createState() => _PinBoxesState();
@@ -333,7 +335,7 @@ class _PinBoxesState extends State<_PinBoxes> {
               height: heightSize(58),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: isFilled ? sActionButton : sDarkFill,
+                color: isFilled ? sActionButton : widget.isDark?sDarkFill:sLightFill,
               ),
               child: Center(
                 child: AnimatedScale(

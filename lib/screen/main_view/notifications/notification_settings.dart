@@ -19,6 +19,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
   bool _isPush = false;
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Padding(
@@ -32,7 +33,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                 GestureDetector(
                   onTap: () => Get.back(),
                   child: SvgPicture.asset(
-                    arrowBackWhite,
+                    isDark?arrowBackWhite:arrowBack,
                     width: widthSize(42),
                     height: heightSize(42),
                   ),
@@ -61,7 +62,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
               padding: EdgeInsets.symmetric(horizontal: widthSize(25), vertical: heightSize(25)),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: sDarkFill,
+                color: isDark?sDarkFill:sLightFill,
               ),
               child: Column(
                 children: [
@@ -85,7 +86,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                               size: 12,
                               fontWeight: CFONT.wRegular,
                               fontFamily: CFONT.FAMILY,
-                              color: sAccountColor,
+                              color: isDark?sAccountColor:sGrey2,
                               height: 16.67/12,
                             ),
                           ],
@@ -150,7 +151,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                               size: 12,
                               fontWeight: CFONT.wRegular,
                               fontFamily: CFONT.FAMILY,
-                              color: sAccountColor,
+                              color: isDark?sAccountColor:sGrey2,
                               height: 16.67/12,
                             ),
                           ],
@@ -215,7 +216,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                               size: 12,
                               fontWeight: CFONT.wRegular,
                               fontFamily: CFONT.FAMILY,
-                              color: sAccountColor,
+                              color: isDark?sAccountColor:sGrey2,
                               height: 16.67/12,
                             ),
                           ],

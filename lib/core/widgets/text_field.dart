@@ -6,6 +6,7 @@ import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/constants/values.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/utils/text.dart';
 
 class AppTextField extends StatefulWidget {
@@ -71,6 +72,7 @@ class AppTextField extends StatefulWidget {
 class _AppTextFieldState extends State<AppTextField> {
   late bool _isObscured;
 
+
   @override
   void initState() {
     super.initState();
@@ -123,13 +125,20 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final accent = AccentController.to.accent.value;
+    final isDefaultAccent =
+        AccentController.options.first.value == accent.value;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final hintColor =
         widget.hintColor ?? (isDark ? sDarkHintText : sLightHintText);
     final textColor = Theme.of(context).colorScheme.onSurface;
     final iconColor = isDark ? sDarkHintText : sLightHintText;
-    final borderColor = isDark ? sDarkBorder : sLightBorder;
+    final baseBorderColor = isDark ? sDarkBorder : sLightBorder;
+
+    final borderColor = isDefaultAccent
+        ? baseBorderColor
+        : accent.withOpacity(0.4);
     final fillColor = isDark ? sDarkFill : Colors.transparent;
 
     // Vertical padding drives the field height on all platforms.
@@ -216,7 +225,9 @@ class _AppTextFieldState extends State<AppTextField> {
                 borderRadius:
                 BorderRadius.circular(Values().buttonRadius10),
                 borderSide: BorderSide(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: isDefaultAccent
+                      ? Theme.of(context).colorScheme.primary
+                      : accent,
                   width: 1.5,
                 ),
               ),
@@ -392,6 +403,11 @@ class AuthSearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textColor = Theme.of(context).colorScheme.onSurface;
+    final accent = AccentController.to.accent.value;
+    final isDefaultAccent =
+        AccentController.options.first.value == accent.value;
+
+    final baseBorder = borderColor ?? sDarkBorder;
 
     return Container(
       width: width ?? double.maxFinite,
@@ -403,7 +419,9 @@ class AuthSearchField extends StatelessWidget {
       decoration: BoxDecoration(
         color: color ?? Colors.transparent,
         borderRadius: BorderRadius.circular(borderRadius ?? 7.5), // ← use radius
-        border: Border.all(color: borderColor ?? sDarkBorder),
+        border: Border.all(
+          color: isDefaultAccent ? baseBorder : accent.withOpacity(0.4),
+        ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

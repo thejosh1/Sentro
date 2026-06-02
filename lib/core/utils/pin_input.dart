@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sentro/core/constants/colors.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/utils/text.dart';
 
 class PinputField extends StatefulWidget {
@@ -30,9 +31,14 @@ class _PinputFieldState extends State<PinputField> {
 
   @override
   Widget build(BuildContext context) {
+    final accent = AccentController.to.accent.value;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDefaultAccent =
+        AccentController.options.first.value == accent.value;
 
-    final borderColor    = isDark ? sDarkBorder : sLightBorder;
+    final borderColor = isDefaultAccent
+        ? (isDark ? sDarkBorder : sLightBorder)
+        : accent.withOpacity(0.4);
     final textColor      = Theme.of(context).colorScheme.onSurface;
     final focusedColor   = const Color(0xFF0F403B);   // sActionButton
     final submittedColor = const Color(0xFF0F403B);   // sActionButton

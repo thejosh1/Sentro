@@ -17,6 +17,7 @@ class _TermsState extends State<Terms> {
   bool isRecentSelected = false;
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
@@ -33,7 +34,7 @@ class _TermsState extends State<Terms> {
                 GestureDetector(
                   onTap: () => Get.back(),
                   child: SvgPicture.asset(
-                    arrowBackWhite,
+                    isDark?arrowBackWhite:arrowBack,
                     width: widthSize(42),
                     height: heightSize(42),
                   ),
@@ -52,7 +53,6 @@ class _TermsState extends State<Terms> {
             SizedBox(height: heightSize(28),),
             /// TAB SWITCHER
             Container(
-              width: widthSize(312),
               height: heightSize(62),
               padding: EdgeInsets.symmetric(
                 horizontal: widthSize(9.57),
@@ -147,7 +147,7 @@ class _TermsState extends State<Terms> {
             SizedBox(height: heightSize(33),),
             if (!isRecentSelected) ...[
               Container(
-                height: heightSize(692),
+                //height: heightSize(692),
                 width: double.maxFinite,
                 padding: EdgeInsets.only(
                   left: widthSize(25),
@@ -157,7 +157,7 @@ class _TermsState extends State<Terms> {
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: sDarkFill,
+                  color: isDark?sDarkFill:sLightFill,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +168,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-                      color: Colors.white,
                     ),
 
                     SizedBox(height: heightSize(24)),
@@ -179,8 +178,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-
-                      color: Colors.white,
                     ),
 
                     SizedBox(height: heightSize(24)),
@@ -191,8 +188,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-
-                      color: Colors.white,
                     ),
 
                     SizedBox(height: heightSize(24)),
@@ -203,7 +198,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-                      color: Colors.white,
                     ),
 
                     SizedBox(height: heightSize(24)),
@@ -214,7 +208,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-                      color: Colors.white,
                     ),
 
                     SizedBox(height: heightSize(24)),
@@ -225,7 +218,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-                      color: Colors.white,
                     ),
 
                     SizedBox(height: heightSize(24)),
@@ -236,7 +228,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-                      color: Colors.white,
                     ),
 
                     SizedBox(height: heightSize(24)),
@@ -247,14 +238,13 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-                      color: Colors.white,
                     ),
                   ],
                 ),
               ),
             ] else ...[
               Container(
-                height: heightSize(692),
+                //height: heightSize(692),
                 width: double.maxFinite,
                 padding: EdgeInsets.only(
                   left: widthSize(25),
@@ -264,12 +254,12 @@ class _TermsState extends State<Terms> {
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: sDarkFill,
+                  color: isDark?sDarkFill:sLightFill,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(child: SvgPicture.asset(logoWhite, width: widthSize(110.93), height: heightSize(26),)),
+                    Center(child: SvgPicture.asset(isDark?logoWhite:logoLight, width: widthSize(110.93), height: heightSize(26),)),
                     SizedBox(height: heightSize(22),),
                     CText(
                       text:
@@ -277,7 +267,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-                      color: Colors.white,
                     ),
 
                     SizedBox(height: heightSize(24)),
@@ -288,8 +277,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-
-                      color: Colors.white,
                     ),
 
                     SizedBox(height: heightSize(24)),
@@ -300,8 +287,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-
-                      color: Colors.white,
                     ),
 
                     SizedBox(height: heightSize(24)),
@@ -312,7 +297,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-                      color: Colors.white,
                     ),
 
                     SizedBox(height: heightSize(24)),
@@ -323,7 +307,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-                      color: Colors.white,
                     ),
 
                     SizedBox(height: heightSize(24)),
@@ -334,7 +317,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-                      color: Colors.white,
                     ),
 
                     SizedBox(height: heightSize(24)),
@@ -345,7 +327,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-                      color: Colors.white,
                     ),
 
                     SizedBox(height: heightSize(24)),
@@ -356,7 +337,6 @@ class _TermsState extends State<Terms> {
                       size: 11,
                       fontFamily: CFONT.FAMILY,
                       fontWeight: CFONT.wRegular,
-                      color: Colors.white,
                     ),
                   ],
                 ),

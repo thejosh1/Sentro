@@ -74,6 +74,7 @@ class _AccountStatementState extends State<AccountStatement> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -92,7 +93,7 @@ class _AccountStatementState extends State<AccountStatement> {
                       GestureDetector(
                         onTap: () => Get.back(),
                         child: SvgPicture.asset(
-                          arrowBackWhite,
+                          isDark?arrowBackWhite:arrowBack,
                           width: widthSize(42),
                           height: heightSize(42),
                         ),
@@ -116,7 +117,7 @@ class _AccountStatementState extends State<AccountStatement> {
                     size: 12,
                     fontWeight: CFONT.wMedium,
                     fontFamily: CFONT.FAMILY,
-                    color: sGrey1,
+                    color: isDark?sGrey1:sGrey2,
                   ),
 
                   SizedBox(height: heightSize(16)),
@@ -131,7 +132,7 @@ class _AccountStatementState extends State<AccountStatement> {
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: sDarkFill,
+                      color: isDark?sDarkFill:sLightFill,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,8 +146,10 @@ class _AccountStatementState extends State<AccountStatement> {
                                 value: _startDate.label,
                                 isOpen: _openDropdown == 'start',
                                 onTap: () => _toggle('start'),
+                                isDark: isDark,
                                 dropdown: _openDropdown == 'start'
                                     ? _MonthDropdown(
+                                  isDark: isDark,
                                   options: _monthOptions,
                                   selected: _startDate,
                                   disableAfter: _endDate,
@@ -165,8 +168,10 @@ class _AccountStatementState extends State<AccountStatement> {
                                 value: _endDate.label,
                                 isOpen: _openDropdown == 'end',
                                 onTap: () => _toggle('end'),
+                                isDark: isDark,
                                 dropdown: _openDropdown == 'end'
                                     ? _MonthDropdown(
+                                  isDark: isDark,
                                   options: _monthOptions,
                                   selected: _endDate,
                                   disableBefore: _startDate,
@@ -189,8 +194,10 @@ class _AccountStatementState extends State<AccountStatement> {
                           value: _format,
                           isOpen: _openDropdown == 'format',
                           onTap: () => _toggle('format'),
+                          isDark: isDark,
                           dropdown: _openDropdown == 'format'
                               ? _FormatDropdown(
+                            isDark: isDark,
                             formats: _formats,
                             selected: _format,
                             onSelect: (f) => setState(() {
@@ -391,12 +398,14 @@ class _DropdownBox extends StatelessWidget {
   final bool isOpen;
   final VoidCallback onTap;
   final Widget? dropdown;
+  final bool isDark;
 
   const _DropdownBox({
     required this.header,
     required this.value,
     required this.isOpen,
     required this.onTap,
+    required this.isDark,
     this.dropdown,
   });
 
@@ -425,7 +434,7 @@ class _DropdownBox extends StatelessWidget {
                 bottomLeft: Radius.circular(isOpen ? 0 : 10),
                 bottomRight: Radius.circular(isOpen ? 0 : 10),
               ),
-              color: sDarkFill,
+              color: isDark?sDarkFill:sLightFill,
               border: Border.all(
                 color: isOpen ? sNavContainer : sDarkBorder,
               ),
@@ -448,6 +457,7 @@ class _DropdownBox extends StatelessWidget {
                     arrowDown,
                     width: widthSize(20),
                     height: heightSize(20),
+                    colorFilter: isDark?null:ColorFilter.mode(sGrey2, BlendMode.srcIn),
                   ),
                 ),
               ],
@@ -468,11 +478,13 @@ class _MonthDropdown extends StatelessWidget {
   final _MonthYear? disableBefore;
   final _MonthYear? disableAfter;
   final ValueChanged<_MonthYear> onSelect;
+  final bool isDark;
 
   const _MonthDropdown({
     required this.options,
     required this.selected,
     required this.onSelect,
+    required this.isDark,
     this.disableBefore,
     this.disableAfter,
   });
@@ -486,7 +498,7 @@ class _MonthDropdown extends StatelessWidget {
           bottomLeft: Radius.circular(10),
           bottomRight: Radius.circular(10),
         ),
-        color: sDarkBorder,
+        color: isDark?sDarkBorder:sLightBorder,
         border: Border.all(color: sNavContainer),
       ),
       child: ClipRRect(
@@ -540,12 +552,14 @@ class _MonthDropdown extends StatelessWidget {
 class _FormatDropdown extends StatelessWidget {
   final List<String> formats;
   final String selected;
+  final bool isDark;
   final ValueChanged<String> onSelect;
 
   const _FormatDropdown({
     required this.formats,
     required this.selected,
     required this.onSelect,
+    required this.isDark,
   });
 
   @override
@@ -556,7 +570,7 @@ class _FormatDropdown extends StatelessWidget {
           bottomLeft: Radius.circular(10),
           bottomRight: Radius.circular(10),
         ),
-        color: sDarkBorder,
+        color: isDark?sDarkBorder:sLightBorder,
         border: Border.all(color: sNavContainer),
       ),
       child: ClipRRect(

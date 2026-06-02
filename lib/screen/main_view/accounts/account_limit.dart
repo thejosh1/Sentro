@@ -63,7 +63,7 @@ class _AccountLimitState extends State<AccountLimit> {
                       GestureDetector(
                         onTap: () => Get.back(),
                         child: SvgPicture.asset(
-                          arrowBackWhite,
+                          isDark?arrowBackWhite:arrowBack,
                           width: widthSize(42),
                           height: heightSize(42),
                         ),
@@ -92,7 +92,7 @@ class _AccountLimitState extends State<AccountLimit> {
                       size: 12,
                       fontWeight: CFONT.wMedium,
                       fontFamily: CFONT.FAMILY,
-                      color: sGrey1,
+                      color: isDark?sGrey1:sGrey2,
                     ),
                   ),
 
@@ -107,16 +107,15 @@ class _AccountLimitState extends State<AccountLimit> {
                       bottom: heightSize(22),
                     ),
                     decoration: BoxDecoration(
-                      borderRadius:
-                      BorderRadius.circular(10),
-                      color: sDarkFill,
+                      borderRadius: BorderRadius.circular(10),
+                      color: isDark?sDarkFill:sLightFill,
                     ),
                     child: Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         /// ACCOUNT DROPDOWN
                         _DropdownBox(
+                          isDark: isDark,
                           header: 'Account',
                           value: _account,
                           isOpen:
@@ -152,7 +151,6 @@ class _AccountLimitState extends State<AccountLimit> {
                             fontWeight:
                             CFONT.wRegular,
                           ),
-
                           controller: amountController,
 
                           inputType:
@@ -164,33 +162,25 @@ class _AccountLimitState extends State<AccountLimit> {
 
                           /// REDUCED LEFT PADDING
 
-                          suffixWidth: 112,
+                          suffixWidth: 124,
 
                           suffixWidget: Container(
                             height: heightSize(25.86),
-                            padding:
-                            EdgeInsets.symmetric(
-                              horizontal:
-                              widthSize(10),
-                              vertical:
-                              heightSize(5),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: widthSize(10),
+                              vertical: heightSize(5),
                             ),
                             decoration: BoxDecoration(
-                              borderRadius:
-                              BorderRadius.circular(
-                                  124.89),
-                              color: sContainerColor,
+                              borderRadius: BorderRadius.circular(124.89),
+                              color: isDark?sContainerColor:sLightFill,
                             ),
                             child: CText(
                               text: 'Min: N20,000',
                               size: 14,
-                              fontWeight:
-                              CFONT.wRegular,
-                              fontFamily:
-                              CFONT.FAMILY,
+                              fontWeight: CFONT.wRegular,
+                              fontFamily: CFONT.FAMILY,
                             ),
                           ),
-
                           error: '',
                           validFunction: (v) {
                             return null;
@@ -211,8 +201,7 @@ class _AccountLimitState extends State<AccountLimit> {
                     decoration: BoxDecoration(
                       borderRadius:
                       BorderRadius.circular(10),
-                      color: sSentroLightGreen
-                          .withOpacity(0.25),
+                      color: sSentroLightGreen.withOpacity(0.25),
                     ),
                     child: Row(
                       crossAxisAlignment:
@@ -220,9 +209,7 @@ class _AccountLimitState extends State<AccountLimit> {
                       children: [
                         Expanded(
                           child: Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment
-                                .start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               CText(
                                 text:
@@ -420,12 +407,14 @@ class _DropdownBox extends StatelessWidget {
   final bool isOpen;
   final VoidCallback onTap;
   final Widget? dropdown;
+  final bool isDark;
 
   const _DropdownBox({
     required this.header,
     required this.value,
     required this.isOpen,
     required this.onTap,
+    required this.isDark,
     this.dropdown,
   });
 
@@ -455,24 +444,16 @@ class _DropdownBox extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
-                topLeft:
-                const Radius.circular(10),
-                topRight:
-                const Radius.circular(10),
-                bottomLeft: Radius.circular(
-                    isOpen ? 0 : 10),
-                bottomRight: Radius.circular(
-                    isOpen ? 0 : 10),
+                topLeft: const Radius.circular(10),
+                topRight: const Radius.circular(10),
+                bottomLeft: Radius.circular(isOpen ? 0 : 10),
+                bottomRight: Radius.circular(isOpen ? 0 : 10),
               ),
-              color: sDarkFill,
-              border: Border.all(
-                color: sDarkBorder,
-              ),
+              color: isDark?sDarkFill:sLightFill,
+              border: Border.all(color: sDarkBorder,),
             ),
             child: Row(
-              mainAxisAlignment:
-              MainAxisAlignment
-                  .spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: CText(
@@ -487,14 +468,12 @@ class _DropdownBox extends StatelessWidget {
 
                 AnimatedRotation(
                   turns: isOpen ? 0.5 : 0,
-                  duration:
-                  const Duration(
-                    milliseconds: 200,
-                  ),
+                  duration: const Duration(milliseconds: 200,),
                   child: SvgPicture.asset(
                     arrowDown,
                     width: widthSize(20),
                     height: heightSize(20),
+                    colorFilter: isDark?null:ColorFilter.mode(sGrey2, BlendMode.srcIn),
                   ),
                 ),
               ],

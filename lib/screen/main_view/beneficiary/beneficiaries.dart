@@ -44,6 +44,7 @@ class _BeneficiariesState extends State<Beneficiaries> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
@@ -59,7 +60,7 @@ class _BeneficiariesState extends State<Beneficiaries> {
                 GestureDetector(
                   onTap: () => Get.back(),
                   child: SvgPicture.asset(
-                    arrowBackWhite,
+                    isDark?arrowBackWhite:arrowBack,
                     width: widthSize(42),
                     height: heightSize(42),
                   ),
@@ -83,7 +84,7 @@ class _BeneficiariesState extends State<Beneficiaries> {
               size: 12,
               fontWeight: CFONT.wMedium,
               fontFamily: CFONT.FAMILY,
-              color: sGrey1,
+              color: isDark?sGrey1:sGrey2,
             ),
 
             SizedBox(height: heightSize(16)),
@@ -93,7 +94,7 @@ class _BeneficiariesState extends State<Beneficiaries> {
               width: double.maxFinite,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: sDarkFill,
+                color: isDark?sDarkFill:sLightFill,
               ),
               child: Column(
                 children: [
@@ -105,8 +106,8 @@ class _BeneficiariesState extends State<Beneficiaries> {
                     ),
                     child: AuthSearchField(
                       height: heightSize(48),
-                      borderColor: sDarkBorder,
-                      color: sDarkFill,
+                      borderColor: isDark?sDarkBorder:sLightBorder,
+                      color: isDark?sDarkFill:sLightFill,
                       hint: 'Search Beneficiary',
                       inputType: TextInputType.text,
                       error: '',
