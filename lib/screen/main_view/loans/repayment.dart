@@ -95,7 +95,8 @@ class _RepaymentState extends State<Repayment> {
                   ),
                 ),
               ),
-              inputType: TextInputType.number,
+              inputType: const TextInputType.numberWithOptions(decimal: true), // Allowed decimals & commas smoothly
+              inputFormatters: [NairaInputFormatter()],
               error: '',
               validFunction: (_) => null,
             ),

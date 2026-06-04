@@ -6,10 +6,13 @@ import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/text.dart';
+import 'package:sentro/screen/global_pay/global_pay.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/home_page.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/transaction_history.dart';
+import 'package:sentro/screen/main_view/cards/cards_page.dart';
 import 'package:sentro/screen/main_view/controller/main_controller.dart';
 import 'package:sentro/screen/main_view/qr_pay/qr_pay.dart';
 
@@ -33,15 +36,15 @@ class _MainViewState extends State<MainView> {
   final _homeKey = GlobalKey();
   final _qrKey = GlobalKey();
   final _cardKey = GlobalKey();
-  final _historyKey = GlobalKey();
+  final _globalPayKey = GlobalKey();
 
   List<Widget> _buildPages() {
     return <Widget>[
       HomePage(key: _homeKey),
       QrPay(key: _qrKey, showBackButton: false),
       Container(),
-      Container(),
-      TransactionHistory(key: _historyKey, showBackButton: false,),
+      CardsPage(key: _cardKey),
+      GlobalPay(key: _globalPayKey,),
     ];
   }
 
@@ -65,6 +68,8 @@ class _MainViewState extends State<MainView> {
     required String icon,
     required bool selected,
     required bool isDark,
+    bool useAccent = false,
+    required Color accent,
     double width = 24,
     double height = 24,
   }) {
@@ -73,7 +78,9 @@ class _MainViewState extends State<MainView> {
       width: width,
       height: height,
       colorFilter: ColorFilter.mode(
-        selected ? sLightGreen : isDark?Colors.white.withOpacity(0.5):sDarkFill.withOpacity(0.5),
+        selected ? useAccent?accent:sLightGreen : isDark
+            ? Colors.white.withOpacity(0.5)
+            : sDarkFill.withOpacity(0.5),
         BlendMode.srcIn,
       ),
     );
@@ -93,13 +100,23 @@ class _MainViewState extends State<MainView> {
     );
   }
 
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = Theme
+        .of(context)
+        .brightness == Brightness.dark;
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme
+            .of(context)
+            .scaffoldBackgroundColor,
         extendBody: true,
 
         body: Stack(
@@ -119,77 +136,90 @@ class _MainViewState extends State<MainView> {
             bottom: 0,
           ),
           decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
+            color: Theme
+                .of(context)
+                .scaffoldBackgroundColor,
           ),
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            currentIndex: controller.selectedIndex.value,
-            onTap: _onItemTapped,
-            showSelectedLabels: true,
-            showUnselectedLabels: true,
-            selectedItemColor: sLightGreen,
-            unselectedItemColor: isDark?sDarkHintText:sLightHintText,
-            selectedFontSize: 12,
-            unselectedFontSize: 12,
-            selectedLabelStyle: const TextStyle(
-              fontSize: 12,
-              fontFamily: CFONT.FAMILY,
-              fontWeight: CFONT.wMedium,
-            ),
-            unselectedLabelStyle: const TextStyle(
-              fontSize: 12,
-              fontFamily: CFONT.FAMILY,
-              fontWeight: CFONT.wRegular,
-            ),
-            items: [
-              BottomNavigationBarItem(
-                icon: _navIcon(
-                  icon: home,
-                  isDark: isDark,
-                  selected: _selectedIndex == 0,
-                  width: 25.5,
-                  height: 25.5,
-                ),
-                label: 'Home',
+          child: Obx(() {
+            final accent = AccentController.to.accent.value;
+            final useAccent = !_isDefaultAccent(accent);
+            return BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              currentIndex: controller.selectedIndex.value,
+              onTap: _onItemTapped,
+              showSelectedLabels: true,
+              showUnselectedLabels: true,
+              selectedItemColor: useAccent?accent:sLightGreen,
+              unselectedItemColor: isDark ? sDarkHintText : sLightHintText,
+              selectedFontSize: 12,
+              unselectedFontSize: 12,
+              selectedLabelStyle: const TextStyle(
+                fontSize: 12,
+                fontFamily: CFONT.FAMILY,
+                fontWeight: CFONT.wMedium,
               ),
-              BottomNavigationBarItem(
-                icon: _navIcon(
-                  icon: qrPay,
-                  isDark: isDark,
-                  selected: _selectedIndex == 1,
-                  width: 24,
-                  height: 25.5,
-                ),
-                label: 'QR Pay',
+              unselectedLabelStyle: const TextStyle(
+                fontSize: 12,
+                fontFamily: CFONT.FAMILY,
+                fontWeight: CFONT.wRegular,
               ),
-              BottomNavigationBarItem(
-                icon: _buildCenterAiButton(),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: _navIcon(
-                  isDark: isDark,
-                  icon: card,
-                  selected: _selectedIndex == 3,
-                ),
-                label: 'Cards',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  history,
-                  width: 24,
-                  height: 24,
-                  colorFilter: ColorFilter.mode(
-                    _selectedIndex == 4 ? sLightGreen : isDark?Colors.white.withOpacity(0.5):sDarkFill,
-                    BlendMode.srcIn,
+              items: [
+                BottomNavigationBarItem(
+                  icon: _navIcon(
+                    useAccent: useAccent,
+                    icon: home,
+                    accent: accent,
+                    isDark: isDark,
+                    selected: _selectedIndex == 0,
+                    width: 25.5,
+                    height: 25.5,
                   ),
+                  label: 'Home',
                 ),
-                label: 'History',
-              ),
-            ],
-          ),
+                BottomNavigationBarItem(
+                  icon: _navIcon(
+                    useAccent: useAccent,
+                    accent: accent,
+                    icon: qrPay,
+                    isDark: isDark,
+                    selected: _selectedIndex == 1,
+                    width: 24,
+                    height: 25.5,
+                  ),
+                  label: 'QR Pay',
+                ),
+                BottomNavigationBarItem(
+                  icon: _buildCenterAiButton(),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: _navIcon(
+                    useAccent: useAccent,
+                    accent: accent,
+                    isDark: isDark,
+                    icon: card,
+                    selected: _selectedIndex == 3,
+                  ),
+                  label: 'Cards',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    global2,
+                    width: 24,
+                    height: 24,
+                    colorFilter: ColorFilter.mode(
+                      _selectedIndex == 4 ? useAccent?accent:sLightGreen : isDark ? Colors.white
+                          .withOpacity(0.5) : sDarkFill,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  label: 'Global Pay',
+                ),
+              ],
+            );
+          }),
         ),
       ),
     );

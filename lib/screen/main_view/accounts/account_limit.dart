@@ -152,9 +152,8 @@ class _AccountLimitState extends State<AccountLimit> {
                             CFONT.wRegular,
                           ),
                           controller: amountController,
-
-                          inputType:
-                          TextInputType.number,
+                          inputType: const TextInputType.numberWithOptions(decimal: true), // Allowed decimals & commas smoothly
+                          inputFormatters: [NairaInputFormatter()],
 
                           showNairaPrefix: true,
 

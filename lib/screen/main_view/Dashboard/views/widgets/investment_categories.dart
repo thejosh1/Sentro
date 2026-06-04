@@ -5,16 +5,26 @@ import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/constants/values.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/text.dart';
 
 class InvestmentCategories extends StatelessWidget {
   const InvestmentCategories({super.key});
 
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme
+        .of(context)
+        .brightness == Brightness.dark;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
 
     return Container(
       width: double.maxFinite,
@@ -68,17 +78,21 @@ class InvestmentCategories extends StatelessWidget {
                           : colorScheme.primary,
                     ),
                     SizedBox(width: widthSize(5)),
-                    SvgPicture.asset(
-                      addition,
-                      width: widthSize(24),
-                      height: heightSize(24),
-                      colorFilter: isDark
-                          ? null
-                          : ColorFilter.mode(
-                        colorScheme.primary,
-                        BlendMode.srcIn,
-                      ),
-                    ),
+                    Obx(() {
+                      final accent = AccentController.to.accent.value;
+                      final useAccent = !_isDefaultAccent(accent);
+                      return SvgPicture.asset(
+                        addition,
+                        width: widthSize(24),
+                        height: heightSize(24),
+                        colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):isDark
+                            ? null
+                            : ColorFilter.mode(
+                          colorScheme.primary,
+                          BlendMode.srcIn,
+                        ),
+                      );
+                    }),
                   ],
                 ),
               )
@@ -187,12 +201,21 @@ class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
   bool _pressed = false;
 
   void _onTapDown(_) => setState(() => _pressed = true);
+
   void _onTapUp(_) => setState(() => _pressed = false);
+
   void _onTapCancel() => setState(() => _pressed = false);
+
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = Theme
+        .of(context)
+        .brightness == Brightness.dark;
     return AnimatedScale(
       scale: _pressed ? 0.92 : 1.0,
       duration: const Duration(milliseconds: 120),
@@ -221,15 +244,24 @@ class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
                         duration: const Duration(milliseconds: 700),
                         curve: Curves.easeOut,
                         builder: (context, value, child) {
-                          return CustomPaint(
-                            painter: _RoundedRectProgressPainter(
-                              progress: value,
-                              activeColor: isDark?sNavContainer:sActionButton,
-                              inactiveColor: isDark?sNavContainer.withOpacity(0.4):sActionButton.withOpacity(0.4),
-                              strokeWidth: 3,
-                              radius: 16,
-                            ),
-                          );
+                          return Obx(() {
+                            final accent = AccentController.to.accent.value;
+                            final useAccent = !_isDefaultAccent(accent);
+                            return CustomPaint(
+                              painter: _RoundedRectProgressPainter(
+                                progress: value,
+                                activeColor: useAccent ? accent : isDark
+                                    ? sNavContainer
+                                    : sActionButton,
+                                inactiveColor: useAccent ? accent.withOpacity(
+                                    0.4) : isDark ? sNavContainer
+                                    .withOpacity(0.4) : sActionButton
+                                    .withOpacity(0.4),
+                                strokeWidth: 3,
+                                radius: 16,
+                              ),
+                            );
+                          });
                         },
                       ),
                     ),
@@ -299,9 +331,12 @@ class _RoundedRectProgressPainter extends CustomPainter {
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
 
-    final path = Path()..addRRect(rrect);
+    final path = Path()
+      ..addRRect(rrect);
 
-    final metric = path.computeMetrics().first;
+    final metric = path
+        .computeMetrics()
+        .first;
 
     final extractPath = metric.extractPath(
       0,

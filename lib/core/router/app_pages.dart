@@ -2,6 +2,8 @@
 import 'package:get/get.dart';
 import 'package:sentro/core/widgets/confirm_pin.dart';
 import 'package:sentro/core/widgets/confirm_transaction.dart';
+import 'package:sentro/screen/global_pay/account_summary.dart';
+import 'package:sentro/screen/global_pay/create_pay_account.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/academics.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/betting.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/cable_tv.dart';
@@ -11,6 +13,9 @@ import 'package:sentro/screen/main_view/Dashboard/views/transaction_history.dart
 import 'package:sentro/screen/main_view/accounts/account_limit.dart';
 import 'package:sentro/screen/main_view/accounts/account_statement.dart';
 import 'package:sentro/screen/main_view/beneficiary/beneficiaries.dart';
+import 'package:sentro/screen/main_view/cards/card_summary.dart';
+import 'package:sentro/screen/main_view/cards/transaction_action.dart';
+import 'package:sentro/screen/main_view/cards/virtual_card.dart';
 import 'package:sentro/screen/main_view/notifications/notification_settings.dart';
 import 'package:sentro/screen/main_view/profile/terms.dart';
 import 'package:sentro/screen/main_view/verification/upgrade_account.dart';
@@ -141,6 +146,15 @@ class AppPages {
 
   //notification
   static const notification = Routes.notification;
+
+  //cards
+  static const virtualCard = Routes.virtualCard;
+  static const cardSummary = Routes.cardSummary;
+  static const transactionAction = Routes.transactionAction;
+
+  //global pay
+  static const createPayAccount = Routes.createPayAccount;
+  static const accountSummary = Routes.accountSummary;
 
   //shared
   static const confirmPin = Routes.confirmPin;
@@ -386,6 +400,26 @@ class AppPages {
     GetPage(
       name: continuosLogin,
       page: () => const ContinuousLogin(),
+    ),
+    GetPage(
+      name: virtualCard,
+      page: () => const VirtualCard(),
+    ),
+    GetPage(
+      name: cardSummary,
+      page: () => const CardSummary(),
+    ),
+    GetPage(
+      name: transactionAction,
+      page: () => const TransactionAction(),
+    ),
+    GetPage(
+      name: createPayAccount,
+      page: () => const CreatePayAccount(),
+    ),
+    GetPage(
+      name: accountSummary,
+      page: () => const AccountSummary(),
     ),
   ];
 }

@@ -117,10 +117,12 @@ class ConfirmBvn extends StatelessWidget {
         ),
         child: Obx(() {
           final accent = AccentController.to.accent.value;
+          final useAccent = !_isDefaultAccent(accent);
           return ActionButton(
-            color: accent,
-            borderColor: accent,
+            color: useAccent?accent:null,
+            borderColor: useAccent?accent:null,
             text: "Continue",
+            textColor: sNavContainer,
             callback: () {
               FocusScope.of(context).unfocus();
               Get.toNamed(Routes.createPassword);

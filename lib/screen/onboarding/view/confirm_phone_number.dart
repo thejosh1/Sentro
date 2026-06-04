@@ -212,10 +212,11 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
         ),
         child: Obx(() {
           final accent = AccentController.to.accent.value;
+          final useAccent = !_isDefaultAccent(accent);
           return ActionButton(
             text: "Continue",
-            color: accent,
-            borderColor: accent,
+            color: useAccent?accent:null,
+            borderColor: useAccent?accent:null,
             textColor: sNavContainer,
             callback: () {
               FocusScope.of(context).unfocus();

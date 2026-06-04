@@ -97,6 +97,17 @@ final String kin = _getImagePath('images/svg/kin.svg');
 final String arrowLeft = _getImagePath('images/svg/arrow-left.svg');
 final String logoLight = _getImagePath('images/svg/logo-light.svg');
 final String unionLarge = _getImagePath('images/svg/Union.svg');
+final String logoCard = _getImagePath('images/svg/logo_card.svg');
+final String visa = _getImagePath('images/svg/Visa.svg');
+final String topUp = _getImagePath('images/svg/top-up.svg');
+final String freeze = _getImagePath('images/svg/freeze.svg');
+final String spendLimit = _getImagePath('images/svg/spend-limit.svg');
+final String terminate = _getImagePath('images/svg/terminate.svg');
+final String withdraw = _getImagePath('images/svg/withdraw.svg');
+final String freezeCard = _getImagePath('images/svg/pause.svg');
+final String slash = _getImagePath('images/svg/slash.svg');
+final String global2 = _getImagePath('images/svg/global2.svg');
+final String logoGlobalPay = _getImagePath('images/svg/logo_global_pay.svg');
 
 
 //icons
@@ -158,5 +169,21 @@ final String user3 = _getImagePath('images/png/user3.png');
 final String sentroTag = _getImagePath('images/png/sentro-tag.png');
 final String qrCode = _getImagePath('images/png/qrCode.png');
 final String getStarted = _getImagePath('images/png/splash_image.png');
+final String cardGoku = _getImagePath('images/png/Goku.png');
+final String cardIronMan = _getImagePath('images/png/Iron_Man.png');
+final String cardIronManClassic = _getImagePath('images/png/Iron_Man_Classic.png');
+final String cardJohnWick = _getImagePath('images/png/John_Wick.png');
+final String cardJohnWick2 = _getImagePath('images/png/John_wick2.png');
+final String cardWonderWoman = _getImagePath('images/png/Wonderwoman.png');
+final String cardSuperman = _getImagePath('images/png/Superman.png');
+final String cardCatWoman = _getImagePath('images/png/Catwoman.png');
+final String cardBatman = _getImagePath('images/png/Batman.png');
+final String cardFloral = _getImagePath('images/png/Floral.png');
+final String globe = _getImagePath('images/png/globe.png');
+final String america = _getImagePath('images/png/america.png');
+final String britain = _getImagePath('images/png/britain.png');
+final String euro = _getImagePath('images/png/euro.png');
+final String ghana = _getImagePath('images/png/ghana.png');
+final String rwanda = _getImagePath('images/png/rwanda.png');
 
 String _getImagePath(String imageName) => imageAssetRoot + imageName;

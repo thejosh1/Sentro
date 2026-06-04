@@ -200,11 +200,12 @@ class _CreatePasswordState extends State<CreatePassword> {
         ),
         child: Obx(() {
           final accent = AccentController.to.accent.value;
+          final useAccent = !_isDefaultAccent(accent);
           return ActionButton(
             text: "Continue",
             textColor: sNavContainer,
-            color: accent,
-            borderColor: accent,
+            color: useAccent?accent:null,
+            borderColor: useAccent?accent:null,
             callback: () {
               FocusScope.of(context).unfocus();
               Get.toNamed(Routes.chooseSentroTag);

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/constants/values.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/utils/text.dart';
 
 typedef KeyboardTapCallback = void Function(String text);
 
 class NumericKeyboard extends StatefulWidget {
   final bool showBiometric;
+
   /// Color of the text [default = Colors.black]
   final Color textColor;
 
@@ -30,16 +33,15 @@ class NumericKeyboard extends StatefulWidget {
   /// Main axis alignment [default = MainAxisAlignment.spaceEvenly]
   final MainAxisAlignment mainAxisAlignment;
 
-  const NumericKeyboard(
-      {super.key,
-        required this.onKeyboardTap,
-        this.textColor = Colors.black,
-        this.rightButtonFn,
-        this.rightIcon,
-        this.leftButtonFn,
-        this.leftIcon,
-        this.showBiometric = true,
-        this.mainAxisAlignment = MainAxisAlignment.spaceEvenly});
+  const NumericKeyboard({super.key,
+    required this.onKeyboardTap,
+    this.textColor = Colors.black,
+    this.rightButtonFn,
+    this.rightIcon,
+    this.leftButtonFn,
+    this.leftIcon,
+    this.showBiometric = true,
+    this.mainAxisAlignment = MainAxisAlignment.spaceEvenly});
 
   @override
   State<StatefulWidget> createState() {
@@ -48,10 +50,18 @@ class NumericKeyboard extends StatefulWidget {
 }
 
 class _NumericKeyboardState extends State<NumericKeyboard> {
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       padding: const EdgeInsets.only(left: 2, right: 2),
       alignment: Alignment.center,
       child: Column(
@@ -93,8 +103,19 @@ class _NumericKeyboardState extends State<NumericKeyboard> {
                   width: 50,
                   height: 50,
                   child: widget.showBiometric
-                      ? SvgPicture.asset(fingerScan)
-                      : const SizedBox.shrink(), // ← invisible but keeps spacing
+                      ? Obx(() {
+                    final accent = AccentController.to.accent.value;
+                    final useAccent = !_isDefaultAccent(accent);
+                    return SvgPicture.asset(
+                      fingerScan,
+                      colorFilter: useAccent?ColorFilter.mode(
+                        accent,
+                        BlendMode.srcIn,
+                      ):null,
+                    );
+                  })
+                      : const SizedBox
+                      .shrink(), // ← invisible but keeps spacing
                 ),
               ),
               _calcButton('0'),

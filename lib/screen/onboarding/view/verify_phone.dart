@@ -5,6 +5,7 @@ import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/constants/values.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/action_button.dart';
 import 'package:sentro/core/utils/text.dart';
@@ -21,12 +22,23 @@ class VerifyPhone extends StatefulWidget {
 class _VerifyPhoneState extends State<VerifyPhone> {
   TextEditingController ctrl = TextEditingController();
 
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme
+        .of(context)
+        .brightness == Brightness.dark;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
         child: Column(
@@ -36,25 +48,32 @@ class _VerifyPhoneState extends State<VerifyPhone> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                GestureDetector(
-                  onTap: () => Get.back(),
-                  child: SvgPicture.asset(
-                    isDark?arrowBackWhite:arrowBack,
-                    width: widthSize(42),
-                    height: heightSize(42),
-                  ),
-                ),
+                Obx(() {
+                  final accent = AccentController.to.accent.value;
+                  final useAccent = !_isDefaultAccent(accent);
+                  return GestureDetector(
+                    onTap: () => Get.back(),
+                    child: SvgPicture.asset(
+                      isDark ? arrowBackWhite : arrowBack,
+                      width: widthSize(42),
+                      height: heightSize(42),
+                      colorFilter: useAccent
+                          ? ColorFilter.mode(accent, BlendMode.srcIn)
+                          : null,
+                    ),
+                  );
+                }),
+                // SvgPicture.asset(
+                //   logoLight,
+                //   width: widthSize(116.39),
+                //   height: heightSize(28),
+                //   colorFilter: isDark ? ColorFilter.mode(
+                //     sNavContainer,
+                //     BlendMode.srcIn,
+                //   ) : null,
+                // ),
                 SvgPicture.asset(
-                  logoLight,
-                  width: widthSize(116.39),
-                  height: heightSize(28),
-                  colorFilter: isDark?ColorFilter.mode(
-                    sNavContainer,
-                    BlendMode.srcIn,
-                  ):null,
-                ),
-                SvgPicture.asset(
-                  isDark?headPhoneWhite:headPhone,
+                  isDark ? headPhoneWhite : headPhone,
                   width: widthSize(43.52),
                   height: heightSize(50),
                 )
@@ -74,7 +93,9 @@ class _VerifyPhoneState extends State<VerifyPhone> {
               size: 18,
               height: 1.5,
               fontFamily: CFONT.FAMILY,
-              color: Theme.of(context).brightness == Brightness.dark
+              color: Theme
+                  .of(context)
+                  .brightness == Brightness.dark
                   ? sDarkModeMutedText // dark mode muted text
                   : sLightModeMutedText,
             ),
@@ -90,8 +111,9 @@ class _VerifyPhoneState extends State<VerifyPhone> {
               prefixWidget: Container(
                 width: widthSize(56),
                 height: heightSize(28),
-               margin: EdgeInsets.only(left: widthSize(8),),
-                padding: EdgeInsets.symmetric(horizontal: widthSize(5), vertical: heightSize(4)),
+                margin: EdgeInsets.only(left: widthSize(8),),
+                padding: EdgeInsets.symmetric(
+                    horizontal: widthSize(5), vertical: heightSize(4)),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
                   color: sNavContainer,
@@ -146,10 +168,14 @@ class _VerifyPhoneState extends State<VerifyPhone> {
               inputType: TextInputType.phone,
               error: '',
               validFunction: (value) {
-                if (value == null || value.trim().isEmpty) {
+                if (value == null || value
+                    .trim()
+                    .isEmpty) {
                   return "Phone number cannot be empty";
                 }
-                return value.trim().length != 10
+                return value
+                    .trim()
+                    .length != 10
                     ? 'Enter 10 digits number'
                     : null;
               },
@@ -163,20 +189,26 @@ class _VerifyPhoneState extends State<VerifyPhone> {
           right: widthSize(25),
           bottom: heightSize(10),
         ),
-        child: ActionButton(
-          text: "Continue",
-          textColor: sNavContainer,
-          callback: () {
-            FocusScope.of(context).unfocus();
-            Get.toNamed(
-              Routes.confirmPhoneNumber,
-              arguments: {
-                "flow": "login",
-              },
-            );
-          },
-          load: false,
-        ),
+        child: Obx(() {
+          final accent = AccentController.to.accent.value;
+          final useAccent = !_isDefaultAccent(accent);
+          return ActionButton(
+            text: "Continue",
+            color: useAccent?accent:null,
+            borderColor: useAccent?accent:null,
+            textColor: sNavContainer,
+            callback: () {
+              FocusScope.of(context).unfocus();
+              Get.toNamed(
+                Routes.confirmPhoneNumber,
+                arguments: {
+                  "flow": "login",
+                },
+              );
+            },
+            load: false,
+          );
+        }),
       ),
     );
   }

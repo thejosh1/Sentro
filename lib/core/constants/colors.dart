@@ -59,3 +59,4 @@ const sAccentPink = Color(0xFFFF00B7);
 const sAccentPurple = Color(0xFFAC0ABA);
 const sAccentAmber = Color(0xFFFF9000);
 const sLightFill = Color(0xFFEEEEEE);
+const sAccentOrange = Color(0xFFFF8D28);

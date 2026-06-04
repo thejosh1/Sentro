@@ -85,4 +85,13 @@ abstract class Routes {
 
   //widgets
   static const confirmTransaction = '/confirm-transaction';
+
+  //cards
+  static const virtualCard = '/virtual-card';
+  static const cardSummary = '/card-summary';
+  static const transactionAction = '/transaction-action';
+
+  //global pay
+  static const createPayAccount = '/create-pay-account';
+  static const accountSummary = '/account-summary';
 }

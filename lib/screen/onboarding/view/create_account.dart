@@ -21,6 +21,11 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   TextEditingController bvnController = TextEditingController();
 
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme
@@ -158,10 +163,11 @@ class _CreateAccountState extends State<CreateAccount> {
         ),
         child: Obx(() {
           final accent = AccentController.to.accent.value;
+          final useAccent = !_isDefaultAccent(accent);
           return ActionButton(
             text: "Continue",
-            color: accent,
-            borderColor: accent,
+            color: useAccent?accent:null,
+            borderColor: useAccent?accent:null,
             textColor: sNavContainer,
             callback: () {
               Get.toNamed(

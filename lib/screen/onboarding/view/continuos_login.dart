@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/text.dart';
 import 'package:sentro/core/widgets/keyboard_pin.dart';
@@ -49,9 +49,9 @@ class _ContinuousLoginState extends State<ContinuousLogin>
     _shakeAnim = TweenSequence<double>([
       TweenSequenceItem(tween: Tween(begin: 0, end: -12), weight: 1),
       TweenSequenceItem(tween: Tween(begin: -12, end: 12), weight: 2),
-      TweenSequenceItem(tween: Tween(begin: 12, end: -8),  weight: 2),
-      TweenSequenceItem(tween: Tween(begin: -8, end: 8),   weight: 2),
-      TweenSequenceItem(tween: Tween(begin: 8, end: 0),    weight: 1),
+      TweenSequenceItem(tween: Tween(begin: 12, end: -8), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: -8, end: 8), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: 8, end: 0), weight: 1),
     ]).animate(CurvedAnimation(parent: _shakeCtrl, curve: Curves.easeInOut));
   }
 
@@ -64,20 +64,28 @@ class _ContinuousLoginState extends State<ContinuousLogin>
   // ── Input logic ────────────────────────────────────────────────────────────
 
 
-
-
   void _onBiometric() {
     // Trigger biometric auth here
+  }
+
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
   }
 
   // ── Build ──────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
       body: Stack(
         children: [
           // ── Background web pattern ──────────────────────
@@ -134,7 +142,10 @@ class _ContinuousLoginState extends State<ContinuousLogin>
                   size: 20,
                   fontFamily: CFONT.SEMIBOLD,
                   fontWeight: CFONT.wBold,
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: Theme
+                      .of(context)
+                      .colorScheme
+                      .onSurface,
                 ),
 
                 SizedBox(height: heightSize(4)),
@@ -144,7 +155,11 @@ class _ContinuousLoginState extends State<ContinuousLogin>
                   size: 14,
                   fontFamily: CFONT.FAMILY,
                   fontWeight: CFONT.wRegular,
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                  color: Theme
+                      .of(context)
+                      .colorScheme
+                      .onSurface
+                      .withOpacity(0.5),
                 ),
 
                 SizedBox(height: heightSize(24)),
@@ -152,10 +167,11 @@ class _ContinuousLoginState extends State<ContinuousLogin>
                 // ── PIN dots ──────────────────────────────
                 AnimatedBuilder(
                   animation: _shakeAnim,
-                  builder: (context, child) => Transform.translate(
-                    offset: Offset(_shakeAnim.value, 0),
-                    child: child,
-                  ),
+                  builder: (context, child) =>
+                      Transform.translate(
+                        offset: Offset(_shakeAnim.value, 0),
+                        child: child,
+                      ),
                   child: _PinDots(
                     entered: _entered.length,
                     total: _pinLength,
@@ -190,36 +206,44 @@ class _PinDots extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: heightSize(52),
-      padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: sNavContainer,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(_pinLength, (i) {
-          final isFilled = i < entered;
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              curve: Curves.easeOutBack,
-              width: isFilled ? widthSize(18) : widthSize(14),
-              height: isFilled ? heightSize(18) : heightSize(14),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isFilled
-                    ? sActiveColor
-                    : Colors.white.withOpacity(0.4),
+    bool _isDefaultAccent(Color c) {
+      final defaultAccent = AccentController.options.first;
+      return c.value == defaultAccent.value;
+    }
+    return Obx(() {
+      final accent = AccentController.to.accent.value;
+      final useAccent = !_isDefaultAccent(accent);
+      return Container(
+        height: heightSize(52),
+        padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: useAccent?accent:sNavContainer,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(_pinLength, (i) {
+            final isFilled = i < entered;
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                curve: Curves.easeOutBack,
+                width: isFilled ? widthSize(18) : widthSize(14),
+                height: isFilled ? heightSize(18) : heightSize(14),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isFilled
+                      ? sActiveColor
+                      : Colors.white.withOpacity(0.4),
+                ),
               ),
-            ),
-          );
-        }),
-      ),
-    );
+            );
+          }),
+        ),
+      );
+    });
   }
 
   int get _pinLength => total;

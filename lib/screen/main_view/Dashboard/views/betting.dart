@@ -9,6 +9,7 @@ import 'package:sentro/core/models/disco.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/action_button.dart';
 import 'package:sentro/core/utils/text.dart';
+import 'package:sentro/core/widgets/balance_pill.dart';
 import 'package:sentro/core/widgets/text_field.dart';
 
 class Betting extends StatefulWidget {
@@ -59,88 +60,7 @@ class _BettingState extends State<Betting> {
                     height: heightSize(42),
                   ),
                 ),
-                Container(
-                  height: heightSize(34.18),
-                  padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(113.27),
-                    color: isDark ? sButtonFillDark
-                        : sLightFill,
-                    border: Border.all(color: isDark ? sDarkBorder
-                        : sLightFill),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        wallet,
-                        width:  widthSize(18),
-                        height: heightSize(18),
-                        colorFilter: ColorFilter.mode(
-                          isDark ? sNavContainer : sActionButton,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      SizedBox(width: widthSize(4)),
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 200),
-                        child: _obscured
-                            ? Text(
-                          '••••••',
-                          key: const ValueKey('hidden'),
-                          style: TextStyle(
-                            fontSize: fontSize(13),
-                            fontFamily: CFONT.FAMILY,
-                            fontWeight: CFONT.wRegular,
-                            color: isDark? Colors.white
-                                : sActionButton,
-                            letterSpacing: 2,
-                          ),
-                        )
-                            : RichText(
-                          key: const ValueKey('shown'),
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: '₦50,000',
-                                style: TextStyle(
-                                  inherit: false, // break font inheritance → ₦ renders
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
-                                  color: isDark? Colors.white
-                                      : sActionButton,
-                                ),
-                              ),
-                              TextSpan(
-                                text: '.00',
-                                style: TextStyle(
-                                  fontSize: 9,
-                                  fontWeight: CFONT.wRegular,
-                                  fontFamily: CFONT.FAMILY,
-                                  color: isDark? Colors.white
-                                      : sActionButton,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: widthSize(4)),
-                      GestureDetector(
-                        onTap: () => setState(() => _obscured = !_obscured),
-                        child: SvgPicture.asset(
-                          _obscured ? visibilityOff : hide,
-                          width: widthSize(18),
-                          height: heightSize(18),
-                          colorFilter: ColorFilter.mode(
-                            isDark ? Colors.white54 : Colors.black45,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
+                BalancePill(isDark: isDark),
               ],
             ),
 
@@ -381,7 +301,8 @@ class _BettingState extends State<Betting> {
               height: heightSize(55),
               hint: '0.00',
               controller: amountController,
-              inputType: TextInputType.number,
+              inputType: const TextInputType.numberWithOptions(decimal: true), // Allowed decimals & commas smoothly
+              inputFormatters: [NairaInputFormatter()],
               error: '',
               suffixWidth: 102,
               suffixWidget: Container(

@@ -159,13 +159,16 @@ class _VerificationState extends State<Verification> {
                               fontWeight: CFONT.wMedium,
                               height: 16.67/14,
                             ),
-                            CText(
-                              text: 'Verify home address as a proof of residency',
-                              size: 12,
-                              fontWeight: CFONT.wRegular,
-                              fontFamily: CFONT.FAMILY,
-                              color: sAccountColor,
-                              height: 16.67/12,
+                            SizedBox(
+                              width: widthSize(230),
+                              child: CText(
+                                text: 'Verify home address as a proof of residency',
+                                size: 12,
+                                fontWeight: CFONT.wRegular,
+                                fontFamily: CFONT.FAMILY,
+                                color: sAccountColor,
+                                height: 16.67/12,
+                              ),
                             ),
                           ],
                         ),
@@ -237,6 +240,9 @@ class _VerificationState extends State<Verification> {
                     text: 'Complete Verification',
                     textColor: sActionButton,
                     color: sNavContainer,
+                    callback: () {
+                      Get.toNamed(Routes.createPayAccount);
+                    },
                   ),
                 ],
               ),

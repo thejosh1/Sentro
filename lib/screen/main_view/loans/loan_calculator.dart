@@ -54,9 +54,10 @@ class _LoanCalculatorState extends State<LoanCalculator> {
               showNairaPrefix: true,
               hasBottomMargin: false,
               height: heightSize(55),
-              hint: '₦0.00',
+              hint: '0.00',
               controller: amountController,
-              inputType: TextInputType.number,
+              inputType: const TextInputType.numberWithOptions(decimal: true), // Allowed decimals & commas smoothly
+              inputFormatters: [NairaInputFormatter()],
               error: '',
               validFunction: (_) => null,
             ),

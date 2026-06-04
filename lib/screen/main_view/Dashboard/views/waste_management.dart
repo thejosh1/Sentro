@@ -334,7 +334,8 @@ class _WasteManagementState extends State<WasteManagement> {
               height: heightSize(55),
               hint: '₦0.00',
               controller: amountController,
-              inputType: TextInputType.number,
+              inputType: const TextInputType.numberWithOptions(decimal: true), // Allowed decimals & commas smoothly
+              inputFormatters: [NairaInputFormatter()],
               error: '',
               validFunction: (value) {
                 if (value == null || value

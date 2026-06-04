@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/models/savings_field.dart';
 import 'package:sentro/core/models/savings_type.dart';
 import 'package:sentro/core/router/app_pages.dart';
@@ -20,6 +21,11 @@ class _StartSavingState extends State<StartSaving> {
   @override
   void initState() {
     super.initState();
+  }
+
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
   }
 
   // ── Shared card sections ───────────────────────────────────────────────
@@ -62,21 +68,22 @@ class _StartSavingState extends State<StartSaving> {
     );
   }
 
-  Widget _cardFooter(SavingsOption option) {
+  Widget _cardFooter(SavingsOption option, bool useAccent, Color? accent) {
     return GestureDetector(
-      onTap: () => Get.toNamed(
-        Routes.savingsType,
-        arguments: {
-          "selected": option,
-          "all": savingsOptions,
-        },
-      ),
+      onTap: () =>
+          Get.toNamed(
+            Routes.savingsType,
+            arguments: {
+              "selected": option,
+              "all": savingsOptions,
+            },
+          ),
       child: Container(
         width: double.maxFinite,
         height: heightSize(38),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: sSentroLightGreen,
+          color: useAccent?accent:sSentroLightGreen,
         ),
         child: Center(
           child: CText(
@@ -114,14 +121,23 @@ class _StartSavingState extends State<StartSaving> {
       interestColor: sNavContainer,
       buttonLabel: 'Start Saving',
       fields: [
-        SavingsField(label: 'Goal Name', type: SavingsFieldType.text, hint: 'e.g. New Car Money'),
-        SavingsField(label: 'Target Goal Amount (N)', type: SavingsFieldType.amount, hint: '0.00'),
-        SavingsField(label: 'Target Date', type: SavingsFieldType.date, hint: 'dd/mm/yyyy',),
-        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%', dropdownItems: [
-          'Monthly / 0.833%',
-          'Quarterly / 2.5%',
-          'Annually / 10%',
-        ]),
+        SavingsField(label: 'Goal Name',
+            type: SavingsFieldType.text,
+            hint: 'e.g. New Car Money'),
+        SavingsField(label: 'Target Goal Amount (N)',
+            type: SavingsFieldType.amount,
+            hint: '0.00'),
+        SavingsField(label: 'Target Date',
+          type: SavingsFieldType.date,
+          hint: 'dd/mm/yyyy',),
+        SavingsField(label: 'Interest Payout Frequency',
+            type: SavingsFieldType.dropdown,
+            hint: 'Monthly / 0.833%',
+            dropdownItems: [
+              'Monthly / 0.833%',
+              'Quarterly / 2.5%',
+              'Annually / 10%',
+            ]),
         SavingsField(
           label: 'Rollover',
           type: SavingsFieldType.info,
@@ -129,7 +145,9 @@ class _StartSavingState extends State<StartSaving> {
           description:
           'Earnings will be paid into your main balance but capital will automatically roll into the next savings cycle.',
         ),
-        SavingsField(label: 'Enable Auto-Save contribution', type: SavingsFieldType.info, description: 'Automatically fund this goal on a schedule from your Business Capital.'),
+        SavingsField(label: 'Enable Auto-Save contribution',
+            type: SavingsFieldType.info,
+            description: 'Automatically fund this goal on a schedule from your Business Capital.'),
         SavingsField(
           type: SavingsFieldType.card,
           label: 'Interest Preview',
@@ -186,13 +204,20 @@ class _StartSavingState extends State<StartSaving> {
       interestColor: sPurple,
       buttonLabel: 'Invest in T-Bills',
       fields: [
-        SavingsField(label: 'Goal Name', type: SavingsFieldType.text, hint: 'e.g. New Car Money'),
-        SavingsField(label: 'Investment Amount (N)', type: SavingsFieldType.amount, hint: '0.00'),
-        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%', dropdownItems: [
-          'Monthly / 0.833%',
-          'Quarterly / 2.5%',
-          'Annually / 10%',
-        ]),
+        SavingsField(label: 'Goal Name',
+            type: SavingsFieldType.text,
+            hint: 'e.g. New Car Money'),
+        SavingsField(label: 'Investment Amount (N)',
+            type: SavingsFieldType.amount,
+            hint: '0.00'),
+        SavingsField(label: 'Interest Payout Frequency',
+            type: SavingsFieldType.dropdown,
+            hint: 'Monthly / 0.833%',
+            dropdownItems: [
+              'Monthly / 0.833%',
+              'Quarterly / 2.5%',
+              'Annually / 10%',
+            ]),
         SavingsField(
           label: 'Rollover',
           type: SavingsFieldType.info,
@@ -256,13 +281,20 @@ class _StartSavingState extends State<StartSaving> {
       interestColor: sLightPink,
       buttonLabel: 'Invest in Funds',
       fields: [
-        SavingsField(label: 'Goal Name', type: SavingsFieldType.text, hint: 'e.g. New Car Money'),
-        SavingsField(label: 'Investment Amount', type: SavingsFieldType.amount, hint: '0.00'),
-        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%', dropdownItems: [
-          'Monthly / 0.833%',
-          'Quarterly / 2.5%',
-          'Annually / 10%',
-        ]),
+        SavingsField(label: 'Goal Name',
+            type: SavingsFieldType.text,
+            hint: 'e.g. New Car Money'),
+        SavingsField(label: 'Investment Amount',
+            type: SavingsFieldType.amount,
+            hint: '0.00'),
+        SavingsField(label: 'Interest Payout Frequency',
+            type: SavingsFieldType.dropdown,
+            hint: 'Monthly / 0.833%',
+            dropdownItems: [
+              'Monthly / 0.833%',
+              'Quarterly / 2.5%',
+              'Annually / 10%',
+            ]),
         SavingsField(
           label: 'Rollover',
           type: SavingsFieldType.info,
@@ -270,7 +302,9 @@ class _StartSavingState extends State<StartSaving> {
           description:
           'Earnings will be paid into your main balance but capital will automatically roll into the next savings cycle.',
         ),
-        SavingsField(label: 'Enable Auto-Save contribution', type: SavingsFieldType.info, description: 'Automatically fund this goal on a schedule from your Business Capital.'),
+        SavingsField(label: 'Enable Auto-Save contribution',
+            type: SavingsFieldType.info,
+            description: 'Automatically fund this goal on a schedule from your Business Capital.'),
         SavingsField(
           type: SavingsFieldType.card,
           label: 'Interest Preview',
@@ -327,18 +361,27 @@ class _StartSavingState extends State<StartSaving> {
       interestColor: sNavContainer,
       buttonLabel: 'Open Dollar Vault',
       fields: [
-        SavingsField(label: 'Goal Name', type: SavingsFieldType.text, hint: 'e.g. New Car Money'),
-        SavingsField(label: 'Amount (USD)', type: SavingsFieldType.amount, hint: '0.00'),
-        SavingsField(label: 'Duration', type: SavingsFieldType.dropdown, hint: '3 Months', dropdownItems: [
-          '6 Months',
-          '12 Months',
-          '24 Months',
-        ]),
-        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%', dropdownItems: [
-          'Monthly / 0.833%',
-          'Quarterly / 2.5%',
-          'Annually / 10%',
-        ]),
+        SavingsField(label: 'Goal Name',
+            type: SavingsFieldType.text,
+            hint: 'e.g. New Car Money'),
+        SavingsField(
+            label: 'Amount (USD)', type: SavingsFieldType.amount, hint: '0.00'),
+        SavingsField(label: 'Duration',
+            type: SavingsFieldType.dropdown,
+            hint: '3 Months',
+            dropdownItems: [
+              '6 Months',
+              '12 Months',
+              '24 Months',
+            ]),
+        SavingsField(label: 'Interest Payout Frequency',
+            type: SavingsFieldType.dropdown,
+            hint: 'Monthly / 0.833%',
+            dropdownItems: [
+              'Monthly / 0.833%',
+              'Quarterly / 2.5%',
+              'Annually / 10%',
+            ]),
         SavingsField(
           label: 'Rollover',
           type: SavingsFieldType.info,
@@ -346,7 +389,9 @@ class _StartSavingState extends State<StartSaving> {
           description:
           'Earnings will be paid into your main balance but capital will automatically roll into the next savings cycle.',
         ),
-        SavingsField(label: 'Enable Auto-Save contribution', type: SavingsFieldType.info, description: 'Automatically fund this goal on a schedule from your Business Capital.'),
+        SavingsField(label: 'Enable Auto-Save contribution',
+            type: SavingsFieldType.info,
+            description: 'Automatically fund this goal on a schedule from your Business Capital.'),
         SavingsField(
           type: SavingsFieldType.card,
           label: 'Interest Preview',
@@ -403,9 +448,22 @@ class _StartSavingState extends State<StartSaving> {
       interestColor: sLightBlue,
       buttonLabel: 'Open Dollar Vault',
       fields: [
-        SavingsField(label: 'Goal Name', type: SavingsFieldType.text, hint: 'e.g. New Car Money'),
-        SavingsField(label: 'Tenor', type: SavingsFieldType.dropdown, hint: '180 days - 16.5% p.a', dropdownItems: ['30 days', '60 days', '90 days', '180 days', '365 days']),
-        SavingsField(label: 'Target Goal Amount(N)', type: SavingsFieldType.amount, hint: '0.00'),
+        SavingsField(label: 'Goal Name',
+            type: SavingsFieldType.text,
+            hint: 'e.g. New Car Money'),
+        SavingsField(label: 'Tenor',
+            type: SavingsFieldType.dropdown,
+            hint: '180 days - 16.5% p.a',
+            dropdownItems: [
+              '30 days',
+              '60 days',
+              '90 days',
+              '180 days',
+              '365 days'
+            ]),
+        SavingsField(label: 'Target Goal Amount(N)',
+            type: SavingsFieldType.amount,
+            hint: '0.00'),
         SavingsField(
           label: 'Rollover',
           type: SavingsFieldType.info,
@@ -413,7 +471,9 @@ class _StartSavingState extends State<StartSaving> {
           description:
           'Earnings will be paid into your main balance but capital will automatically roll into the next savings cycle.',
         ),
-        SavingsField(label: 'Enable Auto-Save contribution', type: SavingsFieldType.info, description: 'Automatically fund this goal on a schedule from your Business Capital.'),
+        SavingsField(label: 'Enable Auto-Save contribution',
+            type: SavingsFieldType.info,
+            description: 'Automatically fund this goal on a schedule from your Business Capital.'),
         SavingsField(
           type: SavingsFieldType.card,
           label: 'Interest Preview',
@@ -469,14 +529,23 @@ class _StartSavingState extends State<StartSaving> {
       interestColor: sAmber,
       buttonLabel: 'Open Flexible Vault',
       fields: [
-        SavingsField(label: 'Goal Name', type: SavingsFieldType.text, hint: 'e.g. New Car Money'),
-        SavingsField(label: 'Target Goal Amount (N)', type: SavingsFieldType.amount, hint: '0.00'),
-        SavingsField(label: 'Target Date', type: SavingsFieldType.date, hint: 'dd/mm/yyyy',),
-        SavingsField(label: 'Interest Payout Frequency', type: SavingsFieldType.dropdown, hint: 'Monthly / 0.833%', dropdownItems: [
-          'Monthly / 0.833%',
-          'Quarterly / 2.5%',
-          'Annually / 10%',
-        ]),
+        SavingsField(label: 'Goal Name',
+            type: SavingsFieldType.text,
+            hint: 'e.g. New Car Money'),
+        SavingsField(label: 'Target Goal Amount (N)',
+            type: SavingsFieldType.amount,
+            hint: '0.00'),
+        SavingsField(label: 'Target Date',
+          type: SavingsFieldType.date,
+          hint: 'dd/mm/yyyy',),
+        SavingsField(label: 'Interest Payout Frequency',
+            type: SavingsFieldType.dropdown,
+            hint: 'Monthly / 0.833%',
+            dropdownItems: [
+              'Monthly / 0.833%',
+              'Quarterly / 2.5%',
+              'Annually / 10%',
+            ]),
         SavingsField(
           label: 'Rollover',
           type: SavingsFieldType.info,
@@ -484,7 +553,9 @@ class _StartSavingState extends State<StartSaving> {
           description:
           'Earnings will be paid into your main balance but capital will automatically roll into the next savings cycle.',
         ),
-        SavingsField(label: 'Enable Auto-Save contribution', type: SavingsFieldType.info, description: 'Automatically fund this goal on a schedule from your Business Capital.'),
+        SavingsField(label: 'Enable Auto-Save contribution',
+            type: SavingsFieldType.info,
+            description: 'Automatically fund this goal on a schedule from your Business Capital.'),
         SavingsField(
           type: SavingsFieldType.card,
           label: 'Interest Preview',
@@ -521,7 +592,7 @@ class _StartSavingState extends State<StartSaving> {
   ];
 
 
-  Widget _cardShell({required SavingsOption option, required bool isDark}) {
+  Widget _cardShell({required SavingsOption option, required bool isDark, bool? useAccent, Color? accent }) {
     final hasInterest =
         option.interest != null && option.interest!.trim().isNotEmpty;
 
@@ -536,7 +607,7 @@ class _StartSavingState extends State<StartSaving> {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.72),
-        color: isDark?sSavingsColor:sLightFill,
+        color: isDark ? sSavingsColor : sLightFill,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -553,18 +624,20 @@ class _StartSavingState extends State<StartSaving> {
             size: 12,
             fontFamily: CFONT.FAMILY,
             fontWeight: CFONT.wRegular,
-            color: isDark?sGrey1:sGrey2,
+            color: isDark ? sGrey1 : sGrey2,
           ),
           SizedBox(height: heightSize(18)),
           // ✅ SAFE RENDER
           if (items.isNotEmpty)
             Container(
               width: widthSize(double.maxFinite),
-              padding: EdgeInsets.only(bottom: heightSize(10), top: heightSize(9), left: widthSize(12),),
+              padding: EdgeInsets.only(bottom: heightSize(10),
+                top: heightSize(9),
+                left: widthSize(12),),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 color: Colors.transparent,
-                border: Border.all(color: isDark?sDarkBorder:sGrey1),
+                border: Border.all(color: isDark ? sDarkBorder : sGrey1),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -595,7 +668,8 @@ class _StartSavingState extends State<StartSaving> {
                               ),
                               if (item.showIcon)
                                 Padding(
-                                  padding: EdgeInsets.only(left: widthSize(2.5)),
+                                  padding: EdgeInsets.only(
+                                      left: widthSize(2.5)),
                                   child: SvgPicture.asset(
                                     tick,
                                     width: widthSize(12),
@@ -612,7 +686,7 @@ class _StartSavingState extends State<StartSaving> {
               ),
             ),
           SizedBox(height: heightSize(22)),
-          _cardFooter(option),
+          _cardFooter(option, useAccent??false, accent),
         ],
       ),
     );
@@ -620,63 +694,78 @@ class _StartSavingState extends State<StartSaving> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = Theme
+        .of(context)
+        .brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
-        child: Column(
-          children: [
-            SizedBox(height: heightSize(64)),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () => Get.back(),
-                  child: SvgPicture.asset(isDark?arrowBackWhite:arrowBack, width: widthSize(42), height: heightSize(42)),
-                ),
-                Expanded(child: SizedBox.shrink(),),
-                CText(
-                  text: 'Start Saving',
-                  size: 18,
-                  fontWeight: CFONT.wMedium,
-                  fontFamily: CFONT.FAMILY,
-                  height: 20/18,
-                ),
-                Expanded(child: SizedBox.shrink(),),
-              ],
-            ),
-
-            SizedBox(height: heightSize(37)),
-
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: widthSize(11), vertical: heightSize(11)),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.63), color: isDark?sDarkFill:Colors.black.withOpacity(0.1)),
-              child: Column(
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
+      body: Obx(() {
+        final accent = AccentController.to.accent.value;
+        final useAccent = !_isDefaultAccent(accent);
+        return SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
+          child: Column(
+            children: [
+              SizedBox(height: heightSize(64)),
+              Row(
                 children: [
-                  // ── 1. Target Savings ──────────────────────────
-                  _cardShell(option: savingsOptions[0], isDark: isDark,),
-                  SizedBox(height: heightSize(13)),
-                  // ── 2. FGN Treasury Bills ──────────────────────
-                  _cardShell(option: savingsOptions[1], isDark: isDark,),
-                  SizedBox(height: heightSize(13)),
-                  // ── 3. Mutual Funds ──────────────────────────
-                  _cardShell(option: savingsOptions[2], isDark: isDark,),
-                  SizedBox(height: heightSize(13)),
-                  // ── 4. Dollar Savings ───────────────────────────
-                  _cardShell(option: savingsOptions[3], isDark: isDark,),
-                  SizedBox(height: heightSize(13)),
-                  // ── 5. Fixed Deposit ────────────────
-                  _cardShell(option: savingsOptions[4], isDark: isDark,),
-                  SizedBox(height: heightSize(13)),
-                  // ── 6. Flexible Savings ─────────────────────────────
-                  _cardShell(option: savingsOptions[5], isDark: isDark,),
+                  GestureDetector(
+                    onTap: () => Get.back(),
+                    child: SvgPicture.asset(
+                      isDark ? arrowBackWhite : arrowBack,
+                      width: widthSize(42), height: heightSize(42),
+                      colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):null,
+                    ),
+                  ),
+                  Expanded(child: SizedBox.shrink(),),
+                  CText(
+                    text: 'Start Saving',
+                    size: 18,
+                    fontWeight: CFONT.wMedium,
+                    fontFamily: CFONT.FAMILY,
+                    height: 20 / 18,
+                  ),
+                  Expanded(child: SizedBox.shrink(),),
                 ],
               ),
-            ),
-            SizedBox(height: heightSize(67)),
-          ],
-        ),
-      ),
+
+              SizedBox(height: heightSize(37)),
+
+              Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: widthSize(11), vertical: heightSize(11)),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.63),
+                    color: isDark ? sDarkFill : Colors.black.withOpacity(0.1)),
+                child: Column(
+                  children: [
+                    // ── 1. Target Savings ──────────────────────────
+                    _cardShell(option: savingsOptions[0], isDark: isDark, useAccent: useAccent, accent: accent),
+                    SizedBox(height: heightSize(13)),
+                    // ── 2. FGN Treasury Bills ──────────────────────
+                    _cardShell(option: savingsOptions[1], isDark: isDark, useAccent: useAccent, accent: accent),
+                    SizedBox(height: heightSize(13)),
+                    // ── 3. Mutual Funds ──────────────────────────
+                    _cardShell(option: savingsOptions[2], isDark: isDark, useAccent: useAccent, accent: accent),
+                    SizedBox(height: heightSize(13)),
+                    // ── 4. Dollar Savings ───────────────────────────
+                    _cardShell(option: savingsOptions[3], isDark: isDark, useAccent: useAccent, accent: accent),
+                    SizedBox(height: heightSize(13)),
+                    // ── 5. Fixed Deposit ────────────────
+                    _cardShell(option: savingsOptions[4], isDark: isDark, useAccent: useAccent, accent: accent),
+                    SizedBox(height: heightSize(13)),
+                    // ── 6. Flexible Savings ─────────────────────────────
+                    _cardShell(option: savingsOptions[5], isDark: isDark, useAccent: useAccent, accent: accent),
+                  ],
+                ),
+              ),
+              SizedBox(height: heightSize(67)),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

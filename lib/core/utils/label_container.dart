@@ -314,7 +314,8 @@ class _LabelContainerState extends State<LabelContainer> {
           hasBottomMargin: false,
           hint: '0.00',
           controller: airtimeController,
-          inputType: TextInputType.number,
+          inputType: const TextInputType.numberWithOptions(decimal: true), // Allowed decimals & commas smoothly
+          inputFormatters: [NairaInputFormatter()],
           error: '',
           validFunction: (v) =>
           (v == null || v.trim().isEmpty) ? 'Select an amount.' : null,

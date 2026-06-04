@@ -6,6 +6,7 @@ import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/models/disco.dart';
 import 'package:sentro/core/utils/text.dart';
+import 'package:sentro/core/widgets/balance_pill.dart';
 
 class Academics extends StatefulWidget {
   const Academics({super.key});
@@ -56,84 +57,7 @@ class _AcademicsState extends State<Academics> {
                   ),
                 ),
 
-                Container(
-                  height: heightSize(34.18),
-                  padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(113.27),
-                    color: isDark ? sButtonFillDark
-                        : sLightFill,
-                    border: Border.all(color: isDark ? sDarkBorder
-                        : sLightFill),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        wallet,
-                        width: widthSize(18),
-                        height: heightSize(18),
-                      ),
-                      SizedBox(width: widthSize(4)),
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 200),
-                        child: _obscured
-                            ? Text(
-                          '••••••',
-                          key: const ValueKey('hidden'),
-                          style: TextStyle(
-                            fontSize: fontSize(13),
-                            fontFamily: CFONT.FAMILY,
-                            fontWeight: CFONT.wRegular,
-                            color: isDark? Colors.white
-                                : sActionButton,
-                            letterSpacing: 2,
-                          ),
-                        )
-                            : RichText(
-                          key: const ValueKey('shown'),
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: '₦50,000',
-                                style: TextStyle(
-                                  inherit: false, // break font inheritance → ₦ renders
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
-                                  color: isDark? Colors.white
-                                      : sActionButton,
-                                ),
-                              ),
-                              TextSpan(
-                                text: '.00',
-                                style: TextStyle(
-                                  fontSize: 9,
-                                  fontWeight: CFONT.wRegular,
-                                  fontFamily: CFONT.FAMILY,
-                                  color: isDark? Colors.white
-                                      : sActionButton,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: widthSize(4)),
-                      GestureDetector(
-                        onTap: () => setState(() => _obscured = !_obscured),
-                        child: SvgPicture.asset(
-                          _obscured ? visibilityOff : hide,
-                          width: widthSize(18),
-                          height: heightSize(18),
-                          colorFilter: ColorFilter.mode(
-                            isDark ? Colors.white54 : Colors.black45,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                BalancePill(isDark: isDark),
               ],
             ),
 

@@ -9,6 +9,18 @@ import 'package:sentro/core/constants/values.dart';
 import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/utils/text.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:sentro/core/constants/asset_path.dart';
+import 'package:sentro/core/constants/colors.dart';
+import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
+import 'package:sentro/core/constants/values.dart';
+import 'package:sentro/core/utils/text.dart';
+
 class AppTextField extends StatefulWidget {
   final TextEditingController controller;
   final TextInputType inputType;
@@ -71,7 +83,6 @@ class AppTextField extends StatefulWidget {
 
 class _AppTextFieldState extends State<AppTextField> {
   late bool _isObscured;
-
 
   @override
   void initState() {
@@ -141,8 +152,6 @@ class _AppTextFieldState extends State<AppTextField> {
         : accent.withOpacity(0.4);
     final fillColor = isDark ? sDarkFill : Colors.transparent;
 
-    // Vertical padding drives the field height on all platforms.
-    // target ~58px: fontSize(14) ≈ 17px + 2*20px padding = 57px ✓
     const double _vPad = 20;
 
     final border = OutlineInputBorder(
@@ -153,15 +162,11 @@ class _AppTextFieldState extends State<AppTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // ── Optional title ──────────────────────────────
         if (widget.title != null) ...[
           widget.title!,
           SizedBox(height: heightSize(8)),
         ],
-
-        // ── Field ───────────────────────────────────────
         Container(
-          // Fixed height only for multiline (null = wrap content)
           height: _isMultiline ? (widget.height != null ? heightSize(widget.height!) : null) : null,
           margin: widget.hasBottomMargin
               ? const EdgeInsets.only(bottom: 10)
@@ -189,12 +194,11 @@ class _AppTextFieldState extends State<AppTextField> {
               fontSize: fontSize(14),
               fontFamily: CFONT.FAMILY,
               fontWeight: CFONT.wRegular,
-              height: 1.0, // tight line height — prevents internal offset
+              height: 1.0,
             ),
             decoration: InputDecoration(
               filled: true,
               fillColor: fillColor,
-
               contentPadding: _isMultiline
                   ? EdgeInsets.symmetric(
                 horizontal: widthSize(16.76),
@@ -208,7 +212,6 @@ class _AppTextFieldState extends State<AppTextField> {
                 top: widget.verticalPadding ?? _vPad,
                 bottom: widget.verticalPadding ?? _vPad,
               ),
-
               hintText: widget.hint,
               hintStyle: TextStyle(
                 color: hintColor,
@@ -217,8 +220,6 @@ class _AppTextFieldState extends State<AppTextField> {
                 fontWeight: CFONT.wRegular,
                 height: 1.0,
               ),
-
-              // Same border for all states — visual border on container
               border: border,
               enabledBorder: border,
               focusedBorder: OutlineInputBorder(
@@ -234,11 +235,7 @@ class _AppTextFieldState extends State<AppTextField> {
               errorBorder: border,
               focusedErrorBorder: border,
               disabledBorder: border,
-
-              errorStyle:
-              const TextStyle(height: 0, fontSize: 0),
-
-              // ── Prefix icon (custom widget) ────────────
+              errorStyle: const TextStyle(height: 0, fontSize: 0),
               prefixIcon: widget.showNairaPrefix
                   ? Padding(
                 padding: EdgeInsets.only(
@@ -261,7 +258,7 @@ class _AppTextFieldState extends State<AppTextField> {
                   ),
                 ),
               )
-                  : widget.prefixWidget != null          // ← add this
+                  : widget.prefixWidget != null
                   ? Padding(
                 padding: EdgeInsets.only(
                   left: widthSize(12),
@@ -279,31 +276,6 @@ class _AppTextFieldState extends State<AppTextField> {
                 minHeight: 0,
                 minWidth: 0,
               ),
-
-              // ── Naira symbol prefix ────────────────────
-              // prefix: widget.showNairaPrefix
-              //     ? Row(
-              //   mainAxisSize: MainAxisSize.min,
-              //   children: [
-              //     Text(
-              //       '₦',
-              //       style: TextStyle(
-              //         // inherit: false breaks the Satoshi inheritance
-              //         // chain completely, forcing Flutter to use the
-              //         // platform system font which has the ₦ glyph.
-              //         inherit: false,
-              //         fontSize: fontSize(14),
-              //         fontWeight: FontWeight.w400,
-              //         color: textColor,
-              //         height: 1.0,
-              //       ),
-              //     ),
-              //     SizedBox(width: widthSize(4)),
-              //   ],
-              // )
-              //     : null,
-
-              // ── Suffix ─────────────────────────────────
               suffixIcon: _resolveSuffix(iconColor),
               suffixIconConstraints: const BoxConstraints(
                 minWidth: 40,
@@ -317,7 +289,7 @@ class _AppTextFieldState extends State<AppTextField> {
   }
 }
 
-// ── Date formatter ────────────────────────────────────────────────────────────
+// ── Date Formatter ───────────────────────────────────────────────────────────
 
 class DateInputFormatter extends TextInputFormatter {
   @override
@@ -342,26 +314,83 @@ class DateInputFormatter extends TextInputFormatter {
   }
 }
 
-// ── Naira formatter ───────────────────────────────────────────────────────────
+// ── Naira Currency Formatter ──────────────────────────────────────────────────
 
 class NairaInputFormatter extends TextInputFormatter {
-  final _formatter = NumberFormat('#,###');
+  final _formatter = NumberFormat('#,###', 'en_US');
 
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue,
       TextEditingValue newValue,
       ) {
-    final digits = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
-    if (digits.isEmpty) return const TextEditingValue(text: '');
-    final formatted = _formatter.format(int.parse(digits));
+    if (newValue.text.isEmpty) {
+      return const TextEditingValue(text: '');
+    }
+
+    // Isolate pure input payload (allow digits and a single optional period)
+    String cleanText = newValue.text.replaceAll(RegExp(r'[^0-9.]'), '');
+
+    // Halt formatting execution if multiple decimals are typed
+    if (cleanText.split('.').length > 2) {
+      return oldValue;
+    }
+
+    // Limit decimal inputs directly to a maximum of 2 spaces
+    if (cleanText.contains('.')) {
+      final parts = cleanText.split('.');
+      if (parts[1].length > 2) {
+        cleanText = '${parts[0]}.${parts[1].substring(0, 2)}';
+      }
+    }
+
+    String integerPart = cleanText;
+    String decimalPart = '';
+
+    if (cleanText.contains('.')) {
+      final parts = cleanText.split('.');
+      integerPart = parts[0];
+      decimalPart = parts.length > 1 ? parts[1] : '';
+    }
+
+    // Apply thousands comma grouping to the whole number section
+    if (integerPart.isNotEmpty) {
+      final parsedValue = double.tryParse(integerPart);
+      if (parsedValue != null) {
+        integerPart = _formatter.format(parsedValue);
+      }
+    }
+
+    // Stitch the complete currency representation back together
+    String formattedText = integerPart;
+    if (cleanText.contains('.')) {
+      formattedText += '.$decimalPart';
+    }
+
+    // Calculate selection offset based on non-comma string data
+    int originalCursorPos = newValue.selection.baseOffset;
+    int nonCommaCountBeforeCursor = 0;
+    for (int i = 0; i < originalCursorPos && i < newValue.text.length; i++) {
+      if (newValue.text[i] != ',') {
+        nonCommaCountBeforeCursor++;
+      }
+    }
+
+    int targetCursorPos = 0;
+    int trackingCount = 0;
+    while (targetCursorPos < formattedText.length && trackingCount < nonCommaCountBeforeCursor) {
+      if (formattedText[targetCursorPos] != ',') {
+        trackingCount++;
+      }
+      targetCursorPos++;
+    }
+
     return TextEditingValue(
-      text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
+      text: formattedText,
+      selection: TextSelection.collapsed(offset: targetCursorPos),
     );
   }
 }
-
 // ── Search field ──────────────────────────────────────────────────────────────
 
 class AuthSearchField extends StatelessWidget {

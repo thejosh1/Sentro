@@ -5,6 +5,7 @@ import 'package:pinput/pinput.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 
 import 'numeric_key.dart';
 
@@ -58,22 +59,6 @@ class _KeyboardPinState extends State<KeyboardPin> {
 
   @override
   Widget build(BuildContext context) {
-    const focusedBorderColor = Color.fromRGBO(23, 171, 144, 1);
-    const fillColor = Color.fromRGBO(243, 246, 249, 0.5);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final defaultPinTheme = PinTheme(
-      width: 62,
-      height: 62,
-      textStyle: const TextStyle(
-        fontSize: 22,
-        color: Color.fromRGBO(30, 60, 87, 1),
-      ),
-      decoration: BoxDecoration(
-        //color: kInputBgDark,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: isDark?sDarkBorder:sLightBorder),
-      ),
-    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
