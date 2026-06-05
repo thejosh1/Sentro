@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/text.dart';
 import 'package:sentro/core/widgets/text_field.dart';
@@ -37,365 +38,386 @@ class _AccountLimitState extends State<AccountLimit> {
     });
   }
 
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme
+        .of(context)
+        .brightness == Brightness.dark;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return Scaffold(
       backgroundColor:
-      Theme.of(context).scaffoldBackgroundColor,
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                horizontal: widthSize(25),
-              ),
-              child: Column(
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: heightSize(64)),
+      Theme
+          .of(context)
+          .scaffoldBackgroundColor,
+      body: Obx(() {
+        final accent = AccentController.to.accent.value;
+        final useAccent = !_isDefaultAccent(accent);
+        return Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: widthSize(25),
+                ),
+                child: Column(
+                  crossAxisAlignment:
+                  CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: heightSize(64)),
 
-                  /// HEADER
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => Get.back(),
-                        child: SvgPicture.asset(
-                          isDark?arrowBackWhite:arrowBack,
-                          width: widthSize(42),
-                          height: heightSize(42),
-                        ),
-                      ),
-
-                      const Spacer(),
-
-                      CText(
-                        text: 'Account Limit',
-                        size: 18,
-                        fontFamily: CFONT.FAMILY,
-                        fontWeight: CFONT.wMedium,
-                        height: 20 / 18,
-                      ),
-
-                      const Spacer(),
-                    ],
-                  ),
-
-                  SizedBox(height: heightSize(51)),
-
-                  Center(
-                    child: CText(
-                      text:
-                      'SET ACCOUNT TRANSFER DAILY LIMIT',
-                      size: 12,
-                      fontWeight: CFONT.wMedium,
-                      fontFamily: CFONT.FAMILY,
-                      color: isDark?sGrey1:sGrey2,
-                    ),
-                  ),
-
-                  SizedBox(height: heightSize(16)),
-
-                  /// FORM CARD
-                  Container(
-                    padding: EdgeInsets.only(
-                      left: widthSize(16),
-                      right: widthSize(16),
-                      top: heightSize(22),
-                      bottom: heightSize(22),
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: isDark?sDarkFill:sLightFill,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    /// HEADER
+                    Row(
                       children: [
-                        /// ACCOUNT DROPDOWN
-                        _DropdownBox(
-                          isDark: isDark,
-                          header: 'Account',
-                          value: _account,
-                          isOpen:
-                          _openDropdown == 'account',
-                          onTap: () =>
-                              _toggle('account'),
-                          dropdown:
-                          _openDropdown == 'account'
-                              ? _FormatDropdown(
-                            isDark: isDark,
-                            colorScheme: colorScheme,
-                            formats: _accounts,
-                            selected: _account,
-                            onSelect: (f) {
-                              setState(() {
-                                _account = f;
-                                _openDropdown =
-                                null;
-                              });
-                            },
-                          )
-                              : null,
+                        GestureDetector(
+                          onTap: () => Get.back(),
+                          child: SvgPicture.asset(
+                            isDark ? arrowBackWhite : arrowBack,
+                            width: widthSize(42),
+                            height: heightSize(42),
+                            colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):null,
+                          ),
                         ),
 
-                        SizedBox(height: heightSize(15)),
+                        const Spacer(),
 
-                        /// AMOUNT FIELD
-                        AppTextField(
-                          title: CText(
-                            text: 'Amount',
-                            size: 16,
-                            fontFamily: CFONT.FAMILY,
-                            fontWeight:
-                            CFONT.wRegular,
-                          ),
-                          controller: amountController,
-                          inputType: const TextInputType.numberWithOptions(decimal: true), // Allowed decimals & commas smoothly
-                          inputFormatters: [NairaInputFormatter()],
-
-                          showNairaPrefix: true,
-
-                          hint: '0.00',
-
-                          /// REDUCED LEFT PADDING
-
-                          suffixWidth: 124,
-
-                          suffixWidget: Container(
-                            height: heightSize(25.86),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: widthSize(10),
-                              vertical: heightSize(5),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(124.89),
-                              color: isDark?sContainerColor:sLightFill,
-                            ),
-                            child: CText(
-                              text: 'Min: N20,000',
-                              size: 14,
-                              fontWeight: CFONT.wRegular,
-                              fontFamily: CFONT.FAMILY,
-                            ),
-                          ),
-                          error: '',
-                          validFunction: (v) {
-                            return null;
-                          },
+                        CText(
+                          text: 'Account Limit',
+                          size: 18,
+                          fontFamily: CFONT.FAMILY,
+                          fontWeight: CFONT.wMedium,
+                          height: 20 / 18,
                         ),
+
+                        const Spacer(),
                       ],
                     ),
-                  ),
 
-                  SizedBox(height: heightSize(16)),
+                    SizedBox(height: heightSize(51)),
 
-                  /// TERMS CARD
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: widthSize(16),
-                      vertical: heightSize(16),
+                    Center(
+                      child: CText(
+                        text:
+                        'SET ACCOUNT TRANSFER DAILY LIMIT',
+                        size: 12,
+                        fontWeight: CFONT.wMedium,
+                        fontFamily: CFONT.FAMILY,
+                        color: isDark ? sGrey1 : sGrey2,
+                      ),
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius:
-                      BorderRadius.circular(10),
-                      color: sSentroLightGreen.withOpacity(0.25),
-                    ),
-                    child: Row(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CText(
-                                text:
-                                'Terms and conditions',
-                                size: 14,
-                                fontFamily:
-                                CFONT.FAMILY,
-                                fontWeight:
-                                CFONT.wMedium,
-                                height: 18.63 / 14,
-                              ),
 
-                              SizedBox(
-                                height: heightSize(6),
-                              ),
+                    SizedBox(height: heightSize(16)),
 
-                              RichText(
-                                text: TextSpan(
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily:
-                                    CFONT.FAMILY,
-                                    fontWeight:
-                                    CFONT.wRegular,
-                                    color:
-                                    Colors.white,
-                                  ),
-                                  children: [
-                                    const TextSpan(
-                                      text:
-                                      'By confirming, I have read and agree to the ',
-                                    ),
-                                    TextSpan(
-                                      text:
-                                      'consent / indemnity for limit increase',
-                                      style:
-                                      TextStyle(
-                                        color:
-                                        sNavContainer,
-                                        fontFamily:
-                                        CFONT
-                                            .FAMILY,
-                                        fontWeight:
-                                        CFONT
-                                            .wRegular,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                    /// FORM CARD
+                    Container(
+                      padding: EdgeInsets.only(
+                        left: widthSize(16),
+                        right: widthSize(16),
+                        top: heightSize(22),
+                        bottom: heightSize(22),
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: isDark ? sDarkFill : sLightFill,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          /// ACCOUNT DROPDOWN
+                          _DropdownBox(
+                            isDark: isDark,
+                            header: 'Account',
+                            value: _account,
+                            isOpen:
+                            _openDropdown == 'account',
+                            onTap: () =>
+                                _toggle('account'),
+                            dropdown:
+                            _openDropdown == 'account'
+                                ? _FormatDropdown(
+                              isDark: isDark,
+                              useAccent: useAccent,
+                              accent: accent,
+                              colorScheme: colorScheme,
+                              formats: _accounts,
+                              selected: _account,
+                              onSelect: (f) {
+                                setState(() {
+                                  _account = f;
+                                  _openDropdown =
+                                  null;
+                                });
+                              },
+                            )
+                                : null,
                           ),
-                        ),
 
-                        SizedBox(width: widthSize(12)),
+                          SizedBox(height: heightSize(15)),
 
-                        /// TOGGLE
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _termsAccepted =
-                              !_termsAccepted;
-                            });
-                          },
-                          child: AnimatedContainer(
-                            duration:
-                            const Duration(
-                              milliseconds: 180,
+                          /// AMOUNT FIELD
+                          AppTextField(
+                            title: CText(
+                              text: 'Amount',
+                              size: 16,
+                              fontFamily: CFONT.FAMILY,
+                              fontWeight:
+                              CFONT.wRegular,
                             ),
-                            curve:
-                            Curves.easeInOut,
-                            width: widthSize(54),
-                            height:
-                            heightSize(28),
-                            padding:
-                            EdgeInsets.symmetric(
-                              horizontal:
-                              widthSize(4),
-                              vertical:
-                              heightSize(3),
+                            controller: amountController,
+                            inputType: const TextInputType.numberWithOptions(
+                                decimal: true),
+                            // Allowed decimals & commas smoothly
+                            inputFormatters: [NairaInputFormatter()],
+
+                            showNairaPrefix: true,
+
+                            hint: '0.00',
+
+                            /// REDUCED LEFT PADDING
+
+                            suffixWidth: 124,
+
+                            suffixWidget: Container(
+                              height: heightSize(25.86),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: widthSize(10),
+                                vertical: heightSize(5),
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(124.89),
+                                color: isDark ? sContainerColor : sLightFill,
+                              ),
+                              child: CText(
+                                text: 'Min: N20,000',
+                                size: 14,
+                                fontWeight: CFONT.wRegular,
+                                fontFamily: CFONT.FAMILY,
+                              ),
                             ),
-                            decoration:
-                            BoxDecoration(
-                              borderRadius:
-                              BorderRadius
-                                  .circular(
-                                  32),
-                              color:
-                              _termsAccepted
-                                  ? sNavContainer
-                                  : sDarkBorder,
-                            ),
-                            child: Row(
-                              mainAxisAlignment:
-                              _termsAccepted
-                                  ? MainAxisAlignment
-                                  .end
-                                  : MainAxisAlignment
-                                  .start,
+                            error: '',
+                            validFunction: (v) {
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: heightSize(16)),
+
+                    /// TERMS CARD
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: widthSize(16),
+                        vertical: heightSize(16),
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                        BorderRadius.circular(10),
+                        color: sSentroLightGreen.withOpacity(0.25),
+                      ),
+                      child: Row(
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                AnimatedContainer(
-                                  duration:
-                                  const Duration(
-                                    milliseconds:
-                                    180,
-                                  ),
-                                  curve: Curves
-                                      .easeInOut,
-                                  width:
-                                  widthSize(22),
-                                  height:
-                                  heightSize(
-                                      22),
-                                  decoration:
-                                  const BoxDecoration(
-                                    shape:
-                                    BoxShape
-                                        .circle,
-                                    color: Colors
-                                        .white,
+                                CText(
+                                  text:
+                                  'Terms and conditions',
+                                  size: 14,
+                                  fontFamily:
+                                  CFONT.FAMILY,
+                                  fontWeight:
+                                  CFONT.wMedium,
+                                  height: 18.63 / 14,
+                                ),
+
+                                SizedBox(
+                                  height: heightSize(6),
+                                ),
+
+                                RichText(
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontFamily:
+                                      CFONT.FAMILY,
+                                      fontWeight:
+                                      CFONT.wRegular,
+                                      color:
+                                      Colors.white,
+                                    ),
+                                    children: [
+                                      const TextSpan(
+                                        text:
+                                        'By confirming, I have read and agree to the ',
+                                      ),
+                                      TextSpan(
+                                        text:
+                                        'consent / indemnity for limit increase',
+                                        style:
+                                        TextStyle(
+                                          color:
+                                          useAccent?accent:sNavContainer,
+                                          fontFamily:
+                                          CFONT
+                                              .FAMILY,
+                                          fontWeight:
+                                          CFONT
+                                              .wRegular,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                      ],
+
+                          SizedBox(width: widthSize(12)),
+
+                          /// TOGGLE
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _termsAccepted =
+                                !_termsAccepted;
+                              });
+                            },
+                            child: AnimatedContainer(
+                              duration:
+                              const Duration(
+                                milliseconds: 180,
+                              ),
+                              curve:
+                              Curves.easeInOut,
+                              width: widthSize(54),
+                              height:
+                              heightSize(28),
+                              padding:
+                              EdgeInsets.symmetric(
+                                horizontal:
+                                widthSize(4),
+                                vertical:
+                                heightSize(3),
+                              ),
+                              decoration:
+                              BoxDecoration(
+                                borderRadius:
+                                BorderRadius
+                                    .circular(
+                                    32),
+                                color:
+                                _termsAccepted
+                                    ? useAccent?accent:sNavContainer
+                                    : sDarkBorder,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                _termsAccepted
+                                    ? MainAxisAlignment
+                                    .end
+                                    : MainAxisAlignment
+                                    .start,
+                                children: [
+                                  AnimatedContainer(
+                                    duration:
+                                    const Duration(
+                                      milliseconds:
+                                      180,
+                                    ),
+                                    curve: Curves
+                                        .easeInOut,
+                                    width:
+                                    widthSize(22),
+                                    height:
+                                    heightSize(
+                                        22),
+                                    decoration:
+                                    const BoxDecoration(
+                                      shape:
+                                      BoxShape
+                                          .circle,
+                                      color: Colors
+                                          .white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: heightSize(40)),
+                  ],
+                ),
+              ),
+            ),
+
+            /// BOTTOM BUTTON
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                widthSize(25),
+                0,
+                widthSize(25),
+                heightSize(42),
+              ),
+              child: GestureDetector(
+                onTap: _termsAccepted
+                    ? () {
+                  Get.toNamed(
+                    Routes.confirmPin,
+                  );
+                }
+                    : null,
+                child: AnimatedContainer(
+                  duration:
+                  const Duration(milliseconds: 200),
+                  width: double.maxFinite,
+                  height: heightSize(55),
+                  decoration: BoxDecoration(
+                    borderRadius:
+                    BorderRadius.circular(
+                        11.17),
+                    border: Border.all(
+                      color: sDarkBorder,
+                    ),
+                    color: _termsAccepted
+                        ? useAccent?accent:sNavContainer
+                        : Colors.transparent,
+                  ),
+                  child: Center(
+                    child: CText(
+                      text: 'Set Limit',
+                      size: 16,
+                      fontWeight:
+                      CFONT.wMedium,
+                      fontFamily:
+                      CFONT.FAMILY,
+                      color: _termsAccepted
+                          ? sActionButton
+                          : Colors.white,
                     ),
                   ),
-
-                  SizedBox(height: heightSize(40)),
-                ],
-              ),
-            ),
-          ),
-
-          /// BOTTOM BUTTON
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-              widthSize(25),
-              0,
-              widthSize(25),
-              heightSize(42),
-            ),
-            child: GestureDetector(
-              onTap: _termsAccepted
-                  ? () {
-                Get.toNamed(
-                  Routes.confirmPin,
-                );
-              }
-                  : null,
-              child: AnimatedContainer(
-                duration:
-                const Duration(milliseconds: 200),
-                width: double.maxFinite,
-                height: heightSize(55),
-                decoration: BoxDecoration(
-                  borderRadius:
-                  BorderRadius.circular(
-                      11.17),
-                  border: Border.all(
-                    color: sDarkBorder,
-                  ),
-                  color: _termsAccepted
-                      ? sNavContainer
-                      : Colors.transparent,
-                ),
-                child: Center(
-                  child: CText(
-                    text: 'Set Limit',
-                    size: 16,
-                    fontWeight:
-                    CFONT.wMedium,
-                    fontFamily:
-                    CFONT.FAMILY,
-                    color: _termsAccepted
-                        ? sActionButton
-                        : Colors.white,
-                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 }
@@ -448,7 +470,7 @@ class _DropdownBox extends StatelessWidget {
                 bottomLeft: Radius.circular(isOpen ? 0 : 10),
                 bottomRight: Radius.circular(isOpen ? 0 : 10),
               ),
-              color: isDark?sDarkFill:sLightFill,
+              color: isDark ? sDarkFill : sLightFill,
               border: Border.all(color: sDarkBorder,),
             ),
             child: Row(
@@ -472,7 +494,8 @@ class _DropdownBox extends StatelessWidget {
                     arrowDown,
                     width: widthSize(20),
                     height: heightSize(20),
-                    colorFilter: isDark?null:ColorFilter.mode(sGrey2, BlendMode.srcIn),
+                    colorFilter: isDark ? null : ColorFilter.mode(
+                        sGrey2, BlendMode.srcIn),
                   ),
                 ),
               ],
@@ -492,6 +515,8 @@ class _FormatDropdown extends StatelessWidget {
   final ValueChanged<String> onSelect;
   final bool isDark;
   final ColorScheme colorScheme;
+  final Color accent;
+  final bool useAccent;
 
   const _FormatDropdown({
     required this.formats,
@@ -499,11 +524,12 @@ class _FormatDropdown extends StatelessWidget {
     required this.onSelect,
     required this.isDark,
     required this.colorScheme,
+    required this.accent,
+    this.useAccent = false,
   });
 
   @override
   Widget build(BuildContext context,) {
-
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
@@ -542,7 +568,7 @@ class _FormatDropdown extends StatelessWidget {
                         text: f,
                         size: 13,
                         fontWeight: isSelected ? CFONT.wMedium : CFONT.wRegular,
-                        color: isSelected ? sNavContainer : null,
+                        color: isSelected ? useAccent?accent:sNavContainer : null,
                       ),
                     ),
 
@@ -553,7 +579,7 @@ class _FormatDropdown extends StatelessWidget {
                         height: heightSize(16),
                         colorFilter:
                         ColorFilter.mode(
-                          sNavContainer,
+                          useAccent?accent:sNavContainer,
                           BlendMode.srcIn,
                         ),
                       ),

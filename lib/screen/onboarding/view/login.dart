@@ -53,14 +53,17 @@ class _LoginState extends State<Login> {
                       isDark ? arrowBackWhite : arrowBack,
                       width: widthSize(42),
                       height: heightSize(42),
-                      colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):null,
+                      colorFilter: useAccent
+                          ? ColorFilter.mode(accent, BlendMode.srcIn)
+                          : null,
                     ),
                   ),
                   SvgPicture.asset(
                     logoLight,
                     width: widthSize(116.39),
                     height: heightSize(28),
-                    colorFilter: isDark ? ColorFilter.mode(
+                    colorFilter: useAccent ? ColorFilter.mode(
+                        accent, BlendMode.srcIn) : isDark ? ColorFilter.mode(
                       sNavContainer,
                       BlendMode.srcIn,
                     ) : null,

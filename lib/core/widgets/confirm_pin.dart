@@ -30,9 +30,18 @@ class _ConfirmPinState extends State<ConfirmPin> {
 
   Future<void> _onSubmitPin() async {
     final pin = controller.text.trim();
-    if (pin.length < 4) {
-      // cToast(title: "Invalid PIN", message: "Enter your 4-digit PIN", color: kRed);
-      return;
+    if (pin.length < 4) return;
+
+    final args = Get.arguments as Map<String, dynamic>?;
+    final isReset = args?['isReset'] == true;
+
+    if (isReset) {
+      // Navigate forward to Confirm Phone Number with your reset tracking flags
+      Get.toNamed(Routes.confirmPhoneNumber, arguments: {
+        'isReset': true,
+        'flow': 'resetPassword',
+        // Tailor this string based on your routing destination logic
+      });
     } else {
       Get.toNamed(Routes.welcome);
     }
@@ -47,6 +56,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme
@@ -56,60 +66,61 @@ class _ConfirmPinState extends State<ConfirmPin> {
       backgroundColor: Theme
           .of(context)
           .scaffoldBackgroundColor,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
-        child: Column(
-          children: [
-            SizedBox(height: heightSize(64),),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () => Get.back(),
-                  child: SvgPicture.asset(
-                    arrowBackWhite,
-                    width: widthSize(42),
-                    height: heightSize(42),
+      body: Obx(() {
+        final accent = AccentController.to.accent.value;
+        final useAccent = !_isDefaultAccent(accent);
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
+          child: Column(
+            children: [
+              SizedBox(height: heightSize(64),),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Get.back(),
+                    child: SvgPicture.asset(
+                      arrowBackWhite,
+                      width: widthSize(42),
+                      height: heightSize(42),
+                      colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):null,
+                    ),
                   ),
-                ),
-                const Spacer(),
-                SvgPicture.asset(
-                  logo, width: widthSize(116.39), height: heightSize(28),),
-                const Spacer(),
-                SvgPicture.asset(headPhoneWhite, width: widthSize(43.52),
-                  height: heightSize(50),),
-              ],
-            ),
-            SizedBox(height: heightSize(31),),
-            CText(
-              text: 'Confirm your 4 Digit PIN',
-              size: 22,
-              fontFamily: CFONT.FAMILY,
-              fontWeight: CFONT.wBold,
-            ),
-            SizedBox(height: heightSize(5),),
-            CText(
-              text: 'Authorise this action',
-              fontWeight: CFONT.wRegular,
-              size: 18,
-              fontFamily: CFONT.FAMILY,
-              color: Theme
-                  .of(context)
-                  .brightness == Brightness.dark
-                  ? sDarkModeMutedText // dark mode muted text
-                  : sLightModeMutedText,
-            ),
-            SizedBox(height: heightSize(30),),
-            Obx(() {
-              final accent = AccentController.to.accent.value;
-              final useAccent = !_isDefaultAccent(accent);
-              return Container(
+                  const Spacer(),
+                  SvgPicture.asset(
+                    logo, width: widthSize(116.39), height: heightSize(28), colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):null,),
+                  const Spacer(),
+                  SvgPicture.asset(headPhoneWhite, width: widthSize(43.52),
+                    height: heightSize(50),),
+                ],
+              ),
+              SizedBox(height: heightSize(31),),
+              CText(
+                text: 'Confirm your 4 Digit PIN',
+                size: 22,
+                fontFamily: CFONT.FAMILY,
+                fontWeight: CFONT.wBold,
+              ),
+              SizedBox(height: heightSize(5),),
+              CText(
+                text: 'Authorise this action',
+                fontWeight: CFONT.wRegular,
+                size: 18,
+                fontFamily: CFONT.FAMILY,
+                color: Theme
+                    .of(context)
+                    .brightness == Brightness.dark
+                    ? sDarkModeMutedText // dark mode muted text
+                    : sLightModeMutedText,
+              ),
+              SizedBox(height: heightSize(30),),
+              Container(
                 width: widthSize(156),
                 height: heightSize(47),
                 padding: EdgeInsets.symmetric(horizontal: widthSize(16)),
                 decoration: BoxDecoration(
                   borderRadius:
                   BorderRadius.circular(Values().buttonRadius20 * 5),
-                  color: useAccent?accent:sNavContainer,
+                  color: useAccent ? accent : sNavContainer,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,18 +140,18 @@ class _ConfirmPinState extends State<ConfirmPin> {
                     );
                   }),
                 ),
-              );
-            }),
-            Spacer(),
-            KeyboardPin(
-              controller: controller,
-              callback: _onSubmitPin,
-              showBiometric: true,
-            ),
-            SizedBox(height: heightSize(67),),
-          ],
-        ),
-      ),
+              ),
+              Spacer(),
+              KeyboardPin(
+                controller: controller,
+                callback: _onSubmitPin,
+                showBiometric: true,
+              ),
+              SizedBox(height: heightSize(67),),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

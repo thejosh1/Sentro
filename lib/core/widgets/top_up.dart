@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/utils/balance_visibility_wrapper.dart';
 import 'package:sentro/core/utils/label_container.dart';
 import 'package:sentro/core/utils/text.dart';
@@ -17,6 +18,10 @@ void showMobileTopupDialog({
   required bool isDark,
   bool initialDataSelected = false,
 }) {
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
   showDialog(
     context: context,
     barrierDismissible: true,
@@ -24,6 +29,8 @@ void showMobileTopupDialog({
     builder: (context) {
       bool isDataSelected = initialDataSelected;
       bool isBalanceObscured = false;
+      final accent = AccentController.to.accent.value;
+      final useAccent = !_isDefaultAccent(accent);
 
       return StatefulBuilder(
         builder: (context, setDialogState) {
@@ -96,7 +103,7 @@ void showMobileTopupDialog({
                                           wallet,
                                           width:  widthSize(18),
                                           height: heightSize(18),
-                                          colorFilter: ColorFilter.mode(
+                                          colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):ColorFilter.mode(
                                             isDark ? sNavContainer : sActionButton,
                                             BlendMode.srcIn,
                                           ),
@@ -256,7 +263,7 @@ void showMobileTopupDialog({
                                               height: heightSize(18),
                                               colorFilter: ColorFilter.mode(
                                                 !isDataSelected
-                                                    ? sNavContainer
+                                                    ? useAccent?accent:sNavContainer
                                                     : (isDark
                                                     ? Colors.white70
                                                     : Colors.black54),
@@ -270,7 +277,7 @@ void showMobileTopupDialog({
                                               fontWeight: CFONT.wRegular,
                                               size: 14,
                                               color: !isDataSelected
-                                                  ? sNavContainer
+                                                  ? useAccent?accent:sNavContainer
                                                   : (isDark
                                                   ? Colors.white
                                                   : Colors.black87),
@@ -306,7 +313,7 @@ void showMobileTopupDialog({
                                               height: heightSize(18),
                                               colorFilter: ColorFilter.mode(
                                                 isDataSelected
-                                                    ? sNavContainer
+                                                    ? useAccent?accent:sNavContainer
                                                     : (isDark
                                                     ? Colors.white70
                                                     : Colors.black54),
@@ -320,7 +327,7 @@ void showMobileTopupDialog({
                                               fontFamily: CFONT.FAMILY,
                                               size: 14,
                                               color: isDataSelected
-                                                  ? sNavContainer
+                                                  ? useAccent?accent:sNavContainer
                                                   : (isDark
                                                   ? Colors.white
                                                   : Colors.black87),

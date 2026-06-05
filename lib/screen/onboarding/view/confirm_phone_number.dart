@@ -24,6 +24,8 @@ class ConfirmPhoneNumber extends StatefulWidget {
 class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
   late final String flow;
   TextEditingController otpController = TextEditingController();
+  bool _isRead = false;
+  bool _isReset = false;
 
   Timer? _timer;
   int _start = 45;
@@ -60,6 +62,7 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
   void initState() {
     super.initState();
     flow = Get.arguments?['flow'] ?? '';
+    _isReset = Get.arguments?['isReset'] == true;
     startTimer();
   }
 
@@ -200,6 +203,85 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
                   ],
                 ),
               ),
+              if(_isReset) ...[
+                Column(
+                  children: [
+                    SizedBox(height: heightSize(30)),
+                    Container(
+                      //height: heightSize(85),
+                      padding: EdgeInsets.symmetric(horizontal: widthSize(15), vertical: heightSize(13)),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(11.17),
+                        border: Border.all(color: sSentroLightGreen),
+                        color: sSentroLightGreen.withOpacity(0.25),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CText(
+                                text: 'Terms and conditions',
+                                size: 14,
+                                fontFamily: CFONT.FAMILY,
+                                fontWeight: CFONT.wMedium,
+                              ),
+                              SizedBox(height: heightSize(5),),
+                              SizedBox(
+                                width: widthSize(263),
+                                child: CText(
+                                  text: 'By confirming, you authorise Sentro to debit your selected funding source. For Fixed Deposits and T-Bills, funds are locked until maturity.',
+                                  size: 12,
+                                  fontWeight: CFONT.wRegular,
+                                  fontFamily: CFONT.FAMILY,
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(width: widthSize(12),),
+                          GestureDetector(
+                            onTap: () => setState(() => _isRead = !_isRead),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 180),
+                              curve: Curves.easeInOut,
+                              width: widthSize(54),
+                              height: heightSize(28),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: widthSize(4),
+                                vertical: heightSize(3),
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(32),
+                                color: _isRead ? sNavContainer : sDarkBorder,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: _isRead
+                                    ? MainAxisAlignment.end
+                                    : MainAxisAlignment.start,
+                                children: [
+                                  AnimatedContainer(
+                                    duration: const Duration(milliseconds: 180),
+                                    curve: Curves.easeInOut,
+                                    width: widthSize(22),
+                                    height: heightSize(22),
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ]
             ],
           ),
         );
@@ -220,15 +302,22 @@ class _ConfirmPhoneNumberState extends State<ConfirmPhoneNumber> {
             textColor: sNavContainer,
             callback: () {
               FocusScope.of(context).unfocus();
-              switch (flow) {
-                case "bvn":
-                  Get.toNamed(Routes.confirmBvn);
-                  break;
-                case "resetPassword":
-                  Get.toNamed(Routes.resetPassword);
-                  break;
-                default:
-                  Get.toNamed(Routes.login);
+              if (_isReset) {
+                Get.toNamed(Routes.faceVerification, arguments: {
+                  'isReset': true,
+                });
+              } else {
+                // Standard non-reset fallback routes
+                switch (flow) {
+                  case "bvn":
+                    Get.toNamed(Routes.confirmBvn);
+                    break;
+                  case "resetPassword":
+                    Get.toNamed(Routes.resetPassword);
+                    break;
+                  default:
+                    Get.toNamed(Routes.login);
+                }
               }
             },
             load: false,

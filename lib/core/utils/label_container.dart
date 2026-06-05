@@ -7,6 +7,7 @@ import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/constants/values.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/models/network.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/action_button.dart';
@@ -170,6 +171,8 @@ class _LabelContainerState extends State<LabelContainer> {
   Widget _networkPhoneRow(
       BuildContext context,
       bool isDark,
+      bool useAccent,
+      Color accent,
       TextEditingController phoneCtrl,
       ) {
     return Row(
@@ -215,7 +218,7 @@ class _LabelContainerState extends State<LabelContainer> {
                   addUser,
                   width: widthSize(22),
                   height: heightSize(22),
-                  colorFilter: isDark?null:ColorFilter.mode(sActionButton, BlendMode.srcIn),
+                  colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):isDark?null:ColorFilter.mode(sActionButton, BlendMode.srcIn),
                 ),
               ),
             ],
@@ -227,15 +230,21 @@ class _LabelContainerState extends State<LabelContainer> {
 
   // ── Build ─────────────────────────────────────────────────────────────────
 
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
+    final accent = AccentController.to.accent.value;
+    final useAccent = !_isDefaultAccent(accent);
     if (widget.isData) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _networkPhoneRow(context, isDark, dataPhoneController),
+          _networkPhoneRow(context, isDark, useAccent, accent, dataPhoneController),
           SizedBox(height: heightSize(14)),
 
           // Plan selector
@@ -305,7 +314,7 @@ class _LabelContainerState extends State<LabelContainer> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _networkPhoneRow(context, isDark, airtimePhoneController),
+        _networkPhoneRow(context, isDark, useAccent, accent, airtimePhoneController),
         SizedBox(height: heightSize(14)),
 
         // Amount
@@ -327,6 +336,7 @@ class _LabelContainerState extends State<LabelContainer> {
           text: 'Buy Airtime',
           height: heightSize(55),
           textColor: Colors.white,
+          color: useAccent?accent:null,
           callback: () {
             Get.back();
             Get.toNamed(Routes.confirmation);

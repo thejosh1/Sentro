@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/text.dart';
 
@@ -14,7 +15,8 @@ class ActiveLoans extends StatefulWidget {
   State<ActiveLoans> createState() => _ActiveLoansState();
 }
 
-class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStateMixin {
+class _ActiveLoansState extends State<ActiveLoans>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _progressAnim1;
   late Animation<double> _progressAnim2;
@@ -45,17 +47,27 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
     required String type,
     required String name,
     required String status,
+    required bool useAccent,
+    required Color accent,
     required Color statusColor,
   }) {
     return Row(
       children: [
-        SvgPicture.asset(takeLoan, width: widthSize(36), height: heightSize(36)),
+        SvgPicture.asset(
+            takeLoan, width: widthSize(36), height: heightSize(36), colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):null,),
         SizedBox(width: widthSize(10)),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CText(text: type, size: 10, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: sGrey2),
-            CText(text: name, size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
+            CText(text: type,
+                size: 10,
+                fontWeight: CFONT.wRegular,
+                fontFamily: CFONT.FAMILY,
+                color: sGrey2),
+            CText(text: name,
+                size: 12,
+                fontFamily: CFONT.FAMILY,
+                fontWeight: CFONT.wMedium),
           ],
         ),
         const Expanded(child: SizedBox.shrink()),
@@ -67,7 +79,11 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
             color: statusColor.withOpacity(0.1),
           ),
           child: Center(
-            child: CText(text: status, size: 12.57, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: statusColor),
+            child: CText(text: status,
+                size: 12.57,
+                fontWeight: CFONT.wRegular,
+                fontFamily: CFONT.FAMILY,
+                color: statusColor),
           ),
         ),
       ],
@@ -100,8 +116,16 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CText(text: showPercent ? '$percent% repaid' : leftLabel, size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
-                CText(text: rightLabel, size: 11, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
+                CText(text: showPercent ? '$percent% repaid' : leftLabel,
+                    size: 11,
+                    fontFamily: CFONT.FAMILY,
+                    fontWeight: CFONT.wRegular,
+                    color: sGrey2),
+                CText(text: rightLabel,
+                    size: 11,
+                    fontFamily: CFONT.FAMILY,
+                    fontWeight: CFONT.wRegular,
+                    color: sGrey2),
               ],
             ),
           ],
@@ -110,17 +134,18 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
     );
   }
 
-  Widget _cardFooter() {
+  Widget _cardFooter(bool useAccent, Color accent) {
     return GestureDetector(
-      onTap: () => Get.toNamed(
-        Routes.repayment,
-      ),
+      onTap: () =>
+          Get.toNamed(
+            Routes.repayment,
+          ),
       child: Container(
         width: double.maxFinite,
         height: heightSize(38),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: sSentroLightGreen,
+          color: useAccent?accent:sSentroLightGreen,
         ),
         child: Center(
           child: CText(
@@ -135,210 +160,310 @@ class _ActiveLoansState extends State<ActiveLoans> with SingleTickerProviderStat
     );
   }
 
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
-        child: Column(
-          children: [
-            SizedBox(height: heightSize(64)),
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
+      body: Obx(() {
+        final accent = AccentController.to.accent.value;
+        final useAccent = !_isDefaultAccent(accent);
+        return SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
+          child: Column(
+            children: [
+              SizedBox(height: heightSize(64)),
 
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () => Get.back(),
-                  child: SvgPicture.asset(arrowBackWhite, width: widthSize(42), height: heightSize(42)),
-                ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(Routes.takeLoan);
-                  },
-                  child: Container(
-                    width: widthSize(129),
-                    height: heightSize(35.67),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(83.34),
-                      color: Colors.white.withOpacity(0.1),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CText(
-                          text: 'Take Loans',
-                          size: 14,
-                          fontWeight: CFONT.wRegular,
-                          fontFamily: CFONT.FAMILY,
-                        ),
-                        SizedBox(width: widthSize(5),),
-                        SvgPicture.asset(add, width: widthSize(24), height: heightSize(24),)
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-
-            SizedBox(height: heightSize(23.33),),
-            CText(
-              text: 'Active Loans',
-              fontWeight: CFONT.wMedium,
-              fontFamily: CFONT.FAMILY,
-              size: 18,
-              height: 20/18,
-            ),
-            SizedBox(height: 2.5,),
-            CText(
-              text: 'Monitor your active loans',
-              size: 14,
-              fontFamily: CFONT.FAMILY,
-              fontWeight: CFONT.wRegular,
-              color: sConfirmTextColor,
-            ),
-            SizedBox(height: heightSize(20.5)),
-
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: widthSize(11), vertical: heightSize(11)),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.63), color: sDarkFill),
-              child: Column(
+              Row(
                 children: [
-
-                  // ── Card 1 — Active ──────────────────────────────
-                  _cardShell(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _cardHeader(type: 'Personal Loan', name: '30 May 2026', status: 'Active', statusColor: sNavContainer),
-                        SizedBox(height: heightSize(18)),
-                        CText(text: 'N3,500,000', size: 18, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wBold),
-                        SizedBox(height: heightSize(2.5)),
-                        CText(text: 'of N5,000,000 disbursed', size: 11, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: sGrey1),
-                        SizedBox(height: heightSize(8.5)),
-                        _progressSection(
-                          anim: _progressAnim1,
-                          leftLabel: '',
-                          rightLabel: 'Due 30 Jun, 2026',
-                          showPercent: true,
-                          activeColor: sNavContainer,
-                        ),
-                        SizedBox(height: heightSize(11)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CText(text: 'Min. Amount', size: 10, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
-                                SizedBox(height: heightSize(0.5)),
-                                CText(text: 'N10,000', size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CText(text: 'Early Repayment', size: 10, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
-                                SizedBox(height: heightSize(0.5)),
-                                CText(text: '5% penalty', size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CText(text: 'Auto Repay', size: 10, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
-                                SizedBox(height: heightSize(0.5)),
-                                Row(
-                                  children: [
-                                    CText(text: 'Yes', size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
-                                    SizedBox(width: widthSize(2.5)),
-                                    SvgPicture.asset(tick, width: widthSize(12), height: heightSize(12)),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: heightSize(10)),
-                        _cardFooter(),
-                      ],
+                  GestureDetector(
+                    onTap: () => Get.back(),
+                    child: SvgPicture.asset(
+                      arrowBackWhite, width: widthSize(42),
+                      height: heightSize(42),
+                      colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):null,
                     ),
                   ),
-
-                  SizedBox(height: heightSize(13)),
-
-                  // ── Card 2 — Overdue ─────────────────────────────
-                  _cardShell(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _cardHeader(type: 'PERSONAL LOAN', name: '30 May, 2026', status: 'Active', statusColor: sNavContainer),
-                        SizedBox(height: heightSize(10)),
-                        Padding(
-                          padding: EdgeInsets.only(left: widthSize(41)),
-                          child: CText(text: 'Loan is overdue, late repayment fine may apply', size: 12, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: sCancel),
-                        ),
-                        SizedBox(height: heightSize(14)),
-                        CText(text: 'N1,200,000', size: 18, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wBold),
-                        SizedBox(height: heightSize(2.5)),
-                        CText(text: 'of N5,000,000 disbursed', size: 11, fontWeight: CFONT.wRegular, fontFamily: CFONT.FAMILY, color: sGrey1),
-                        SizedBox(height: heightSize(8.5)),
-                        _progressSection(
-                          anim: _progressAnim2,
-                          leftLabel: '',
-                          rightLabel: 'Due 30 Jun, 2026',
-                          showPercent: true,
-                          activeColor: sNavContainer,
-                        ),
-                        SizedBox(height: heightSize(11)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CText(text: 'Min. Amount', size: 10, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
-                                SizedBox(height: heightSize(0.5)),
-                                CText(text: 'N10,000', size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CText(text: 'Early Repayment', size: 10, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
-                                SizedBox(height: heightSize(0.5)),
-                                CText(text: '5% penalty', size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CText(text: 'Auto Repay', size: 10, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wRegular, color: sGrey2),
-                                SizedBox(height: heightSize(0.5)),
-                                Row(
-                                  children: [
-                                    CText(text: 'Yes', size: 12, fontFamily: CFONT.FAMILY, fontWeight: CFONT.wMedium),
-                                    SizedBox(width: widthSize(2.5)),
-                                    SvgPicture.asset(tick, width: widthSize(12), height: heightSize(12)),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: heightSize(10)),
-                        _cardFooter(),
-                      ],
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.takeLoan);
+                    },
+                    child: Container(
+                      width: widthSize(129),
+                      height: heightSize(35.67),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(83.34),
+                        color: Colors.white.withOpacity(0.1),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CText(
+                            text: 'Take Loans',
+                            size: 14,
+                            fontWeight: CFONT.wRegular,
+                            fontFamily: CFONT.FAMILY,
+                          ),
+                          SizedBox(width: widthSize(5),),
+                          SvgPicture.asset(
+                            add, width: widthSize(24), height: heightSize(24),
+                            colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):null,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-
-                  SizedBox(height: heightSize(123)),
+                  )
                 ],
               ),
-            ),
-          ],
-        ),
-      ),
+
+              SizedBox(height: heightSize(23.33),),
+              CText(
+                text: 'Active Loans',
+                fontWeight: CFONT.wMedium,
+                fontFamily: CFONT.FAMILY,
+                size: 18,
+                height: 20 / 18,
+              ),
+              SizedBox(height: 2.5,),
+              CText(
+                text: 'Monitor your active loans',
+                size: 14,
+                fontFamily: CFONT.FAMILY,
+                fontWeight: CFONT.wRegular,
+                color: sConfirmTextColor,
+              ),
+              SizedBox(height: heightSize(20.5)),
+
+              Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: widthSize(11), vertical: heightSize(11)),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.63),
+                    color: sDarkFill),
+                child: Column(
+                  children: [
+
+                    // ── Card 1 — Active ──────────────────────────────
+                    _cardShell(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _cardHeader(type: 'Personal Loan',
+                              name: '30 May 2026',
+                              status: 'Active',
+                              useAccent: useAccent,
+                              accent: accent,
+                              statusColor: useAccent?accent:sNavContainer),
+                          SizedBox(height: heightSize(18)),
+                          CText(text: 'N3,500,000',
+                              size: 18,
+                              fontFamily: CFONT.FAMILY,
+                              fontWeight: CFONT.wBold),
+                          SizedBox(height: heightSize(2.5)),
+                          CText(text: 'of N5,000,000 disbursed',
+                              size: 11,
+                              fontWeight: CFONT.wRegular,
+                              fontFamily: CFONT.FAMILY,
+                              color: sGrey1),
+                          SizedBox(height: heightSize(8.5)),
+                          _progressSection(
+                            anim: _progressAnim1,
+                            leftLabel: '',
+                            rightLabel: 'Due 30 Jun, 2026',
+                            showPercent: true,
+                            activeColor: useAccent?accent:sNavContainer,
+                          ),
+                          SizedBox(height: heightSize(11)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CText(text: 'Min. Amount',
+                                      size: 10,
+                                      fontFamily: CFONT.FAMILY,
+                                      fontWeight: CFONT.wRegular,
+                                      color: sGrey2),
+                                  SizedBox(height: heightSize(0.5)),
+                                  CText(text: 'N10,000',
+                                      size: 12,
+                                      fontFamily: CFONT.FAMILY,
+                                      fontWeight: CFONT.wMedium),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CText(text: 'Early Repayment',
+                                      size: 10,
+                                      fontFamily: CFONT.FAMILY,
+                                      fontWeight: CFONT.wRegular,
+                                      color: sGrey2),
+                                  SizedBox(height: heightSize(0.5)),
+                                  CText(text: '5% penalty',
+                                      size: 12,
+                                      fontFamily: CFONT.FAMILY,
+                                      fontWeight: CFONT.wMedium),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CText(text: 'Auto Repay',
+                                      size: 10,
+                                      fontFamily: CFONT.FAMILY,
+                                      fontWeight: CFONT.wRegular,
+                                      color: sGrey2),
+                                  SizedBox(height: heightSize(0.5)),
+                                  Row(
+                                    children: [
+                                      CText(text: 'Yes',
+                                          size: 12,
+                                          fontFamily: CFONT.FAMILY,
+                                          fontWeight: CFONT.wMedium),
+                                      SizedBox(width: widthSize(2.5)),
+                                      SvgPicture.asset(
+                                        tick, width: widthSize(12),
+                                        height: heightSize(12),
+                                        colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):null,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: heightSize(10)),
+                          _cardFooter(useAccent, accent),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: heightSize(13)),
+
+                    // ── Card 2 — Overdue ─────────────────────────────
+                    _cardShell(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _cardHeader(type: 'PERSONAL LOAN',
+                              name: '30 May, 2026',
+                              status: 'Active',
+                              useAccent: useAccent,
+                              accent: accent,
+                              statusColor: useAccent?accent:sNavContainer),
+                          SizedBox(height: heightSize(10)),
+                          Padding(
+                            padding: EdgeInsets.only(left: widthSize(41)),
+                            child: CText(
+                                text: 'Loan is overdue, late repayment fine may apply',
+                                size: 12,
+                                fontWeight: CFONT.wRegular,
+                                fontFamily: CFONT.FAMILY,
+                                color: sCancel),
+                          ),
+                          SizedBox(height: heightSize(14)),
+                          CText(text: 'N1,200,000',
+                              size: 18,
+                              fontFamily: CFONT.FAMILY,
+                              fontWeight: CFONT.wBold),
+                          SizedBox(height: heightSize(2.5)),
+                          CText(text: 'of N5,000,000 disbursed',
+                              size: 11,
+                              fontWeight: CFONT.wRegular,
+                              fontFamily: CFONT.FAMILY,
+                              color: sGrey1),
+                          SizedBox(height: heightSize(8.5)),
+                          _progressSection(
+                            anim: _progressAnim2,
+                            leftLabel: '',
+                            rightLabel: 'Due 30 Jun, 2026',
+                            showPercent: true,
+                            activeColor: useAccent?accent:sNavContainer,
+                          ),
+                          SizedBox(height: heightSize(11)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CText(text: 'Min. Amount',
+                                      size: 10,
+                                      fontFamily: CFONT.FAMILY,
+                                      fontWeight: CFONT.wRegular,
+                                      color: sGrey2),
+                                  SizedBox(height: heightSize(0.5)),
+                                  CText(text: 'N10,000',
+                                      size: 12,
+                                      fontFamily: CFONT.FAMILY,
+                                      fontWeight: CFONT.wMedium),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CText(text: 'Early Repayment',
+                                      size: 10,
+                                      fontFamily: CFONT.FAMILY,
+                                      fontWeight: CFONT.wRegular,
+                                      color: sGrey2),
+                                  SizedBox(height: heightSize(0.5)),
+                                  CText(text: '5% penalty',
+                                      size: 12,
+                                      fontFamily: CFONT.FAMILY,
+                                      fontWeight: CFONT.wMedium),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CText(text: 'Auto Repay',
+                                      size: 10,
+                                      fontFamily: CFONT.FAMILY,
+                                      fontWeight: CFONT.wRegular,
+                                      color: sGrey2),
+                                  SizedBox(height: heightSize(0.5)),
+                                  Row(
+                                    children: [
+                                      CText(text: 'Yes',
+                                          size: 12,
+                                          fontFamily: CFONT.FAMILY,
+                                          fontWeight: CFONT.wMedium),
+                                      SizedBox(width: widthSize(2.5)),
+                                      SvgPicture.asset(
+                                        tick, width: widthSize(12),
+                                        height: heightSize(12),
+                                        colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):null,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: heightSize(10)),
+                          _cardFooter(useAccent, accent),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: heightSize(123)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 

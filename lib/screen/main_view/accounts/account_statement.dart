@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/text.dart';
 
@@ -13,6 +14,7 @@ import 'package:sentro/core/utils/text.dart';
 class _MonthYear {
   final int month;
   final int year;
+
   _MonthYear(this.month, this.year);
 
   String get label {
@@ -72,320 +74,350 @@ class _AccountStatementState extends State<AccountStatement> {
   void _toggle(String key) =>
       setState(() => _openDropdown = _openDropdown == key ? null : key);
 
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = Theme
+        .of(context)
+        .brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: heightSize(64)),
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
+      body: Obx(() {
+        final accent = AccentController.to.accent.value;
+        final useAccent = !_isDefaultAccent(accent);
+        return Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: heightSize(64)),
 
-                  // ── Header ───────────────────────────────
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => Get.back(),
-                        child: SvgPicture.asset(
-                          isDark?arrowBackWhite:arrowBack,
-                          width: widthSize(42),
-                          height: heightSize(42),
-                        ),
-                      ),
-                      const Spacer(),
-                      CText(
-                        text: 'Account Statement',
-                        size: 18,
-                        fontFamily: CFONT.FAMILY,
-                        fontWeight: CFONT.wMedium,
-                        height: 20 / 18,
-                      ),
-                      const Spacer(),
-                    ],
-                  ),
-
-                  SizedBox(height: heightSize(51)),
-
-                  CText(
-                    text: 'GENERATE ACCOUNT STATEMENT',
-                    size: 12,
-                    fontWeight: CFONT.wMedium,
-                    fontFamily: CFONT.FAMILY,
-                    color: isDark?sGrey1:sGrey2,
-                  ),
-
-                  SizedBox(height: heightSize(16)),
-
-                  // ── Form card ─────────────────────────────
-                  Container(
-                    padding: EdgeInsets.only(
-                      left: widthSize(16),
-                      top: heightSize(22),
-                      right: widthSize(16),
-                      bottom: heightSize(22),
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: isDark?sDarkFill:sLightFill,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    // ── Header ───────────────────────────────
+                    Row(
                       children: [
-                        // ── Start + End ─────────────────────
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _DropdownBox(
-                                header: 'Start Date',
-                                value: _startDate.label,
-                                isOpen: _openDropdown == 'start',
-                                onTap: () => _toggle('start'),
-                                isDark: isDark,
-                                dropdown: _openDropdown == 'start'
-                                    ? _MonthDropdown(
-                                  isDark: isDark,
-                                  options: _monthOptions,
-                                  selected: _startDate,
-                                  disableAfter: _endDate,
-                                  onSelect: (m) => setState(() {
-                                    _startDate = m;
-                                    _openDropdown = null;
-                                  }),
-                                )
-                                    : null,
-                              ),
-                            ),
-                            SizedBox(width: widthSize(12)),
-                            Expanded(
-                              child: _DropdownBox(
-                                header: 'End Date',
-                                value: _endDate.label,
-                                isOpen: _openDropdown == 'end',
-                                onTap: () => _toggle('end'),
-                                isDark: isDark,
-                                dropdown: _openDropdown == 'end'
-                                    ? _MonthDropdown(
-                                  isDark: isDark,
-                                  options: _monthOptions,
-                                  selected: _endDate,
-                                  disableBefore: _startDate,
-                                  onSelect: (m) => setState(() {
-                                    _endDate = m;
-                                    _openDropdown = null;
-                                  }),
-                                )
-                                    : null,
-                              ),
-                            ),
-                          ],
+                        GestureDetector(
+                          onTap: () => Get.back(),
+                          child: SvgPicture.asset(
+                            isDark ? arrowBackWhite : arrowBack,
+                            width: widthSize(42),
+                            height: heightSize(42),
+                            colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):null,
+                          ),
                         ),
-
-                        SizedBox(height: heightSize(15)),
-
-                        // ── Format ──────────────────────────
-                        _DropdownBox(
-                          header: 'Document Format',
-                          value: _format,
-                          isOpen: _openDropdown == 'format',
-                          onTap: () => _toggle('format'),
-                          isDark: isDark,
-                          dropdown: _openDropdown == 'format'
-                              ? _FormatDropdown(
-                            isDark: isDark,
-                            formats: _formats,
-                            selected: _format,
-                            onSelect: (f) => setState(() {
-                              _format = f;
-                              _openDropdown = null;
-                            }),
-                          )
-                              : null,
+                        const Spacer(),
+                        CText(
+                          text: 'Account Statement',
+                          size: 18,
+                          fontFamily: CFONT.FAMILY,
+                          fontWeight: CFONT.wMedium,
+                          height: 20 / 18,
                         ),
+                        const Spacer(),
                       ],
                     ),
-                  ),
 
-                  SizedBox(height: heightSize(16)),
+                    SizedBox(height: heightSize(51)),
 
-                  // ── Email notice ──────────────────────────
-                  // Row(
-                  //   children: [
-                  //     Container(
-                  //       width: widthSize(28),
-                  //       height: heightSize(28),
-                  //       decoration: BoxDecoration(
-                  //         color: sNavContainer.withOpacity(0.15),
-                  //         borderRadius: BorderRadius.circular(6),
-                  //       ),
-                  //       child: Center(
-                  //         child: SvgPicture.asset(
-                  //           emailIcon,
-                  //           width: widthSize(16),
-                  //           height: heightSize(16),
-                  //           colorFilter: ColorFilter.mode(
-                  //             sNavContainer, BlendMode.srcIn,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     SizedBox(width: widthSize(8)),
-                  //     Expanded(
-                  //       child: RichText(
-                  //         text: TextSpan(
-                  //           style: TextStyle(
-                  //             fontSize: fontSize(12),
-                  //             fontFamily: CFONT.FAMILY,
-                  //             fontWeight: CFONT.wRegular,
-                  //             color: sNavContainer,
-                  //           ),
-                  //           children: const [
-                  //             TextSpan(
-                  //               text: 'Account statement be sent this email ',
-                  //             ),
-                  //             TextSpan(
-                  //               text: 'u***da@***.com',
-                  //               style: TextStyle(fontWeight: FontWeight.w600),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  //
-                  // SizedBox(height: heightSize(16)),
-
-                  // ── Terms card ────────────────────────────
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: widthSize(16),
-                      vertical: heightSize(16),
+                    CText(
+                      text: 'GENERATE ACCOUNT STATEMENT',
+                      size: 12,
+                      fontWeight: CFONT.wMedium,
+                      fontFamily: CFONT.FAMILY,
+                      color: isDark ? sGrey1 : sGrey2,
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: sSentroLightGreen.withOpacity(0.25),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+
+                    SizedBox(height: heightSize(16)),
+
+                    // ── Form card ─────────────────────────────
+                    Container(
+                      padding: EdgeInsets.only(
+                        left: widthSize(16),
+                        top: heightSize(22),
+                        right: widthSize(16),
+                        bottom: heightSize(22),
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: isDark ? sDarkFill : sLightFill,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // ── Start + End ─────────────────────
+                          Row(
                             children: [
-                              CText(
-                                text: 'Terms and conditions',
-                                size: 14,
-                                fontFamily: CFONT.FAMILY,
-                                fontWeight: CFONT.wMedium,
-                                height: 18.63/14,
+                              Expanded(
+                                child: _DropdownBox(
+                                  useAccent: useAccent,
+                                  accent: accent,
+                                  header: 'Start Date',
+                                  value: _startDate.label,
+                                  isOpen: _openDropdown == 'start',
+                                  onTap: () => _toggle('start'),
+                                  isDark: isDark,
+                                  dropdown: _openDropdown == 'start'
+                                      ? _MonthDropdown(
+                                    isDark: isDark,
+                                    useAccent: useAccent,
+                                    accent: accent,
+                                    options: _monthOptions,
+                                    selected: _startDate,
+                                    disableAfter: _endDate,
+                                    onSelect: (m) =>
+                                        setState(() {
+                                          _startDate = m;
+                                          _openDropdown = null;
+                                        }),
+                                  )
+                                      : null,
+                                ),
                               ),
-                              SizedBox(height: heightSize(6)),
-                              CText(
-                                text:
-                                'By confirming, you authorise Sentro to send your bank '
-                                    'transaction history from the provided dates to the email '
-                                    'address attached to your account.',
-                                size: 12,
-                                fontFamily: CFONT.FAMILY,
-                                fontWeight: CFONT.wRegular,
-                                color: Colors.white
+                              SizedBox(width: widthSize(12)),
+                              Expanded(
+                                child: _DropdownBox(
+                                  useAccent: useAccent,
+                                  accent: accent,
+                                  header: 'End Date',
+                                  value: _endDate.label,
+                                  isOpen: _openDropdown == 'end',
+                                  onTap: () => _toggle('end'),
+                                  isDark: isDark,
+                                  dropdown: _openDropdown == 'end'
+                                      ? _MonthDropdown(
+                                    isDark: isDark,
+                                    useAccent: useAccent,
+                                    accent: accent,
+                                    options: _monthOptions,
+                                    selected: _endDate,
+                                    disableBefore: _startDate,
+                                    onSelect: (m) =>
+                                        setState(() {
+                                          _endDate = m;
+                                          _openDropdown = null;
+                                        }),
+                                  )
+                                      : null,
+                                ),
                               ),
                             ],
                           ),
-                        ),
-                        SizedBox(width: widthSize(12)),
-                        // ── Toggle ─────────────────────────
-                        GestureDetector(
-                          onTap: () =>
-                              setState(() => _termsAccepted = !_termsAccepted),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 180),
-                            curve: Curves.easeInOut,
-                            width: widthSize(54),
-                            height: heightSize(28),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: widthSize(4),
-                              vertical: heightSize(3),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(32),
-                              color: _termsAccepted
-                                  ? sNavContainer
-                                  : sDarkBorder,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: _termsAccepted
-                                  ? MainAxisAlignment.end
-                                  : MainAxisAlignment.start,
+
+                          SizedBox(height: heightSize(15)),
+
+                          // ── Format ──────────────────────────
+                          _DropdownBox(
+                            useAccent: useAccent,
+                            accent: accent,
+                            header: 'Document Format',
+                            value: _format,
+                            isOpen: _openDropdown == 'format',
+                            onTap: () => _toggle('format'),
+                            isDark: isDark,
+                            dropdown: _openDropdown == 'format'
+                                ? _FormatDropdown(
+                              useAccent: useAccent,
+                              accent: accent,
+                              isDark: isDark,
+                              formats: _formats,
+                              selected: _format,
+                              onSelect: (f) =>
+                                  setState(() {
+                                    _format = f;
+                                    _openDropdown = null;
+                                  }),
+                            )
+                                : null,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: heightSize(16)),
+
+                    // ── Email notice ──────────────────────────
+                    // Row(
+                    //   children: [
+                    //     Container(
+                    //       width: widthSize(28),
+                    //       height: heightSize(28),
+                    //       decoration: BoxDecoration(
+                    //         color: sNavContainer.withOpacity(0.15),
+                    //         borderRadius: BorderRadius.circular(6),
+                    //       ),
+                    //       child: Center(
+                    //         child: SvgPicture.asset(
+                    //           emailIcon,
+                    //           width: widthSize(16),
+                    //           height: heightSize(16),
+                    //           colorFilter: ColorFilter.mode(
+                    //             sNavContainer, BlendMode.srcIn,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     SizedBox(width: widthSize(8)),
+                    //     Expanded(
+                    //       child: RichText(
+                    //         text: TextSpan(
+                    //           style: TextStyle(
+                    //             fontSize: fontSize(12),
+                    //             fontFamily: CFONT.FAMILY,
+                    //             fontWeight: CFONT.wRegular,
+                    //             color: sNavContainer,
+                    //           ),
+                    //           children: const [
+                    //             TextSpan(
+                    //               text: 'Account statement be sent this email ',
+                    //             ),
+                    //             TextSpan(
+                    //               text: 'u***da@***.com',
+                    //               style: TextStyle(fontWeight: FontWeight.w600),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    //
+                    // SizedBox(height: heightSize(16)),
+
+                    // ── Terms card ────────────────────────────
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: widthSize(16),
+                        vertical: heightSize(16),
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: sSentroLightGreen.withOpacity(0.25),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                AnimatedContainer(
-                                  duration: const Duration(milliseconds: 180),
-                                  curve: Curves.easeInOut,
-                                  width: widthSize(22),
-                                  height: heightSize(22),
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white,
-                                  ),
+                                CText(
+                                  text: 'Terms and conditions',
+                                  size: 14,
+                                  fontFamily: CFONT.FAMILY,
+                                  fontWeight: CFONT.wMedium,
+                                  height: 18.63 / 14,
+                                ),
+                                SizedBox(height: heightSize(6)),
+                                CText(
+                                    text:
+                                    'By confirming, you authorise Sentro to send your bank '
+                                        'transaction history from the provided dates to the email '
+                                        'address attached to your account.',
+                                    size: 12,
+                                    fontFamily: CFONT.FAMILY,
+                                    fontWeight: CFONT.wRegular,
+                                    color: Colors.white
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                      ],
+                          SizedBox(width: widthSize(12)),
+                          // ── Toggle ─────────────────────────
+                          GestureDetector(
+                            onTap: () =>
+                                setState(() =>
+                                _termsAccepted = !_termsAccepted),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 180),
+                              curve: Curves.easeInOut,
+                              width: widthSize(54),
+                              height: heightSize(28),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: widthSize(4),
+                                vertical: heightSize(3),
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(32),
+                                color: _termsAccepted
+                                    ? useAccent?accent:sNavContainer
+                                    : sDarkBorder,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: _termsAccepted
+                                    ? MainAxisAlignment.end
+                                    : MainAxisAlignment.start,
+                                children: [
+                                  AnimatedContainer(
+                                    duration: const Duration(milliseconds: 180),
+                                    curve: Curves.easeInOut,
+                                    width: widthSize(22),
+                                    height: heightSize(22),
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: heightSize(40)),
+                  ],
+                ),
+              ),
+            ),
+
+            // ── Bottom button ─────────────────────────────────
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                widthSize(25),
+                0,
+                widthSize(25),
+                heightSize(42),
+              ),
+              child: GestureDetector(
+                onTap: _termsAccepted ? () {
+                  Get.toNamed(Routes.confirmPin);
+                } : null,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: double.maxFinite,
+                  height: heightSize(55),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(11.17),
+                    border: Border.all(
+                      color: _termsAccepted
+                          ? useAccent?accent:sNavContainer
+                          : sDarkBorder,
+                    ),
+                    color: Colors.transparent,
+                  ),
+                  child: Center(
+                    child: CText(
+                      text: 'Request Statement',
+                      size: 16,
+                      fontWeight: CFONT.wMedium,
+                      fontFamily: CFONT.FAMILY,
                     ),
                   ),
-
-                  SizedBox(height: heightSize(40)),
-                ],
-              ),
-            ),
-          ),
-
-          // ── Bottom button ─────────────────────────────────
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-              widthSize(25),
-              0,
-              widthSize(25),
-              heightSize(42),
-            ),
-            child: GestureDetector(
-              onTap: _termsAccepted ? () {
-                Get.toNamed(Routes.confirmPin);
-              } : null,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                width: double.maxFinite,
-                height: heightSize(55),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(11.17),
-                  border: Border.all(
-                    color: _termsAccepted
-                        ? sNavContainer
-                        : sDarkBorder,
-                  ),
-                  color: Colors.transparent,
-                ),
-                child: Center(
-                  child: CText(
-                    text: 'Request Statement',
-                    size: 16,
-                    fontWeight: CFONT.wMedium,
-                    fontFamily: CFONT.FAMILY,
-                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 }
@@ -399,6 +431,8 @@ class _DropdownBox extends StatelessWidget {
   final VoidCallback onTap;
   final Widget? dropdown;
   final bool isDark;
+  final Color accent;
+  final bool useAccent;
 
   const _DropdownBox({
     required this.header,
@@ -406,6 +440,8 @@ class _DropdownBox extends StatelessWidget {
     required this.isOpen,
     required this.onTap,
     required this.isDark,
+    required this.accent,
+    this.useAccent = false,
     this.dropdown,
   });
 
@@ -434,9 +470,9 @@ class _DropdownBox extends StatelessWidget {
                 bottomLeft: Radius.circular(isOpen ? 0 : 10),
                 bottomRight: Radius.circular(isOpen ? 0 : 10),
               ),
-              color: isDark?sDarkFill:sLightFill,
+              color: isDark ? sDarkFill : sLightFill,
               border: Border.all(
-                color: isOpen ? sNavContainer : sDarkBorder,
+                color: isOpen ? useAccent?accent:sNavContainer : sDarkBorder,
               ),
             ),
             child: Row(
@@ -457,7 +493,8 @@ class _DropdownBox extends StatelessWidget {
                     arrowDown,
                     width: widthSize(20),
                     height: heightSize(20),
-                    colorFilter: isDark?null:ColorFilter.mode(sGrey2, BlendMode.srcIn),
+                    colorFilter: isDark ? null : ColorFilter.mode(
+                        sGrey2, BlendMode.srcIn),
                   ),
                 ),
               ],
@@ -479,12 +516,16 @@ class _MonthDropdown extends StatelessWidget {
   final _MonthYear? disableAfter;
   final ValueChanged<_MonthYear> onSelect;
   final bool isDark;
+  final Color accent;
+  final bool useAccent;
 
   const _MonthDropdown({
     required this.options,
     required this.selected,
     required this.onSelect,
     required this.isDark,
+    required this.accent,
+    this.useAccent = false,
     this.disableBefore,
     this.disableAfter,
   });
@@ -498,8 +539,8 @@ class _MonthDropdown extends StatelessWidget {
           bottomLeft: Radius.circular(10),
           bottomRight: Radius.circular(10),
         ),
-        color: isDark?sDarkBorder:sLightBorder,
-        border: Border.all(color: sNavContainer),
+        color: isDark ? sDarkBorder : sLightBorder,
+        border: Border.all(color: useAccent?accent:sNavContainer),
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
@@ -535,7 +576,7 @@ class _MonthDropdown extends StatelessWidget {
                   color: isDisabled
                       ? sGrey1.withOpacity(0.35)
                       : isSelected
-                      ? sNavContainer
+                      ? useAccent?accent:sNavContainer
                       : null,
                 ),
               ),
@@ -554,12 +595,16 @@ class _FormatDropdown extends StatelessWidget {
   final String selected;
   final bool isDark;
   final ValueChanged<String> onSelect;
+  final Color accent;
+  final bool useAccent;
 
   const _FormatDropdown({
     required this.formats,
     required this.selected,
     required this.onSelect,
     required this.isDark,
+    required this.accent,
+    this.useAccent = false,
   });
 
   @override
@@ -570,8 +615,8 @@ class _FormatDropdown extends StatelessWidget {
           bottomLeft: Radius.circular(10),
           bottomRight: Radius.circular(10),
         ),
-        color: isDark?sDarkBorder:sLightBorder,
-        border: Border.all(color: sNavContainer),
+        color: isDark ? sDarkBorder : sLightBorder,
+        border: Border.all(color: useAccent?accent:sNavContainer),
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
@@ -598,7 +643,7 @@ class _FormatDropdown extends StatelessWidget {
                       fontFamily: CFONT.FAMILY,
                       fontWeight:
                       isSelected ? CFONT.wMedium : CFONT.wRegular,
-                      color: isSelected ? sNavContainer : null,
+                      color: isSelected ? useAccent?accent:sNavContainer : null,
                     ),
                     if (isSelected)
                       SvgPicture.asset(
@@ -606,7 +651,7 @@ class _FormatDropdown extends StatelessWidget {
                         width: widthSize(16),
                         height: heightSize(16),
                         colorFilter: ColorFilter.mode(
-                          sNavContainer, BlendMode.srcIn,
+                          useAccent?accent:sNavContainer, BlendMode.srcIn,
                         ),
                       ),
                   ],

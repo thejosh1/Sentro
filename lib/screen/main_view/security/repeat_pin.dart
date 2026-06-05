@@ -10,14 +10,14 @@ import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/text.dart';
 import 'package:sentro/core/widgets/keyboard_pin.dart';
 
-class CreatePin extends StatefulWidget {
-  const CreatePin({super.key});
+class RepeatPin extends StatefulWidget {
+  const RepeatPin({super.key});
 
   @override
-  State<CreatePin> createState() => _CreatePinState();
+  State<RepeatPin> createState() => _RepeatPinState();
 }
 
-class _CreatePinState extends State<CreatePin> {
+class _RepeatPinState extends State<RepeatPin> {
   TextEditingController pinController = TextEditingController();
   final TextEditingController controller = TextEditingController();
 
@@ -25,20 +25,7 @@ class _CreatePinState extends State<CreatePin> {
     final pin = controller.text.trim();
     if (pin.length < 4) return;
 
-    // Check if we arrived here from the Reset PIN flow sequence
-    final args = Get.arguments as Map<String, dynamic>?;
-    final isReset = args?['isReset'] == true;
-
-    if (isReset) {
-      // Pass the typed pin forward to RepeatPin for validation
-      Get.toNamed(Routes.repeatPin, arguments: {
-        'isReset': true,
-        'firstPin': pin,
-      });
-    } else {
-      // Standard new-account onboarding routing flow
-      Get.offAllNamed(Routes.welcome);
-    }
+    Get.offAllNamed(Routes.login);
   }
 
   @override
@@ -105,7 +92,7 @@ class _CreatePinState extends State<CreatePin> {
               ),
               SizedBox(height: heightSize(34),),
               CText(
-                text: 'Create your 4 Digit PIN',
+                text: 'Repeat your 4 Digit PIN',
                 size: 22,
                 fontFamily: CFONT.FAMILY,
                 fontWeight: CFONT.wBold,

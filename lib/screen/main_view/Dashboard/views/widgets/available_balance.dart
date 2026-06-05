@@ -7,6 +7,7 @@ import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/constants/values.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/controllers/visibility_controller.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/balance_visibility_wrapper.dart';
@@ -22,6 +23,12 @@ class AvailableBalance extends StatefulWidget {
 class _AvailableBalanceState extends State<AvailableBalance> {
   bool _obscured = false;
 
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme
@@ -36,358 +43,367 @@ class _AvailableBalanceState extends State<AvailableBalance> {
     final pillBg = isDark ? sButtonFillDark : colorScheme.primary.withOpacity(
         0.08);
 
-    return Padding(
-      padding: EdgeInsets.only(bottom: heightSize(12)),
-      child: Column(
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            clipBehavior: Clip.none,
-            children: [
-              // ── Card ──────────────────────────────────────────
-              Container(
-                width: double.maxFinite,
-                height: heightSize(196),
-                padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
-                decoration: BoxDecoration(
-                  borderRadius:
-                  BorderRadius.circular(Values().buttonRadius20),
-                  color: cardBg,
-                  boxShadow: isDark
-                      ? null
-                      : [
-                    BoxShadow(
-                      color: colorScheme.primary.withOpacity(0.08),
-                      blurRadius: 16,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(height: heightSize(10)),
+    return Obx(() {
+      final accent = AccentController.to.accent.value;
+      final useAccent = !_isDefaultAccent(accent);
+      return Padding(
+        padding: EdgeInsets.only(bottom: heightSize(12)),
+        child: Column(
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                // ── Card ──────────────────────────────────────────
+                Container(
+                  width: double.maxFinite,
+                  height: heightSize(196),
+                  padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
+                  decoration: BoxDecoration(
+                    borderRadius:
+                    BorderRadius.circular(Values().buttonRadius20),
+                    color: cardBg,
+                    boxShadow: isDark
+                        ? null
+                        : [
+                      BoxShadow(
+                        color: colorScheme.primary.withOpacity(0.08),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(height: heightSize(10)),
 
-                    // ── Top row ────────────────────────────────
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CText(
-                              text: 'Available Bal',
-                              size: 14,
-                              fontWeight: CFONT.wRegular,
-                              fontFamily: CFONT.FAMILY,
-                              color: isDark
-                                  ? sContainerTextDark
-                                  : colorScheme.onSurface.withOpacity(0.55),
-                            ),
-                            SizedBox(width: widthSize(5),),
-                            GestureDetector(
-                              onTap: () => VisibilityController.to.toggle(),
-                              child: Obx(() =>
-                                  SvgPicture.asset(
-                                    VisibilityController.to.isObscured.value
-                                        ? visibilityOff
-                                        : visIcon,
-                                    width: widthSize(24),
-                                    height: heightSize(24),
-                                  )),
-                            ),
-                          ],
-                        ),
-                        // Account pill
-                        Container(
-                          //width: widthSize(200),
-                          height: heightSize(31.97),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(83.34),
-                            color: pillBg,
-                            border: isDark
-                                ? null
-                                : Border.all(
-                              color: colorScheme.primary
-                                  .withOpacity(0.18),
-                              width: 1,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
+                      // ── Top row ────────────────────────────────
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(width: widthSize(10)),
-                              Container(
-                                width: widthSize(14.67),
-                                height: heightSize(14.67),
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: SvgPicture.asset(nigeria),
-                              ),
-                              SizedBox(width: widthSize(3)),
-                              SvgPicture.asset(
-                                arrowDown,
-                                width: widthSize(20),
-                                height: heightSize(20),
-                                colorFilter: ColorFilter.mode(
-                                  isDark
-                                      ? Colors.white
-                                      : colorScheme.onSurface,
-                                  BlendMode.srcIn,
-                                ),
-                              ),
-                              SizedBox(width: widthSize(10)),
                               CText(
-                                text: 'Kuda MFB - 9060007015',
-                                size: 11.67,
+                                text: 'Available Bal',
+                                size: 14,
                                 fontWeight: CFONT.wRegular,
                                 fontFamily: CFONT.FAMILY,
                                 color: isDark
-                                    ? Colors.white
-                                    : colorScheme.onSurface.withOpacity(0.75),
+                                    ? sContainerTextDark
+                                    : colorScheme.onSurface.withOpacity(0.55),
                               ),
-                              SizedBox(width: widthSize(17.83)),
+                              SizedBox(width: widthSize(5),),
+                              GestureDetector(
+                                onTap: () => VisibilityController.to.toggle(),
+                                child: Obx(() =>
+                                    SvgPicture.asset(
+                                      VisibilityController.to.isObscured.value
+                                          ? visibilityOff
+                                          : visIcon,
+                                      width: widthSize(24),
+                                      height: heightSize(24),
+                                    )),
+                              ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: heightSize(14.78)),
-
-                    // ── Balance + Token row ────────────────────
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        // Balance with visibility toggle
-                        GestureDetector(
-                          onTap: () =>
-                              setState(() => _obscured = !_obscured),
-                          child: Obx(() {
-                            final obscured = VisibilityController.to.isObscured.value;
-                            return AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 200),
-                              child: obscured
-                                  ? Text(
-                                '••••••',
-                                key: const ValueKey('hidden'),
-                                style: TextStyle(
-                                  fontSize: fontSize(30.11),
-                                  fontFamily: CFONT.FAMILY,
-                                  fontWeight: CFONT.wBold,
-                                  color: isDark
-                                      ? Colors.white
-                                      : colorScheme.onSurface,
-                                  letterSpacing: 4,
-                                ),
-                              )
-                                  : TextNaira(
-                                key: const ValueKey('shown'),
-                                text: '0.00',
-                                size: 30.11,
-                                nairaColor: isDark
-                                    ? sNavContainer
-                                    : sActionButton,
-                                fontWeight: CFONT.wBold,
-                                color: isDark
-                                    ? Colors.white
-                                    : colorScheme.onSurface,
+                          // Account pill
+                          Container(
+                            //width: widthSize(200),
+                            height: heightSize(31.97),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(83.34),
+                              color: pillBg,
+                              border: isDark
+                                  ? null
+                                  : Border.all(
+                                color: colorScheme.primary
+                                    .withOpacity(0.18),
+                                width: 1,
                               ),
-                            );
-                          }),
-                        ),
-                        // Token
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Row(
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                SvgPicture.asset(
-                                  token,
-                                  width: widthSize(21),
-                                  height: heightSize(21),
+                                SizedBox(width: widthSize(10)),
+                                Container(
+                                  width: widthSize(14.67),
+                                  height: heightSize(14.67),
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: SvgPicture.asset(nigeria),
                                 ),
-                                SizedBox(width: widthSize(4)),
+                                SizedBox(width: widthSize(3)),
+                                SvgPicture.asset(
+                                  arrowDown,
+                                  width: widthSize(20),
+                                  height: heightSize(20),
+                                  colorFilter: ColorFilter.mode(
+                                    isDark
+                                        ? Colors.white
+                                        : colorScheme.onSurface,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                                SizedBox(width: widthSize(10)),
                                 CText(
-                                  text: '0.00',
-                                  size: 20,
+                                  text: 'Kuda MFB - 9060007015',
+                                  size: 11.67,
                                   fontWeight: CFONT.wRegular,
                                   fontFamily: CFONT.FAMILY,
                                   color: isDark
                                       ? Colors.white
-                                      : colorScheme.onSurface,
+                                      : colorScheme.onSurface.withOpacity(0.75),
                                 ),
+                                SizedBox(width: widthSize(17.83)),
                               ],
-                            ),
-                            CText(
-                              text: 'Sentro Token',
-                              size: 10,
-                              fontStyle: FontStyle.italic,
-                              color: isDark
-                                  ? Colors.white54
-                                  : colorScheme.onSurface.withOpacity(0.45),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-
-                    Spacer(),
-
-                    // ── Transfer | Receive bar ────────────────
-                    Container(
-                      width: double.maxFinite,
-                      height: heightSize(50),
-                      padding: EdgeInsets.only(
-                        //left:  widthSize(32),
-                        //right: widthSize(26.22),
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          Values().buttonRadius11 + 1,
-                        ),
-                        gradient: const LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          stops: [0.0, 1.0],
-                          colors: [sBlue, sNavContainer],
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Transfer
-                          Expanded(
-                            child: _AnimatedTapRow(
-                              onTap: () =>
-                                  _showTransferDialog(
-                                    context,
-                                    isDark,
-                                    colorScheme,
-                                  ),
-                              child: Row(
-                                children: [
-                                  SizedBox(width: widthSize(40),),
-                                  CText(
-                                    text: 'Transfer',
-                                    fontWeight: CFONT.wMedium,
-                                    fontFamily: CFONT.FAMILY,
-                                    size: 18,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: widthSize(2.5)),
-                                  SvgPicture.asset(
-                                    sendMoney,
-                                    width: widthSize(24),
-                                    height: heightSize(24),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          VerticalDivider(
-                            width: 34,
-                            thickness: 2,
-                            color: Colors.white.withOpacity(0.4),
-                            indent: 8,
-                            endIndent: 8,
-                          ),
-
-                          // Receive
-                          Expanded(
-                            child: _AnimatedTapRow(
-                              onTap: () =>
-                                  _showReceiveDialog(
-                                    context,
-                                    isDark,
-                                    colorScheme,
-                                  ),
-                              child: Row(
-                                children: [
-                                  SizedBox(width: widthSize(25.5),),
-                                  CText(
-                                    text: 'Receive',
-                                    fontWeight: CFONT.wMedium,
-                                    fontFamily: CFONT.FAMILY,
-                                    size: 18,
-                                    color: sActionButton,
-                                  ),
-                                  SizedBox(width: widthSize(2.5)),
-                                  SvgPicture.asset(
-                                    receiveMoney,
-                                    width: widthSize(24),
-                                    height: heightSize(24),
-                                  ),
-                                ],
-                              ),
                             ),
                           ),
                         ],
                       ),
+
+                      SizedBox(height: heightSize(14.78)),
+
+                      // ── Balance + Token row ────────────────────
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          // Balance with visibility toggle
+                          GestureDetector(
+                            onTap: () =>
+                                setState(() => _obscured = !_obscured),
+                            child: Obx(() {
+                              final obscured = VisibilityController.to
+                                  .isObscured.value;
+                              return AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 200),
+                                child: obscured
+                                    ? Text(
+                                  '••••••',
+                                  key: const ValueKey('hidden'),
+                                  style: TextStyle(
+                                    fontSize: fontSize(30.11),
+                                    fontFamily: CFONT.FAMILY,
+                                    fontWeight: CFONT.wBold,
+                                    color: isDark
+                                        ? Colors.white
+                                        : colorScheme.onSurface,
+                                    letterSpacing: 4,
+                                  ),
+                                )
+                                    : TextNaira(
+                                  key: const ValueKey('shown'),
+                                  text: '0.00',
+                                  size: 30.11,
+                                  nairaColor: isDark
+                                      ? sNavContainer
+                                      : sActionButton,
+                                  fontWeight: CFONT.wBold,
+                                  color: isDark
+                                      ? Colors.white
+                                      : colorScheme.onSurface,
+                                ),
+                              );
+                            }),
+                          ),
+                          // Token
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    token,
+                                    width: widthSize(21),
+                                    height: heightSize(21),
+                                  ),
+                                  SizedBox(width: widthSize(4)),
+                                  CText(
+                                    text: '0.00',
+                                    size: 20,
+                                    fontWeight: CFONT.wRegular,
+                                    fontFamily: CFONT.FAMILY,
+                                    color: isDark
+                                        ? Colors.white
+                                        : colorScheme.onSurface,
+                                  ),
+                                ],
+                              ),
+                              CText(
+                                text: 'Sentro Token',
+                                size: 10,
+                                fontStyle: FontStyle.italic,
+                                color: isDark
+                                    ? Colors.white54
+                                    : colorScheme.onSurface.withOpacity(0.45),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      Spacer(),
+
+                      // ── Transfer | Receive bar ────────────────
+                      Container(
+                        width: double.maxFinite,
+                        height: heightSize(50),
+                        padding: EdgeInsets.only(
+                          //left:  widthSize(32),
+                          //right: widthSize(26.22),
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            Values().buttonRadius11 + 1,
+                          ),
+                          gradient: const LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            stops: [0.0, 1.0],
+                            colors: [sBlue, sNavContainer],
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Transfer
+                            Expanded(
+                              child: _AnimatedTapRow(
+                                onTap: () =>
+                                    _showTransferDialog(
+                                      context,
+                                      isDark,
+                                      colorScheme,
+                                      useAccent,
+                                      accent,
+                                    ),
+                                child: Row(
+                                  children: [
+                                    SizedBox(width: widthSize(40),),
+                                    CText(
+                                      text: 'Transfer',
+                                      fontWeight: CFONT.wMedium,
+                                      fontFamily: CFONT.FAMILY,
+                                      size: 18,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: widthSize(2.5)),
+                                    SvgPicture.asset(
+                                      sendMoney,
+                                      width: widthSize(24),
+                                      height: heightSize(24),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            VerticalDivider(
+                              width: 34,
+                              thickness: 2,
+                              color: Colors.white.withOpacity(0.4),
+                              indent: 8,
+                              endIndent: 8,
+                            ),
+
+                            // Receive
+                            Expanded(
+                              child: _AnimatedTapRow(
+                                onTap: () =>
+                                    _showReceiveDialog(
+                                      context,
+                                      isDark,
+                                      colorScheme,
+                                      useAccent,
+                                      accent,
+                                    ),
+                                child: Row(
+                                  children: [
+                                    SizedBox(width: widthSize(25.5),),
+                                    CText(
+                                      text: 'Receive',
+                                      fontWeight: CFONT.wMedium,
+                                      fontFamily: CFONT.FAMILY,
+                                      size: 18,
+                                      color: sActionButton,
+                                    ),
+                                    SizedBox(width: widthSize(2.5)),
+                                    SvgPicture.asset(
+                                      receiveMoney,
+                                      width: widthSize(24),
+                                      height: heightSize(24),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: heightSize(15)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            // ── Transaction History chip ─────────────────────────
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () => Get.toNamed(Routes.transactionHistory),
+              child: Container(
+                width: widthSize(148),
+                height: heightSize(30),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(Values().buttonRadius10 + 2),
+                    bottomRight: Radius.circular(Values().buttonRadius10 + 2),
+                  ),
+                  color: historyBg,
+                  boxShadow: isDark
+                      ? null
+                      : [
+                    BoxShadow(
+                      color: colorScheme.primary.withOpacity(0.07),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
                     ),
-                    SizedBox(height: heightSize(15)),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      arrowDownCircle,
+                      width: widthSize(19.5),
+                      height: heightSize(19.5),
+                    ),
+                    SizedBox(width: widthSize(8)),
+                    CText(
+                      text: 'Transaction History',
+                      fontWeight: CFONT.wRegular,
+                      fontFamily: CFONT.FAMILY,
+                      size: 12,
+                      color: isDark ? Colors.white : colorScheme.primary,
+                    ),
+                    SizedBox(width: widthSize(2)),
                   ],
                 ),
               ),
-            ],
-          ),
-
-          // ── Transaction History chip ─────────────────────────
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () => Get.toNamed(Routes.transactionHistory),
-            child: Container(
-              width: widthSize(148),
-              height: heightSize(30),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(Values().buttonRadius10 + 2),
-                  bottomRight: Radius.circular(Values().buttonRadius10 + 2),
-                ),
-                color: historyBg,
-                boxShadow: isDark
-                    ? null
-                    : [
-                  BoxShadow(
-                    color: colorScheme.primary.withOpacity(0.07),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    arrowDownCircle,
-                    width: widthSize(19.5),
-                    height: heightSize(19.5),
-                  ),
-                  SizedBox(width: widthSize(8)),
-                  CText(
-                    text: 'Transaction History',
-                    fontWeight: CFONT.wRegular,
-                    fontFamily: CFONT.FAMILY,
-                    size: 12,
-                    color: isDark ? Colors.white : colorScheme.primary,
-                  ),
-                  SizedBox(width: widthSize(2)),
-                ],
-              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   // ── Transfer dialog ──────────────────────────────────────────────────────────
 
   void _showTransferDialog(BuildContext context,
       bool isDark,
-      ColorScheme colorScheme,) {
+      ColorScheme colorScheme, bool useAccent, Color accent) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -395,12 +411,16 @@ class _AvailableBalanceState extends State<AvailableBalance> {
       builder: (ctx) =>
           _MoneyDialog(
             isDark: isDark,
+            useAccent: useAccent,
+            accent: accent,
             colorScheme: colorScheme,
             title: 'Send Money',
             subtitle: 'Choose how you want to send money',
             items: [
               _DialogItemData(
                 icon: bank,
+                useAccent: useAccent,
+                accent: accent,
                 title: 'Other Banks',
                 subtitle: 'Send money to local and commercial banks',
                 onTap: () =>
@@ -411,6 +431,8 @@ class _AvailableBalanceState extends State<AvailableBalance> {
               ),
               _DialogItemData(
                 icon: sentro,
+                useAccent: useAccent,
+                accent: accent,
                 title: 'Sentro User (Sentro Tag)',
                 subtitle: 'Send money to users on Sentro, instant and free',
                 onTap: () =>
@@ -421,6 +443,8 @@ class _AvailableBalanceState extends State<AvailableBalance> {
               ),
               _DialogItemData(
                 icon: qrPayWhite,
+                useAccent: useAccent,
+                accent: accent,
                 title: 'QR Pay',
                 subtitle: 'Send money by scanning QR Code',
                 onTap: () => Get.toNamed(Routes.qrPay),
@@ -434,7 +458,7 @@ class _AvailableBalanceState extends State<AvailableBalance> {
 
   void _showReceiveDialog(BuildContext context,
       bool isDark,
-      ColorScheme colorScheme,) {
+      ColorScheme colorScheme, bool useAccent, Color accent,) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -442,36 +466,46 @@ class _AvailableBalanceState extends State<AvailableBalance> {
       builder: (ctx) =>
           _MoneyDialog(
             isDark: isDark,
+            useAccent: useAccent,
+            accent: accent,
             colorScheme: colorScheme,
             title: 'Receive Money',
             subtitle: 'Choose how you want to receive money',
             items: [
               _DialogItemData(
                 icon: sentro,
+                useAccent: useAccent,
+                accent: accent,
                 title: 'Request from Sentro User',
                 subtitle: 'Send money to users on Sentro, instant and free',
                 onTap: () => Get.toNamed(Routes.requestFromSentro),
               ),
               _DialogItemData(
                 icon: moneyReceive,
+                useAccent: useAccent,
+                accent: accent,
                 title: 'Account Top-up',
                 subtitle: 'Add money from other banks',
                 onTap: () {},
               ),
               _DialogItemData(
                 icon: qrPayWhite,
+                useAccent: useAccent,
+                accent: accent,
                 title: 'QR Pay',
                 subtitle: 'Share QR Code to receive money',
                 onTap: () => Get.toNamed(Routes.qrPay),
               ),
               _DialogItemData(
                 icon: coin,
+                useAccent: useAccent,
+                accent: accent,
                 title: 'Stable Coins',
                 subtitle: 'Receive money through stable coin transfer',
                 onTap: () {},
               ),
             ],
-            footer: _AccountDetailsCard(isDark: isDark),
+            footer: _AccountDetailsCard(isDark: isDark, useAccent: useAccent, accent: accent,),
           ),
     );
   }
@@ -484,12 +518,16 @@ class _DialogItemData {
   final String title;
   final String subtitle;
   final VoidCallback onTap;
+  final bool useAccent;
+  final Color accent;
 
   const _DialogItemData({
     required this.icon,
     required this.title,
     required this.subtitle,
     required this.onTap,
+    required this.accent,
+    this.useAccent = false,
   });
 }
 
@@ -500,6 +538,8 @@ class _MoneyDialog extends StatefulWidget {
   final String subtitle;
   final List<_DialogItemData> items;
   final Widget? footer;
+  final bool useAccent;
+  final Color accent;
 
   const _MoneyDialog({
     required this.isDark,
@@ -507,6 +547,8 @@ class _MoneyDialog extends StatefulWidget {
     required this.title,
     required this.subtitle,
     required this.items,
+    required this.accent,
+    this.useAccent = false,
     this.footer,
   });
 
@@ -586,74 +628,83 @@ class _MoneyDialogState extends State<_MoneyDialog> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         BalanceVisibility(
-                          builder: (obscured, toggleLocal) => Row(  // 👈 obscured comes from here
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SvgPicture.asset(
-                                wallet,
-                                width: widthSize(18),
-                                height: heightSize(18),
-                                colorFilter: ColorFilter.mode(
-                                  widget.isDark ? sNavContainer : sActionButton,
-                                  BlendMode.srcIn,
-                                ),
-                              ),
-                              SizedBox(width: widthSize(4)),
-                              AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 200),
-                                child: obscured          // 👈 was _obscured, now uses builder param
-                                    ? Text(
-                                  '••••••',
-                                  key: const ValueKey('h'),
-                                  style: TextStyle(
-                                    fontSize: fontSize(13),
-                                    fontFamily: CFONT.FAMILY,
-                                    fontWeight: CFONT.wRegular,
-                                    color: _titleColor,
-                                    letterSpacing: 2,
+                          builder: (obscured, toggleLocal) =>
+                              Row( // 👈 obscured comes from here
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                    wallet,
+                                    width: widthSize(18),
+                                    height: heightSize(18),
+                                    colorFilter: widget.useAccent
+                                        ? ColorFilter.mode(
+                                        widget.accent, BlendMode.srcIn)
+                                        : ColorFilter.mode(
+                                      widget.isDark
+                                          ? sNavContainer
+                                          : sActionButton,
+                                      BlendMode.srcIn,
+                                    ),
                                   ),
-                                )
-                                    : RichText(
-                                  key: const ValueKey('s'),
-                                  text: TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: '₦50,000',
-                                        style: TextStyle(
-                                          inherit: false,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w400,
-                                          color: _titleColor,
-                                        ),
+                                  SizedBox(width: widthSize(4)),
+                                  AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 200),
+                                    child: obscured // 👈 was _obscured, now uses builder param
+                                        ? Text(
+                                      '••••••',
+                                      key: const ValueKey('h'),
+                                      style: TextStyle(
+                                        fontSize: fontSize(13),
+                                        fontFamily: CFONT.FAMILY,
+                                        fontWeight: CFONT.wRegular,
+                                        color: _titleColor,
+                                        letterSpacing: 2,
                                       ),
-                                      TextSpan(
-                                        text: '.00',
-                                        style: TextStyle(
-                                          fontSize: 9,
-                                          fontFamily: CFONT.FAMILY,
-                                          fontWeight: CFONT.wRegular,
-                                          color: _titleColor,
-                                        ),
+                                    )
+                                        : RichText(
+                                      key: const ValueKey('s'),
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: '₦50,000',
+                                            style: TextStyle(
+                                              inherit: false,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w400,
+                                              color: _titleColor,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: '.00',
+                                            style: TextStyle(
+                                              fontSize: 9,
+                                              fontFamily: CFONT.FAMILY,
+                                              fontWeight: CFONT.wRegular,
+                                              color: _titleColor,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                              SizedBox(width: widthSize(4)),
-                              GestureDetector(
-                                onTap: toggleLocal,      // 👈 was setState(() => _obscured = !_obscured)
-                                child: SvgPicture.asset(
-                                  obscured ? visibilityOff : hide,   // 👈 was _obscured
-                                  width: widthSize(18),
-                                  height: heightSize(18),
-                                  colorFilter: ColorFilter.mode(
-                                    widget.isDark ? Colors.white54 : Colors.black45,
-                                    BlendMode.srcIn,
+                                  SizedBox(width: widthSize(4)),
+                                  GestureDetector(
+                                    onTap: toggleLocal,
+                                    // 👈 was setState(() => _obscured = !_obscured)
+                                    child: SvgPicture.asset(
+                                      obscured ? visibilityOff : hide,
+                                      // 👈 was _obscured
+                                      width: widthSize(18),
+                                      height: heightSize(18),
+                                      colorFilter: ColorFilter.mode(
+                                        widget.isDark ? Colors.white54 : Colors
+                                            .black45,
+                                        BlendMode.srcIn,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
                         ),
                       ],
                     ),
@@ -734,7 +785,7 @@ class _MoneyDialogState extends State<_MoneyDialog> {
                               item.icon,
                               width: widthSize(46),
                               height: heightSize(46),
-                              colorFilter: const ColorFilter.mode(
+                              colorFilter: widget.useAccent?ColorFilter.mode(widget.accent, BlendMode.srcIn): ColorFilter.mode(
                                 sNavContainer,
                                 BlendMode.srcIn,
                               ),
@@ -789,8 +840,10 @@ class _MoneyDialogState extends State<_MoneyDialog> {
 
 class _AccountDetailsCard extends StatelessWidget {
   final bool isDark;
+  final bool useAccent;
+  final Color accent;
 
-  const _AccountDetailsCard({required this.isDark});
+  const _AccountDetailsCard({required this.isDark, this.useAccent = false,  required this.accent});
 
   @override
   Widget build(BuildContext context) {
@@ -851,9 +904,9 @@ class _AccountDetailsCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  _iconBtn(copy, isDark),
+                  _iconBtn(copy, isDark, useAccent, accent),
                   SizedBox(width: widthSize(10)),
-                  _iconBtn(share, isDark),
+                  _iconBtn(share, isDark, useAccent, accent),
                 ],
               ),
             ],
@@ -863,13 +916,13 @@ class _AccountDetailsCard extends StatelessWidget {
     );
   }
 
-  Widget _iconBtn(String asset, bool isDark) {
+  Widget _iconBtn(String asset, bool isDark, bool useAccent, Color accent) {
     return Center(
       child: SvgPicture.asset(
         asset,
         width: widthSize(30),
         height: heightSize(30),
-        colorFilter: ColorFilter.mode(sNavContainer, BlendMode.srcIn),
+        colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):ColorFilter.mode(sNavContainer, BlendMode.srcIn),
       ),
     );
   }

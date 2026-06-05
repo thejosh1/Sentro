@@ -193,12 +193,12 @@ class RecentlyUsedPanelState extends State<RecentlyUsedPanel>
                         boxShadow: widget.isDark
                             ? null
                             : [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.06),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, -2),
-                                ),
-                              ],
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.06),
+                            blurRadius: 6,
+                            offset: const Offset(0, -2),
+                          ),
+                        ],
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -297,345 +297,354 @@ class ProfileSheet extends StatelessWidget {
     Future.delayed(const Duration(milliseconds: 150), () => Get.toNamed(route));
   }
 
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
+
   // ── Build ────────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: widthSize(5)),
-        decoration: BoxDecoration(
-          color: _panelColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(Values().buttonRadius20),
-            topRight: Radius.circular(Values().buttonRadius20),
-          ),
-          boxShadow: isDark
-              ? null
-              : [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
-                    blurRadius: 20,
-                    offset: const Offset(0, -4),
-                  ),
-                ],
-        ),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                top: heightSize(16),
-                left: widthSize(20),
-                right: widthSize(20),
-                bottom: heightSize(13),
+    return Obx(() {
+      final accent = AccentController.to.accent.value;
+      final useAccent = !_isDefaultAccent(accent);
+      return IntrinsicHeight(
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: widthSize(5)),
+          decoration: BoxDecoration(
+            color: _panelColor,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(Values().buttonRadius20),
+              topRight: Radius.circular(Values().buttonRadius20),
+            ),
+            boxShadow: isDark
+                ? null
+                : [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 20,
+                offset: const Offset(0, -4),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // ── Avatar + name + account row ────────────
-                  Row(
-                    children: [
-                      Container(
-                        width: widthSize(50),
-                        height: heightSize(50),
-                        margin: EdgeInsets.only(left: widthSize(3)),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: AssetImage(avatar),
-                            fit: BoxFit.cover,
+            ],
+          ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  top: heightSize(16),
+                  left: widthSize(20),
+                  right: widthSize(20),
+                  bottom: heightSize(13),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // ── Avatar + name + account row ────────────
+                    Row(
+                      children: [
+                        Container(
+                          width: widthSize(50),
+                          height: heightSize(50),
+                          margin: EdgeInsets.only(left: widthSize(3)),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: AssetImage(avatar),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
+                        SizedBox(width: widthSize(10)),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CText(
+                              text: 'Richmond Uche',
+                              fontFamily: CFONT.FAMILY,
+                              fontWeight: CFONT.wRegular,
+                              size: 14,
+                              color: colorScheme.onSurface,
+                            ),
+                            SizedBox(height: heightSize(4)),
+                            Container(
+                              height: heightSize(28.67),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(83.34),
+                                color: _accountPillBg,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(width: widthSize(10)),
+                                  Container(
+                                    width: widthSize(14.67),
+                                    height: heightSize(14.67),
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: SvgPicture.asset(nigeria),
+                                  ),
+                                  SizedBox(width: widthSize(3)),
+                                  SvgPicture.asset(
+                                    arrowDown,
+                                    width: widthSize(20),
+                                    height: heightSize(20),
+                                    colorFilter: ColorFilter.mode(
+                                      colorScheme.onSurface,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                  SizedBox(width: widthSize(10)),
+                                  CText(
+                                    text: 'Kuda MFB - 9060007015',
+                                    size: 11.67,
+                                    fontWeight: CFONT.wRegular,
+                                    fontFamily: CFONT.FAMILY,
+                                    color: colorScheme.onSurface.withOpacity(
+                                      0.65,
+                                    ),
+                                  ),
+                                  SizedBox(width: widthSize(17.83)),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: heightSize(22)),
+
+                    // ── Upgrade card ───────────────────────────
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: widthSize(22),
+                        vertical: heightSize(14),
                       ),
-                      SizedBox(width: widthSize(10)),
-                      Column(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: _cardBg,
+                      ),
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CText(
-                            text: 'Richmond Uche',
-                            fontFamily: CFONT.FAMILY,
-                            fontWeight: CFONT.wRegular,
-                            size: 14,
-                            color: colorScheme.onSurface,
-                          ),
-                          SizedBox(height: heightSize(4)),
-                          Container(
-                            height: heightSize(28.67),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(83.34),
-                              color: _accountPillBg,
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(width: widthSize(10)),
-                                Container(
-                                  width: widthSize(14.67),
-                                  height: heightSize(14.67),
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: SvgPicture.asset(nigeria),
-                                ),
-                                SizedBox(width: widthSize(3)),
-                                SvgPicture.asset(
-                                  arrowDown,
-                                  width: widthSize(20),
-                                  height: heightSize(20),
-                                  colorFilter: ColorFilter.mode(
-                                    colorScheme.onSurface,
-                                    BlendMode.srcIn,
-                                  ),
-                                ),
-                                SizedBox(width: widthSize(10)),
-                                CText(
-                                  text: 'Kuda MFB - 9060007015',
-                                  size: 11.67,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: CText(
+                                  text: 'Complete verification to access more',
+                                  size: 13,
                                   fontWeight: CFONT.wRegular,
                                   fontFamily: CFONT.FAMILY,
-                                  color: colorScheme.onSurface.withOpacity(
-                                    0.65,
+                                  color: colorScheme.onSurface.withOpacity(0.8),
+                                  height: 16.67 / 13,
+                                ),
+                              ),
+                              SizedBox(width: widthSize(8)),
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    goldMedal,
+                                    width: widthSize(14.3),
+                                    height: heightSize(20),
+                                  ),
+                                  SizedBox(width: widthSize(4)),
+                                  CText(
+                                    text: 'Tier 2',
+                                    size: 16,
+                                    fontWeight: CFONT.wMedium,
+                                    fontFamily: CFONT.FAMILY,
+                                    color: colorScheme.onSurface,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: heightSize(10)),
+                          TweenAnimationBuilder<double>(
+                            tween: Tween<double>(begin: 0, end: 0.65),
+                            duration: const Duration(milliseconds: 800),
+                            curve: Curves.easeOutCubic,
+                            builder: (context, value, _) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: LinearProgressIndicator(
+                                  value: value,
+                                  minHeight: heightSize(8),
+                                  backgroundColor: isDark
+                                      ? useAccent?accent.withOpacity(0.2):sNavContainer.withOpacity(0.2)
+                                      : sActionButton.withOpacity(0.2),
+                                  valueColor: AlwaysStoppedAnimation(
+                                    isDark ? useAccent?accent:sNavContainer : sActionButton,
                                   ),
                                 ),
-                                SizedBox(width: widthSize(17.83)),
-                              ],
+                              );
+                            },
+                          ),
+                          SizedBox(height: heightSize(12)),
+                          Center(
+                            child: GestureDetector(
+                              onTap: () => _goTo(Routes.upgradeAccount),
+                              child: CText(
+                                text: 'Upgrade Account',
+                                size: 14,
+                                fontFamily: CFONT.FAMILY,
+                                fontWeight: CFONT.wRegular,
+                                color: isDark ? useAccent?accent:sNavContainer : sActionButton,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-
-                  SizedBox(height: heightSize(22)),
-
-                  // ── Upgrade card ───────────────────────────
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: widthSize(22),
-                      vertical: heightSize(14),
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: _cardBg,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: CText(
-                                text: 'Complete verification to access more',
-                                size: 13,
-                                fontWeight: CFONT.wRegular,
-                                fontFamily: CFONT.FAMILY,
-                                color: colorScheme.onSurface.withOpacity(0.8),
-                                height: 16.67 / 13,
-                              ),
-                            ),
-                            SizedBox(width: widthSize(8)),
-                            Row(
-                              children: [
-                                SvgPicture.asset(
-                                  goldMedal,
-                                  width: widthSize(14.3),
-                                  height: heightSize(20),
-                                ),
-                                SizedBox(width: widthSize(4)),
-                                CText(
-                                  text: 'Tier 2',
-                                  size: 16,
-                                  fontWeight: CFONT.wMedium,
-                                  fontFamily: CFONT.FAMILY,
-                                  color: colorScheme.onSurface,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: heightSize(10)),
-                        TweenAnimationBuilder<double>(
-                          tween: Tween<double>(begin: 0, end: 0.65),
-                          duration: const Duration(milliseconds: 800),
-                          curve: Curves.easeOutCubic,
-                          builder: (context, value, _) {
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: LinearProgressIndicator(
-                                value: value,
-                                minHeight: heightSize(8),
-                                backgroundColor: isDark
-                                    ? sNavContainer.withOpacity(0.2)
-                                    : sActionButton.withOpacity(0.2),
-                                valueColor: AlwaysStoppedAnimation(
-                                  isDark ? sNavContainer : sActionButton,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        SizedBox(height: heightSize(12)),
-                        Center(
-                          child: GestureDetector(
-                            onTap: () => _goTo(Routes.upgradeAccount),
-                            child: CText(
-                              text: 'Upgrade Account',
-                              size: 14,
-                              fontFamily: CFONT.FAMILY,
-                              fontWeight: CFONT.wRegular,
-                              color: isDark ? sNavContainer : sActionButton,
+
+                    SizedBox(height: heightSize(28)),
+
+                    // ── Options row 1 ──────────────────────────
+                    _row([
+                      _item(
+                        assetName: profile,
+                        title: 'Profile',
+                        callback: () => _goTo(Routes.profilePage),
+                      ),
+                      _item(
+                        assetName: security,
+                        title: 'Security',
+                        callback: () => _goTo(Routes.security),
+                      ),
+                      _item(
+                        assetName: verification,
+                        title: 'Verification',
+                        callback: () => _goTo(Routes.verification),
+                      ),
+                      _item(
+                        assetName: transactions,
+                        title: 'Transactions',
+                        callback: () => _goTo(Routes.transactionHistory),
+                      ),
+                      _item(
+                        assetName: beneficiary,
+                        title: 'Beneficiaries',
+                        callback: () => _goTo(Routes.beneficiaries),
+                      ),
+                    ]),
+
+                    SizedBox(height: heightSize(15)),
+
+                    // ── Options row 2 ──────────────────────────
+                    _row([
+                      _item(
+                        assetName: statement,
+                        title: 'Account Statements',
+                        callback: () => _goTo(Routes.accountStatements),
+                      ),
+                      _item(
+                        assetName: limits,
+                        title: 'Account Limits',
+                        callback: () => _goTo(Routes.accountLimit),
+                      ),
+                      _item(
+                        assetName: support,
+                        title: 'Customer Service',
+                        callback: () {},
+                      ),
+                      _item(
+                        assetName: terms,
+                        title: 'Terms & Conditions',
+                        callback: () => _goTo(Routes.terms),
+                      ),
+                      _item(
+                        assetName: notificationSettings,
+                        title: 'Notification Settings',
+                        callback: () => _goTo(Routes.notification),
+                      ),
+                    ]),
+
+                    SizedBox(height: heightSize(26)),
+
+                    // ── Appearance toggle ──────────────────────
+                    const AppearanceToggle(),
+
+                    SizedBox(height: heightSize(26)),
+
+                    // ── Log out ────────────────────────────────
+                    GestureDetector(
+                      onTap: () => Get.offAllNamed(Routes.continuosLogin),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            logout,
+                            width: widthSize(24),
+                            height: heightSize(24),
+                            colorFilter: const ColorFilter.mode(
+                              sLogout,
+                              BlendMode.srcIn,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: heightSize(28)),
-
-                  // ── Options row 1 ──────────────────────────
-                  _row([
-                    _item(
-                      assetName: profile,
-                      title: 'Profile',
-                      callback: () => _goTo(Routes.profilePage),
-                    ),
-                    _item(
-                      assetName: security,
-                      title: 'Security',
-                      callback: () => _goTo(Routes.security),
-                    ),
-                    _item(
-                      assetName: verification,
-                      title: 'Verification',
-                      callback: () => _goTo(Routes.verification),
-                    ),
-                    _item(
-                      assetName: transactions,
-                      title: 'Transactions',
-                      callback: () => _goTo(Routes.transactionHistory),
-                    ),
-                    _item(
-                      assetName: beneficiary,
-                      title: 'Beneficiaries',
-                      callback: () => _goTo(Routes.beneficiaries),
-                    ),
-                  ]),
-
-                  SizedBox(height: heightSize(15)),
-
-                  // ── Options row 2 ──────────────────────────
-                  _row([
-                    _item(
-                      assetName: statement,
-                      title: 'Account Statements',
-                      callback: () => _goTo(Routes.accountStatements),
-                    ),
-                    _item(
-                      assetName: limits,
-                      title: 'Account Limits',
-                      callback: () => _goTo(Routes.accountLimit),
-                    ),
-                    _item(
-                      assetName: support,
-                      title: 'Customer Service',
-                      callback: () {},
-                    ),
-                    _item(
-                      assetName: terms,
-                      title: 'Terms & Conditions',
-                      callback: () => _goTo(Routes.terms),
-                    ),
-                    _item(
-                      assetName: notificationSettings,
-                      title: 'Notification Settings',
-                      callback: () => _goTo(Routes.notification),
-                    ),
-                  ]),
-
-                  SizedBox(height: heightSize(26)),
-
-                  // ── Appearance toggle ──────────────────────
-                  const AppearanceToggle(),
-
-                  SizedBox(height: heightSize(26)),
-
-                  // ── Log out ────────────────────────────────
-                  GestureDetector(
-                    onTap: () => Get.offAllNamed(Routes.continuosLogin),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          logout,
-                          width: widthSize(24),
-                          height: heightSize(24),
-                          colorFilter: const ColorFilter.mode(
-                            sLogout,
-                            BlendMode.srcIn,
+                          SizedBox(width: widthSize(6)),
+                          CText(
+                            text: 'Log Out',
+                            size: 18,
+                            fontFamily: CFONT.FAMILY,
+                            fontWeight: CFONT.wRegular,
+                            color: sLogout,
                           ),
-                        ),
-                        SizedBox(width: widthSize(6)),
-                        CText(
-                          text: 'Log Out',
-                          size: 18,
-                          fontFamily: CFONT.FAMILY,
-                          fontWeight: CFONT.wRegular,
-                          color: sLogout,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: heightSize(29)),
-                ],
-              ),
-            ),
-
-            // ── Header pill ────────────────────────────────
-            Positioned(
-              top: -23,
-              left: 20,
-              child: Container(
-                width: widthSize(141),
-                height: heightSize(30),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(Values().buttonRadius10 + 2),
-                    topRight: Radius.circular(Values().buttonRadius10 + 2),
-                  ),
-                  color: _panelColor,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      setting,
-                      width: widthSize(24),
-                      height: heightSize(24),
-                      colorFilter: ColorFilter.mode(
-                        colorScheme.onSurface,
-                        BlendMode.srcIn,
+                        ],
                       ),
                     ),
-                    SizedBox(width: widthSize(8)),
-                    CText(
-                      text: 'Profile & Settings',
-                      size: 12,
-                      fontWeight: CFONT.wRegular,
-                      fontFamily: CFONT.FAMILY,
-                      color: colorScheme.onSurface,
-                    ),
+
+                    SizedBox(height: heightSize(29)),
                   ],
                 ),
               ),
-            ),
-          ],
+
+              // ── Header pill ────────────────────────────────
+              Positioned(
+                top: -23,
+                left: 20,
+                child: Container(
+                  width: widthSize(141),
+                  height: heightSize(30),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(Values().buttonRadius10 + 2),
+                      topRight: Radius.circular(Values().buttonRadius10 + 2),
+                    ),
+                    color: _panelColor,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        setting,
+                        width: widthSize(24),
+                        height: heightSize(24),
+                        colorFilter: ColorFilter.mode(
+                          colorScheme.onSurface,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      SizedBox(width: widthSize(8)),
+                      CText(
+                        text: 'Profile & Settings',
+                        size: 12,
+                        fontWeight: CFONT.wRegular,
+                        fontFamily: CFONT.FAMILY,
+                        color: colorScheme.onSurface,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -671,11 +680,12 @@ class _CollapsedRow extends StatelessWidget {
           title: 'Data',
           isDark: isDark,
           colorScheme: colorScheme,
-          callback: () => showMobileTopupDialog(
-            context: context,
-            isDark: isDark,
-            initialDataSelected: true,
-          ),
+          callback: () =>
+              showMobileTopupDialog(
+                context: context,
+                isDark: isDark,
+                initialDataSelected: true,
+              ),
         ),
         investmentItem(
           assetName: electricity,
@@ -791,11 +801,12 @@ class _ExpandedContent extends StatelessWidget {
               colorScheme: colorScheme,
               tintColor: isDark ? Colors.white : sActionButton,
               title: 'Data',
-              onTap: () => showMobileTopupDialog(
-                context: context,
-                isDark: isDark,
-                initialDataSelected: true,
-              ),
+              onTap: () =>
+                  showMobileTopupDialog(
+                    context: context,
+                    isDark: isDark,
+                    initialDataSelected: true,
+                  ),
             ),
             _item(
               assetName: electricity,
@@ -804,8 +815,9 @@ class _ExpandedContent extends StatelessWidget {
               tintColor: isDark ? Colors.white : sActionButton,
               onTap: () => Get.toNamed(Routes.electricity),
             ),
-            _item(assetName: gift, title: 'Gift Cards', colorScheme: colorScheme,
-              tintColor: isDark ? Colors.white : sActionButton, ),
+            _item(
+              assetName: gift, title: 'Gift Cards', colorScheme: colorScheme,
+              tintColor: isDark ? Colors.white : sActionButton,),
             _item(
               assetName: loansService,
               title: 'Loans',
@@ -836,8 +848,9 @@ class _ExpandedContent extends StatelessWidget {
               tintColor: isDark ? Colors.white : sActionButton,
               onTap: () => Get.toNamed(Routes.activeGoals),
             ),
-            _item(assetName: cardWhite, title: 'Cards', colorScheme: colorScheme,
-              tintColor: isDark ? Colors.white : sActionButton, ),
+            _item(
+              assetName: cardWhite, title: 'Cards', colorScheme: colorScheme,
+              tintColor: isDark ? Colors.white : sActionButton,),
             _item(
               assetName: qrPayWhite,
               colorScheme: colorScheme,
@@ -845,8 +858,9 @@ class _ExpandedContent extends StatelessWidget {
               title: 'QR Pay',
               onTap: () => Get.toNamed(Routes.qrPay),
             ),
-            _item(assetName: transfer, title: 'Transfer', colorScheme: colorScheme,
-              tintColor: isDark ? Colors.white : sActionButton, ),
+            _item(
+              assetName: transfer, title: 'Transfer', colorScheme: colorScheme,
+              tintColor: isDark ? Colors.white : sActionButton,),
           ],
         ),
       ],
@@ -914,7 +928,9 @@ class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
   bool _pressed = false;
 
   void _onTapDown(_) => setState(() => _pressed = true);
+
   void _onTapUp(_) => setState(() => _pressed = false);
+
   void _onTapCancel() => setState(() => _pressed = false);
 
   @override
@@ -948,8 +964,8 @@ class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
                     // 👇 Obx makes it react to accent changes instantly
                     Obx(() {
                       final accentCtrl = AccentController.to;
-                      final accent     = accentCtrl.accent.value;
-                      final isDefault  = accentCtrl.isDefault;
+                      final accent = accentCtrl.accent.value;
+                      final isDefault = accentCtrl.isDefault;
 
                       final Color tint;
 

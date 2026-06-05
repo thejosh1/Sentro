@@ -34,12 +34,14 @@ class _StartSavingState extends State<StartSaving> {
     required String type,
     required String interest,
     required Color interestColor,
+    required Color accent,
+    bool useAccent = false,
     bool showInterest = true,
   }) {
     return Row(
       children: [
         SvgPicture.asset(barChat,
-            width: widthSize(38), height: heightSize(38)),
+            width: widthSize(38), height: heightSize(38), colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):null,),
         SizedBox(width: widthSize(10)),
 
         Column(
@@ -592,7 +594,7 @@ class _StartSavingState extends State<StartSaving> {
   ];
 
 
-  Widget _cardShell({required SavingsOption option, required bool isDark, bool? useAccent, Color? accent }) {
+  Widget _cardShell({required SavingsOption option, required bool isDark, required bool useAccent, required Color accent }) {
     final hasInterest =
         option.interest != null && option.interest!.trim().isNotEmpty;
 
@@ -617,6 +619,9 @@ class _StartSavingState extends State<StartSaving> {
             interest: option.interest ?? "",
             interestColor: option.interestColor ?? sNavContainer,
             showInterest: hasInterest,
+            useAccent: useAccent,
+            accent: accent,
+
           ),
           SizedBox(height: heightSize(18)),
           CText(
@@ -674,6 +679,7 @@ class _StartSavingState extends State<StartSaving> {
                                     tick,
                                     width: widthSize(12),
                                     height: heightSize(12),
+                                    colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):null,
                                   ),
                                 ),
                             ],

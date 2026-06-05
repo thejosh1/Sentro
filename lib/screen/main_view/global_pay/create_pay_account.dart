@@ -17,8 +17,16 @@ class CreatePayAccount extends StatefulWidget {
 }
 
 class _CreatePayAccountState extends State<CreatePayAccount> {
+  bool _fromPayAccountCreation = false;
   // Tracks the currently selected currency code
   String _selectedCurrency = 'USD';
+
+  @override
+  void initState() {
+    super.initState();
+    final args = Get.arguments as Map<String, dynamic>?;
+    _fromPayAccountCreation = args?['fromPayAccountCreation'] == true;
+  }
 
   // Currency options matching your UI layout specification
   final List<Map<String, String>> _currencies = [
@@ -56,8 +64,10 @@ class _CreatePayAccountState extends State<CreatePayAccount> {
 
   void _onContinue() {
     if (_selectedCurrency.isNotEmpty) {
-      // Navigates to the summary page and passes the selected code as an argument
-      Get.toNamed(Routes.accountSummary, arguments: _selectedCurrency);
+      Get.toNamed(Routes.accountSummary, arguments: {
+        'currency': _selectedCurrency,
+        'fromPayAccountCreation': _fromPayAccountCreation,
+      });
     }
   }
 
@@ -73,7 +83,7 @@ class _CreatePayAccountState extends State<CreatePayAccount> {
           final useAccent = !_isDefaultAccent(accent);
 
           // UI Primary Accents based on your screenshot's lime-green palette
-          final primaryLime = const Color(0xFF9BED6E);
+          final primaryLime = sNavContainer;
           final activeButtonColor = useAccent ? accent : primaryLime;
           final activeTextColor = useAccent ? Colors.white.withOpacity(0.4) : const Color(0xFF0D1E04);
 
@@ -251,7 +261,7 @@ class _CreatePayAccountState extends State<CreatePayAccount> {
                   text: 'Continue',
                   color: activeButtonColor,
                   borderColor: activeButtonColor,
-                  textColor: activeTextColor,
+                  textColor: sActionButton,
                   disabledColor: activeButtonColor.withOpacity(0.4),
                   disabledBorderColor: activeButtonColor.withOpacity(0.4),
                   disabledTextColor: activeTextColor.withOpacity(0.4),

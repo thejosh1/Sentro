@@ -108,6 +108,10 @@ final String freezeCard = _getImagePath('images/svg/pause.svg');
 final String slash = _getImagePath('images/svg/slash.svg');
 final String global2 = _getImagePath('images/svg/global2.svg');
 final String logoGlobalPay = _getImagePath('images/svg/logo_global_pay.svg');
+final String send = _getImagePath('images/svg/send.svg');
+final String receive = _getImagePath('images/svg/receive.svg');
+final String swap = _getImagePath('images/svg/swap.svg');
+final String incorrectPin = _getImagePath('images/svg/incorrect-pin.svg');
 
 
 //icons
@@ -149,6 +153,7 @@ final String copy = _getImagePath('icon/svg/copy.svg');
 final String share = _getImagePath('icon/svg/share.svg');
 final String arrowForward = _getImagePath('icon/svg/arrow_forward.svg');
 final String visIcon = _getImagePath('icon/svg/visibility-icon.svg');
+final String infoCirclePay = _getImagePath('icon/svg/info-circle.svg');
 
 //png icons
 final String aiIcon = _getImagePath('icon/png/ai.png');
@@ -185,5 +190,6 @@ final String britain = _getImagePath('images/png/britain.png');
 final String euro = _getImagePath('images/png/euro.png');
 final String ghana = _getImagePath('images/png/ghana.png');
 final String rwanda = _getImagePath('images/png/rwanda.png');
+final String naija = _getImagePath('images/png/naija.png');
 
 String _getImagePath(String imageName) => imageAssetRoot + imageName;

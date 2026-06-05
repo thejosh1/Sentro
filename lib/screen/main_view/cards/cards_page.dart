@@ -57,7 +57,17 @@ class CardsPage extends StatefulWidget {
 }
 
 class _CardsPageState extends State<CardsPage> {
-  bool _hasCard = true;
+  bool _hasCard = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final args = Get.arguments as Map<String, dynamic>?;
+    if (args != null && args['cardCreated'] == true) {
+      _hasCard = true;
+      args['cardCreated'] = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,9 +98,10 @@ class _CardPickerScreen extends StatefulWidget {
 
 class _CardPickerScreenState extends State<_CardPickerScreen> {
   final PageController _pageController = PageController(
-    viewportFraction: 0.67,
+    viewportFraction: 0.8,
     initialPage: 0,
   );
+  final ScrollController _scrollController = ScrollController();
   int _currentIndex = 0;
 
   bool get _isLastCard => _currentIndex == _cards.length - 1;
@@ -101,6 +112,7 @@ class _CardPickerScreenState extends State<_CardPickerScreen> {
   @override
   void initState() {
     super.initState();
+    _scrollToArrow();
     _pageController.addListener(() {
       final page = _pageController.page ?? 0;
       if (page.round() != _currentIndex) {
@@ -112,6 +124,7 @@ class _CardPickerScreenState extends State<_CardPickerScreen> {
   @override
   void dispose() {
     _pageController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -127,6 +140,18 @@ class _CardPickerScreenState extends State<_CardPickerScreen> {
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeOutCubic);
     }
+  }
+
+  void _scrollToArrow() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 600),
+          curve: Curves.easeOutCubic,
+        );
+      }
+    });
   }
 
 
@@ -145,137 +170,142 @@ class _CardPickerScreenState extends State<_CardPickerScreen> {
         child: Obx(() {
           final accent = AccentController.to.accent.value;
           final useAccent = !_isDefaultAccent(accent);
-          return Column(
-            children: [
-              SizedBox(height: heightSize(24)),
-              // Contextual header to support backing out of the picker interface back to active card view
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    if (widget.onBack != null)
-                      Positioned(
-                        left: 0,
-                        child: GestureDetector(
-                            onTap: widget.onBack,
-                            child: SvgPicture.asset(
-                              isDark ? arrowBackWhite : arrowBack,
-                              width: widthSize(42),
-                              height: heightSize(42),
-                              colorFilter: useAccent ? ColorFilter.mode(
-                                  accent, BlendMode.srcIn) : null,)
+          return SingleChildScrollView(
+            controller: _scrollController,
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.only(bottom: heightSize(100)),
+            child: Column(
+              children: [
+                SizedBox(height: heightSize(24)),
+                // Contextual header to support backing out of the picker interface back to active card view
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      if (widget.onBack != null)
+                        Positioned(
+                          left: 0,
+                          child: GestureDetector(
+                              onTap: widget.onBack,
+                              child: SvgPicture.asset(
+                                isDark ? arrowBackWhite : arrowBack,
+                                width: widthSize(42),
+                                height: heightSize(42),
+                                colorFilter: useAccent ? ColorFilter.mode(
+                                    accent, BlendMode.srcIn) : null,)
+                          ),
+                        ),
+                      Center(
+                        child: SvgPicture.asset(logoCard,
+                            width: widthSize(124.7), height: heightSize(37.59)),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: heightSize(23.87)),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (child, anim) =>
+                      FadeTransition(
+                        opacity: anim,
+                        child: SlideTransition(
+                          position: Tween<Offset>(
+                              begin: const Offset(0, 0.06), end: Offset.zero)
+                              .animate(anim),
+                          child: child,
                         ),
                       ),
-                    Center(
-                      child: SvgPicture.asset(logoCard,
-                          width: widthSize(124.7), height: heightSize(37.59)),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: heightSize(23.87)),
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                transitionBuilder: (child, anim) =>
-                    FadeTransition(
-                      opacity: anim,
-                      child: SlideTransition(
-                        position: Tween<Offset>(
-                            begin: const Offset(0, 0.06), end: Offset.zero)
-                            .animate(anim),
-                        child: child,
-                      ),
-                    ),
-                child: Column(
-                  key: ValueKey(_currentIndex),
-                  children: [
-                    CText(
-                      text: _current.name,
-                      size: 22,
-                      fontWeight: CFONT.wRegular,
-                      fontFamily: CFONT.FAMILY,
-                    ),
-                    SizedBox(height: heightSize(5)),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: widthSize(42)),
-                      child: CText(
-                        text:
-                        'Express yourself with cards that inspires your personality, find one that feels like you have arrived',
-                        size: 14,
-                        fontFamily: CFONT.FAMILY,
+                  child: Column(
+                    key: ValueKey(_currentIndex),
+                    children: [
+                      CText(
+                        text: _current.name,
+                        size: 22,
                         fontWeight: CFONT.wRegular,
-                        color: isDark ? sConfirmTextColor : sLightModeMutedText,
-                        textAlign: TextAlign.center,
-                        height: 1.5,
+                        fontFamily: CFONT.FAMILY,
                       ),
-                    ),
-                  ],
+                      SizedBox(height: heightSize(5)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: widthSize(42)),
+                        child: CText(
+                          text:
+                          'Express yourself with cards that inspires your personality, find one that feels like you have arrived',
+                          size: 14,
+                          fontFamily: CFONT.FAMILY,
+                          fontWeight: CFONT.wRegular,
+                          color: isDark ? sConfirmTextColor : sLightModeMutedText,
+                          textAlign: TextAlign.center,
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: heightSize(24)),
-              _NetworkTab(
-                isDark: isDark,
-                useAccent:useAccent,
-                accent: accent,
-                selected: _current.network,
-                onChanged: (network) {
-                  final index = _cards.indexWhere((c) => c.network == network);
-                  if (index != -1) {
-                    _pageController.animateToPage(index,
-                        duration: const Duration(milliseconds: 400),
-                        curve: Curves.easeOutCubic);
-                  }
-                },
-              ),
-              SizedBox(height: heightSize(24)),
-              SizedBox(
-                height: heightSize(340),
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: _cards.length,
-                  onPageChanged: (i) => setState(() => _currentIndex = i),
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: widthSize(
-                          21.5)),
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.toNamed(Routes.virtualCard, arguments: {
-                            'name': _cards[index].name,
-                            'image': _cards[index].image,
-                            'network': _cards[index].network,
-                          });
-                        },
-                        child: _CardTile(card: _cards[index]),
-                      ),
-                    );
+                SizedBox(height: heightSize(24)),
+                _NetworkTab(
+                  isDark: isDark,
+                  useAccent:useAccent,
+                  accent: accent,
+                  selected: _current.network,
+                  onChanged: (network) {
+                    final index = _cards.indexWhere((c) => c.network == network);
+                    if (index != -1) {
+                      _pageController.animateToPage(index,
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeOutCubic);
+                    }
                   },
                 ),
-              ),
-              SizedBox(height: heightSize(24.61)),
-              GestureDetector(
-                onTap: _next,
-                child: Obx(() {
-                  final accent = AccentController.to.accent.value;
-                  final useAccent = !_isDefaultAccent(accent);
-                  return AnimatedRotation(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOutCubic,
-                    turns: _isLastCard ? 0.5 : 0,
-                    child: SvgPicture.asset(
-                      arrowLeft,
-                      width: widthSize(70),
-                      height: heightSize(70),
-                      colorFilter: useAccent
-                          ? ColorFilter.mode(accent, BlendMode.srcIn)
-                          : null,
-                    ),
-                  );
-                }),
-              ),
-              SizedBox(height: heightSize(100)),
-            ],
+                SizedBox(height: heightSize(24)),
+                SizedBox(
+                  height: heightSize(463.89),
+                  width: widthSize(464),
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: _cards.length,
+                    onPageChanged: (i) => setState(() => _currentIndex = i),
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: widthSize(
+                            21.5)),
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.virtualCard, arguments: {
+                              'name': _cards[index].name,
+                              'image': _cards[index].image,
+                              'network': _cards[index].network,
+                            });
+                          },
+                          child: _CardTile(card: _cards[index]),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: heightSize(24.61)),
+                GestureDetector(
+                  onTap: _next,
+                  child: Obx(() {
+                    final accent = AccentController.to.accent.value;
+                    final useAccent = !_isDefaultAccent(accent);
+                    return AnimatedRotation(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOutCubic,
+                      turns: _isLastCard ? 0.5 : 0,
+                      child: SvgPicture.asset(
+                        arrowLeft,
+                        width: widthSize(70),
+                        height: heightSize(70),
+                        colorFilter: useAccent
+                            ? ColorFilter.mode(accent, BlendMode.srcIn)
+                            : null,
+                      ),
+                    );
+                  }),
+                ),
+              ],
+            ),
           );
         }),
       ),
@@ -376,12 +406,9 @@ class _CardDashboardScreenState extends State<_CardDashboardScreen>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Spacer(),
                           GestureDetector(
-                            onTap: () => Get.back(),
-                            child: SvgPicture.asset(isDark?arrowBackWhite:arrowBack, width: widthSize(42), height: heightSize(42), colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):null,),
-                          ),
-                          GestureDetector(
-                            onTap: widget.onNewCard,
+                            onTap: () {},
                             // Triggers view transition state switch
                             child: Container(
                               height: heightSize(36),
@@ -1165,16 +1192,13 @@ class _CardTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Image.asset(
-          card.image,
-          fit: BoxFit.cover,
-        ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Image.asset(
+        card.image,
+        height: heightSize(463.89), // the larger value = height (portrait)
+        width: widthSize(278),      // the smaller value = width
+        fit: BoxFit.cover,
       ),
     );
   }

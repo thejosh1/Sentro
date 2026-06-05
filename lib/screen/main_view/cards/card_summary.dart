@@ -180,12 +180,11 @@ class _CardSummaryState extends State<CardSummary> {
               ),
               SizedBox(height: heightSize(20),),
               Container(
-                height: heightSize(85),
-                padding: EdgeInsets.symmetric(horizontal: widthSize(15),),
+                padding: EdgeInsets.symmetric(horizontal: widthSize(15), vertical: heightSize(13)),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(11.17),
-                  border: Border.all(color: sDarkBorder),
-                  color: Colors.white.withOpacity(0.05),
+                  border: Border.all(color: sSentroLightGreen),
+                  color: sSentroLightGreen.withOpacity(0.25),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -207,6 +206,7 @@ class _CardSummaryState extends State<CardSummary> {
                           child: CText(
                             text: 'By confirming, you authorise Sentro to debit your selected funding source. to create your account',
                             size: 12,
+                            height: heightSize(1.5),
                             fontWeight: CFONT.wRegular,
                             fontFamily: CFONT.FAMILY,
                           ),
@@ -257,7 +257,10 @@ class _CardSummaryState extends State<CardSummary> {
                 color: useAccent?accent:sNavContainer,
                 textColor: sActionButton,
                 callback: () {
-                  Get.toNamed(Routes.confirmTransaction);
+                  Get.toNamed(
+                    Routes.confirmTransaction,
+                    arguments: {'isCardCreation': true},
+                  );
                 },
               ),
               SizedBox(height: heightSize(30),),

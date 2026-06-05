@@ -260,6 +260,7 @@ class _ConfirmTransferState extends State<ConfirmTransfer> {
                         child: CText(
                           text: 'Send money to this person without knowing who sent the money',
                           size: 12,
+                          height: heightSize(1.5),
                           fontWeight: CFONT.wRegular,
                           fontFamily: CFONT.FAMILY,
                         ),

@@ -202,11 +202,11 @@ class _SavingsSummaryState extends State<SavingsSummary> {
             ),
             SizedBox(height: heightSize(12),),
             Container(
-              height: heightSize(85),
-              padding: EdgeInsets.symmetric(horizontal: widthSize(15),),
+              // height: heightSize(85),
+              padding: EdgeInsets.symmetric(horizontal: widthSize(15), vertical: heightSize(13)),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(11.17),
-                border: Border.all(color: sDarkBorder),
+                border: Border.all(color: sSentroLightGreen),
                 color: sSentroLightGreen.withOpacity(0.25),
               ),
               child: Row(
@@ -229,6 +229,7 @@ class _SavingsSummaryState extends State<SavingsSummary> {
                         child: CText(
                           text: 'By confirming, you authorise Sentro to debit your selected funding source. For Fixed Deposits and T-Bills, funds are locked until maturity.',
                           size: 12,
+                          height: heightSize(1.5),
                           fontWeight: CFONT.wRegular,
                           fontFamily: CFONT.FAMILY,
                         ),

@@ -9,12 +9,12 @@ import 'package:sentro/core/constants/sizes.dart';
 import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/text.dart';
-import 'package:sentro/screen/global_pay/global_pay.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/home_page.dart';
-import 'package:sentro/screen/main_view/Dashboard/views/transaction_history.dart';
 import 'package:sentro/screen/main_view/cards/cards_page.dart';
 import 'package:sentro/screen/main_view/controller/main_controller.dart';
 import 'package:sentro/screen/main_view/qr_pay/qr_pay.dart';
+
+import 'global_pay/global_pay.dart';
 
 class MainView extends StatefulWidget {
   final int initialIndex;
@@ -51,8 +51,11 @@ class _MainViewState extends State<MainView> {
   @override
   void initState() {
     super.initState();
-    controller.changeTab(widget.initialIndex);
-    _selectedIndex = widget.initialIndex;
+    final args = Get.arguments as Map<String, dynamic>?;
+    final goToTab = args?['goToTab'] as int? ?? widget.initialIndex;
+
+    controller.changeTab(goToTab);
+    _selectedIndex = goToTab;
   }
 
   void _onItemTapped(int index) {

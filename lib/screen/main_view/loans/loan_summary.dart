@@ -194,11 +194,11 @@ class _LoanSummaryState extends State<LoanSummary> {
             ),
             SizedBox(height: heightSize(12),),
             Container(
-              height: heightSize(85),
-              padding: EdgeInsets.symmetric(horizontal: widthSize(15),),
+              //height: heightSize(85),
+              padding: EdgeInsets.symmetric(horizontal: widthSize(15), vertical: heightSize(13)),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(11.17),
-                border: Border.all(color: sDarkBorder),
+                border: Border.all(color: sSentroLightGreen),
                 color: sSentroLightGreen.withOpacity(0.25),
               ),
               child: Row(

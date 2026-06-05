@@ -68,6 +68,8 @@ abstract class Routes {
   static const changePin = '/change-pin';
   static const linkedDevices = '/linked-devices';
   static const permissions = '/permissions';
+  static const faceVerification = '/face-verification';
+  static const repeatPin = '/repeat-pin';
 
   //verification
   static const verification = '/verification';
@@ -94,4 +96,7 @@ abstract class Routes {
   //global pay
   static const createPayAccount = '/create-pay-account';
   static const accountSummary = '/account-summary';
+  static const sendMoney = '/send-money';
+  static const sendSummary = '/send-summary';
+  static const swapCurrency = '/swap-currency';
 }

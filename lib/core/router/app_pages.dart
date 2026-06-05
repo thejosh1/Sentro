@@ -2,8 +2,6 @@
 import 'package:get/get.dart';
 import 'package:sentro/core/widgets/confirm_pin.dart';
 import 'package:sentro/core/widgets/confirm_transaction.dart';
-import 'package:sentro/screen/global_pay/account_summary.dart';
-import 'package:sentro/screen/global_pay/create_pay_account.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/academics.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/betting.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/cable_tv.dart';
@@ -16,8 +14,15 @@ import 'package:sentro/screen/main_view/beneficiary/beneficiaries.dart';
 import 'package:sentro/screen/main_view/cards/card_summary.dart';
 import 'package:sentro/screen/main_view/cards/transaction_action.dart';
 import 'package:sentro/screen/main_view/cards/virtual_card.dart';
+import 'package:sentro/screen/main_view/global_pay/account_summary.dart';
+import 'package:sentro/screen/main_view/global_pay/create_pay_account.dart';
+import 'package:sentro/screen/main_view/global_pay/send_money.dart';
+import 'package:sentro/screen/main_view/global_pay/send_summary.dart';
+import 'package:sentro/screen/main_view/global_pay/swap_currency.dart';
 import 'package:sentro/screen/main_view/notifications/notification_settings.dart';
 import 'package:sentro/screen/main_view/profile/terms.dart';
+import 'package:sentro/screen/main_view/security/face_verification.dart';
+import 'package:sentro/screen/main_view/security/repeat_pin.dart';
 import 'package:sentro/screen/main_view/verification/upgrade_account.dart';
 import 'package:sentro/screen/main_view/Dashboard/views/waste_management.dart';
 import 'package:sentro/screen/main_view/Saving&Investments/active_goals.dart';
@@ -136,6 +141,8 @@ class AppPages {
   static const changePassword = Routes.changePassword;
   static const changePin = Routes.changePin;
   static const permissions = Routes.permissions;
+  static const faceVerification = Routes.faceVerification;
+  static const repeatPin = Routes.repeatPin;
 
   //verification
   static const verification = Routes.verification;
@@ -155,6 +162,9 @@ class AppPages {
   //global pay
   static const createPayAccount = Routes.createPayAccount;
   static const accountSummary = Routes.accountSummary;
+  static const sendMoney = Routes.sendMoney;
+  static const sendSummary = Routes.sendSummary;
+  static const swapCurrency = Routes.swapCurrency;
 
   //shared
   static const confirmPin = Routes.confirmPin;
@@ -420,6 +430,26 @@ class AppPages {
     GetPage(
       name: accountSummary,
       page: () => const AccountSummary(),
+    ),
+    GetPage(
+      name: sendMoney,
+      page: () => const SendMoneyPage(),
+    ),
+    GetPage(
+      name: sendSummary,
+      page: () => const SendSummary(),
+    ),
+    GetPage(
+      name: swapCurrency,
+      page: () => const SwapCurrencyPage(),
+    ),
+    GetPage(
+      name: faceVerification,
+      page: () => const FaceVerification(),
+    ),
+    GetPage(
+      name: repeatPin,
+      page: () => const RepeatPin(),
     ),
   ];
 }

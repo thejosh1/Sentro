@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -28,7 +30,6 @@ class InvestmentCategories extends StatelessWidget {
 
     return Container(
       width: double.maxFinite,
-      height: heightSize(144),
       padding: EdgeInsets.only(
         left: widthSize(13),
         top: heightSize(9),
@@ -201,9 +202,7 @@ class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
   bool _pressed = false;
 
   void _onTapDown(_) => setState(() => _pressed = true);
-
   void _onTapUp(_) => setState(() => _pressed = false);
-
   void _onTapCancel() => setState(() => _pressed = false);
 
   bool _isDefaultAccent(Color c) {
@@ -213,9 +212,7 @@ class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme
-        .of(context)
-        .brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return AnimatedScale(
       scale: _pressed ? 0.92 : 1.0,
       duration: const Duration(milliseconds: 120),
@@ -233,47 +230,55 @@ class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
               AnimatedScale(
                 scale: _pressed ? 0.9 : 1.0,
                 duration: const Duration(milliseconds: 120),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    SizedBox(
-                      width: widthSize(54),
-                      height: heightSize(54),
-                      child: TweenAnimationBuilder<double>(
-                        tween: Tween(begin: 0, end: widget.progress),
-                        duration: const Duration(milliseconds: 700),
-                        curve: Curves.easeOut,
-                        builder: (context, value, child) {
-                          return Obx(() {
-                            final accent = AccentController.to.accent.value;
-                            final useAccent = !_isDefaultAccent(accent);
-                            return CustomPaint(
-                              painter: _RoundedRectProgressPainter(
-                                progress: value,
-                                activeColor: useAccent ? accent : isDark
-                                    ? sNavContainer
-                                    : sActionButton,
-                                inactiveColor: useAccent ? accent.withOpacity(
-                                    0.4) : isDark ? sNavContainer
-                                    .withOpacity(0.4) : sActionButton
-                                    .withOpacity(0.4),
-                                strokeWidth: 3,
-                                radius: 16,
-                              ),
-                            );
-                          });
-                        },
-                      ),
-                    ),
+                child: Obx(() {
+                  final accent = AccentController.to.accent.value;
+                  final useAccent = !_isDefaultAccent(accent);
+                  final activeColor = useAccent ? accent : isDark ? sNavContainer : sActionButton;
 
-                    SvgPicture.asset(
-                      widget.assetName,
-                      height: heightSize(49),
-                      width: widthSize(49),
-                      fit: BoxFit.contain,
-                    ),
-                  ],
-                ),
+                  return TweenAnimationBuilder<double>(
+                    tween: Tween(begin: 0, end: widget.progress),
+                    duration: const Duration(milliseconds: 700),
+                    curve: Curves.easeOut,
+                    builder: (context, value, child) {
+                      return SizedBox(
+                        width: widthSize(60),  // slightly larger to fit stroke around container
+                        height: heightSize(60),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // Progress ring drawn around the container
+                            CustomPaint(
+                              size: Size(widthSize(63), heightSize(63)),
+                              painter: _CircularProgressPainter(
+                                progress: value,
+                                activeColor: activeColor,
+                                strokeWidth: 2.5,
+                              ),
+                            ),
+
+                            // White rounded container with SVG inside
+                            Container(
+                              width: widthSize(55.88),
+                              height: heightSize(55.88),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle
+                              ),
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  widget.assetName,
+                                  height: heightSize(30),
+                                  width: widthSize(30),
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }),
               ),
               SizedBox(height: heightSize(5)),
               CText(
@@ -292,62 +297,43 @@ class _AnimatedCategoryItemState extends State<_AnimatedCategoryItem> {
   }
 }
 
-class _RoundedRectProgressPainter extends CustomPainter {
+class _CircularProgressPainter extends CustomPainter {
   final double progress;
   final Color activeColor;
-  final Color inactiveColor;
   final double strokeWidth;
-  final double radius;
 
-  _RoundedRectProgressPainter({
+  _CircularProgressPainter({
     required this.progress,
     required this.activeColor,
-    required this.inactiveColor,
     required this.strokeWidth,
-    required this.radius,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = (size.width / 2) - strokeWidth / 2;
 
-    final rrect = RRect.fromRectAndRadius(
-      rect.deflate(strokeWidth / 2),
-      Radius.circular(radius),
-    );
+    // inactive track — transparent, so nothing drawn
+    // active arc
+    if (progress > 0) {
+      final fgPaint = Paint()
+        ..color = activeColor
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = strokeWidth
+        ..strokeCap = StrokeCap.round;
 
-    // ── inactive border ─────────────────────────
-    final bgPaint = Paint()
-      ..color = inactiveColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth;
-
-    canvas.drawRRect(rrect, bgPaint);
-
-    // ── active progress border ──────────────────
-    final fgPaint = Paint()
-      ..color = activeColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
-
-    final path = Path()
-      ..addRRect(rrect);
-
-    final metric = path
-        .computeMetrics()
-        .first;
-
-    final extractPath = metric.extractPath(
-      0,
-      metric.length * progress.clamp(0.0, 1.0),
-    );
-
-    canvas.drawPath(extractPath, fgPaint);
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: radius),
+        -math.pi / 2,                    // start from top
+        2 * math.pi * progress.clamp(0.0, 1.0),
+        false,
+        fgPaint,
+      );
+    }
   }
 
   @override
-  bool shouldRepaint(covariant _RoundedRectProgressPainter oldDelegate) {
-    return oldDelegate.progress != progress;
+  bool shouldRepaint(covariant _CircularProgressPainter oldDelegate) {
+    return oldDelegate.progress != progress || oldDelegate.activeColor != activeColor;
   }
 }

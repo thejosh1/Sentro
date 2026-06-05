@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/router/app_pages.dart';
 import 'package:sentro/core/utils/action_button.dart';
 import 'package:sentro/core/utils/text.dart';
@@ -15,12 +16,33 @@ class Verification extends StatefulWidget {
   State<Verification> createState() => _VerificationState();
 }
 
+
 class _VerificationState extends State<Verification> {
+  bool _fromCardCreation = false;
+  bool _fromPayAccountCreation = false;
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Intercepts context routing arguments dynamically
+    final args = Get.arguments as Map<String, dynamic>?;
+    _fromCardCreation = args?['fromCardCreation'] == true;
+    _fromPayAccountCreation = args?['fromPayAccountCreation'] == true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = Theme
+        .of(context)
+        .brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: widthSize(25)),
         child: Column(
@@ -32,7 +54,7 @@ class _VerificationState extends State<Verification> {
                 GestureDetector(
                   onTap: () => Get.back(),
                   child: SvgPicture.asset(
-                    isDark?arrowBackWhite:arrowBack,
+                    isDark ? arrowBackWhite : arrowBack,
                     width: widthSize(42),
                     height: heightSize(42),
                   ),
@@ -43,7 +65,7 @@ class _VerificationState extends State<Verification> {
                   size: 18,
                   fontFamily: CFONT.FAMILY,
                   fontWeight: CFONT.wMedium,
-                  height: 20/18,
+                  height: 20 / 18,
                 ),
                 Spacer(),
               ],
@@ -54,14 +76,15 @@ class _VerificationState extends State<Verification> {
               size: 12,
               fontWeight: CFONT.wMedium,
               fontFamily: CFONT.FAMILY,
-              color: isDark?sGrey1:sGrey2,
+              color: isDark ? sGrey1 : sGrey2,
             ),
             SizedBox(height: heightSize(16),),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: widthSize(25), vertical: heightSize(25)),
+              padding: EdgeInsets.symmetric(
+                  horizontal: widthSize(25), vertical: heightSize(25)),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: isDark?sDarkFill:sLightFill,
+                color: isDark ? sDarkFill : sLightFill,
               ),
               child: Column(
                 children: [
@@ -71,7 +94,8 @@ class _VerificationState extends State<Verification> {
                     },
                     child: Row(
                       children: [
-                        SvgPicture.asset(bvn, width: widthSize(38), height: heightSize(38),),
+                        SvgPicture.asset(
+                          bvn, width: widthSize(38), height: heightSize(38),),
                         SizedBox(width: widthSize(10),),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +105,7 @@ class _VerificationState extends State<Verification> {
                               size: 14,
                               fontFamily: CFONT.FAMILY,
                               fontWeight: CFONT.wMedium,
-                              height: 16.67/14,
+                              height: 16.67 / 14,
                             ),
                             CText(
                               text: 'Bank Verification Number',
@@ -89,12 +113,13 @@ class _VerificationState extends State<Verification> {
                               fontWeight: CFONT.wRegular,
                               fontFamily: CFONT.FAMILY,
                               color: sAccountColor,
-                              height: 16.67/12,
+                              height: 16.67 / 12,
                             ),
                           ],
                         ),
                         Spacer(),
-                        SvgPicture.asset(tickLight, width: widthSize(24), height: heightSize(24),),
+                        SvgPicture.asset(tickLight, width: widthSize(24),
+                          height: heightSize(24),),
                       ],
                     ),
                   ),
@@ -107,7 +132,8 @@ class _VerificationState extends State<Verification> {
                     },
                     child: Row(
                       children: [
-                        SvgPicture.asset(nin, width: widthSize(38), height: heightSize(38),),
+                        SvgPicture.asset(
+                          nin, width: widthSize(38), height: heightSize(38),),
                         SizedBox(width: widthSize(10),),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +143,7 @@ class _VerificationState extends State<Verification> {
                               size: 14,
                               fontFamily: CFONT.FAMILY,
                               fontWeight: CFONT.wMedium,
-                              height: 16.67/14,
+                              height: 16.67 / 14,
                             ),
                             CText(
                               text: 'National Identification Number',
@@ -125,12 +151,13 @@ class _VerificationState extends State<Verification> {
                               fontWeight: CFONT.wRegular,
                               fontFamily: CFONT.FAMILY,
                               color: sAccountColor,
-                              height: 16.67/12,
+                              height: 16.67 / 12,
                             ),
                           ],
                         ),
                         Spacer(),
-                        SvgPicture.asset(tickLight, width: widthSize(24), height: heightSize(24),),
+                        SvgPicture.asset(tickLight, width: widthSize(24),
+                          height: heightSize(24),),
                       ],
                     ),
                   ),
@@ -147,7 +174,8 @@ class _VerificationState extends State<Verification> {
                     },
                     child: Row(
                       children: [
-                        SvgPicture.asset(address, width: widthSize(38), height: heightSize(38),),
+                        SvgPicture.asset(address, width: widthSize(38),
+                          height: heightSize(38),),
                         SizedBox(width: widthSize(10),),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +185,7 @@ class _VerificationState extends State<Verification> {
                               size: 14,
                               fontFamily: CFONT.FAMILY,
                               fontWeight: CFONT.wMedium,
-                              height: 16.67/14,
+                              height: 16.67 / 14,
                             ),
                             SizedBox(
                               width: widthSize(230),
@@ -167,7 +195,7 @@ class _VerificationState extends State<Verification> {
                                 fontWeight: CFONT.wRegular,
                                 fontFamily: CFONT.FAMILY,
                                 color: sAccountColor,
-                                height: 16.67/12,
+                                height: 16.67 / 12,
                               ),
                             ),
                           ],
@@ -177,7 +205,8 @@ class _VerificationState extends State<Verification> {
                           arrowForward,
                           width: widthSize(7.57),
                           height: heightSize(13.64),
-                          colorFilter: ColorFilter.mode(sVerifyArrow, BlendMode.srcIn),
+                          colorFilter: ColorFilter.mode(
+                              sVerifyArrow, BlendMode.srcIn),
                         ),
                       ],
                     ),
@@ -195,7 +224,8 @@ class _VerificationState extends State<Verification> {
                     },
                     child: Row(
                       children: [
-                        SvgPicture.asset(kin, width: widthSize(38), height: heightSize(38),),
+                        SvgPicture.asset(
+                          kin, width: widthSize(38), height: heightSize(38),),
                         SizedBox(width: widthSize(10),),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,7 +235,7 @@ class _VerificationState extends State<Verification> {
                               size: 14,
                               fontFamily: CFONT.FAMILY,
                               fontWeight: CFONT.wMedium,
-                              height: 16.67/14,
+                              height: 16.67 / 14,
                             ),
                             CText(
                               text: 'Provide next of kin to your account',
@@ -213,7 +243,7 @@ class _VerificationState extends State<Verification> {
                               fontWeight: CFONT.wRegular,
                               fontFamily: CFONT.FAMILY,
                               color: sAccountColor,
-                              height: 16.67/12,
+                              height: 16.67 / 12,
                             ),
                           ],
                         ),
@@ -229,21 +259,32 @@ class _VerificationState extends State<Verification> {
                             arrowForward,
                             width: widthSize(7.57),
                             height: heightSize(13.64),
-                            colorFilter: ColorFilter.mode(sVerifyArrow, BlendMode.srcIn),
+                            colorFilter: ColorFilter.mode(
+                                sVerifyArrow, BlendMode.srcIn),
                           ),
                         ),
                       ],
                     ),
                   ),
                   SizedBox(height: heightSize(47),),
-                  ActionButton(
-                    text: 'Complete Verification',
-                    textColor: sActionButton,
-                    color: sNavContainer,
-                    callback: () {
-                      Get.toNamed(Routes.createPayAccount);
-                    },
-                  ),
+                  Obx(() {
+                    final accent = AccentController.to.accent.value;
+                    final useAccent = !_isDefaultAccent(accent);
+                    return ActionButton(
+                      text: 'Complete Verification',
+                      textColor: sActionButton,
+                      color: useAccent?accent:isDark?sNavContainer:sActionButton,
+                      callback: () {
+                        if (_fromCardCreation) {
+                          Get.toNamed(Routes.cardSummary);
+                        } else if (_fromPayAccountCreation) {
+                          Get.toNamed(Routes.createPayAccount, arguments: {'fromPayAccountCreation': true});
+                        } else {
+                          Get.back();
+                        }
+                      },
+                    );
+                  }),
                 ],
               ),
             )

@@ -107,7 +107,7 @@ class _VirtualCardState extends State<VirtualCard> {
                 textAlign: TextAlign.center,
                 color: sConfirmTextColor,
               ),
-              SizedBox(height: heightSize(65)),
+              SizedBox(height: heightSize(25)),
               ActionButton(
                 color: accent,
                 borderColor: accent,
@@ -115,7 +115,7 @@ class _VirtualCardState extends State<VirtualCard> {
                 textColor: sActionButton,
                 callback: () {
                   FocusScope.of(context).unfocus();
-                  Get.toNamed(Routes.cardSummary);
+                  Get.toNamed(Routes.verification, arguments: {'fromCardCreation': true});
                 },
                 load: false,
               )

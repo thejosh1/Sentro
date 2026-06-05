@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:sentro/core/constants/asset_path.dart';
 import 'package:sentro/core/constants/colors.dart';
 import 'package:sentro/core/constants/sizes.dart';
+import 'package:sentro/core/controllers/accent_controller.dart';
 import 'package:sentro/core/utils/balance_visibility_wrapper.dart';
 import 'package:sentro/core/utils/label_container.dart';
 import 'package:sentro/core/utils/text.dart';
@@ -19,6 +20,10 @@ void showLoanDialog({
   required bool isDark,
   bool initialDataSelected = false,
 }) {
+  bool _isDefaultAccent(Color c) {
+    final defaultAccent = AccentController.options.first;
+    return c.value == defaultAccent.value;
+  }
   showDialog(
     context: context,
     barrierDismissible: true,
@@ -27,6 +32,8 @@ void showLoanDialog({
       bool _obscured = false;
       return StatefulBuilder(
         builder: (context, setDialogState) {
+          final accent = AccentController.to.accent.value;
+          final useAccent = !_isDefaultAccent(accent);
           return GestureDetector(
             onTap: () => Navigator.of(context).pop(),
             child: Stack(
@@ -63,6 +70,8 @@ void showLoanDialog({
                             children: [
                               _BalancePill(
                                 isDark: isDark,
+                                useAccent: useAccent,
+                                accent: accent,
                                 obscured: _obscured,
                                 onToggle: () => setDialogState(() => _obscured = !_obscured),
                                 pillBg: isDark ? sButtonFillDark : const Color(0xFFEEEEEE),
@@ -90,6 +99,8 @@ void showLoanDialog({
                           SizedBox(height: heightSize(20)),
                           SizedBox(height: heightSize(40)),
                           _dialogItem(
+                            useAccent: useAccent,
+                            accent: accent,
                             isDark: isDark,
                             icon: takeLoan,
                             title: 'Take Loans',
@@ -98,6 +109,8 @@ void showLoanDialog({
                           ),
                           SizedBox(height: heightSize(10)),
                           _dialogItem(
+                            useAccent: useAccent,
+                            accent: accent,
                             isDark: isDark,
                             icon: payLoan,
                             title: 'Repay Loans',
@@ -108,6 +121,8 @@ void showLoanDialog({
                           _dialogItem(
                             isDark: isDark,
                             icon: calculator,
+                            useAccent: useAccent,
+                            accent: accent,
                             title: 'Loan Calculator',
                             subtitle: 'Send money by scanning QR Code',
                             onTap: () => Get.toNamed(Routes.loanCalculator),
@@ -132,6 +147,8 @@ void showLoanDialog({
                               Get.toNamed(Routes.activeLoans);
                             },
                             child: _AnimatedLoanCard(
+                              useAccent: useAccent,
+                              accent: accent,
                               key: const ValueKey('loan_750'),
                               progress: 550000 / 750000, // 73% paid
                               loanAmount: 'Loans - N750,000',
@@ -144,6 +161,8 @@ void showLoanDialog({
                               Get.toNamed(Routes.activeLoans);
                             },
                             child: _AnimatedLoanCard(
+                              useAccent: useAccent,
+                              accent: accent,
                               key: const ValueKey('loan_500'),
                               progress: 200000 / 500000, // 40% paid
                               loanAmount: 'Loans - N500,000',
@@ -171,6 +190,8 @@ Widget _dialogItem({
   required String subtitle,
   required VoidCallback onTap,
   required bool isDark,
+  bool useAccent = false,
+  required Color accent,
 }) {
   return GestureDetector(
     onTap: onTap,
@@ -188,7 +209,7 @@ Widget _dialogItem({
             icon,
             width: widthSize(46),
             height: heightSize(46),
-            colorFilter: ColorFilter.mode(sNavContainer, BlendMode.srcIn),
+            colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):ColorFilter.mode(sNavContainer, BlendMode.srcIn),
           ),
           SizedBox(width: widthSize(10)),
           Expanded(                               // ← add this
@@ -217,12 +238,16 @@ class _AnimatedLoanCard extends StatefulWidget {
   final double progress; // 0.0 - 1.0
   final String loanAmount;
   final String remainingText;
+  final bool useAccent;
+  final Color accent;
 
   const _AnimatedLoanCard({
     super.key,
     required this.progress,
     required this.loanAmount,
     required this.remainingText,
+    this.useAccent = false,
+    required this.accent,
   });
 
   @override
@@ -266,7 +291,7 @@ class _AnimatedLoanCardState extends State<_AnimatedLoanCard>
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: sNavContainer,
+        color: widget.useAccent?widget.accent:sNavContainer,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,6 +350,8 @@ class _BalancePill extends StatelessWidget {
   final Color pillBorder;
   final Color textColor;
   final VoidCallback onToggle;
+  final bool useAccent;
+  final Color accent;
 
   const _BalancePill({
     required this.isDark,
@@ -333,6 +360,8 @@ class _BalancePill extends StatelessWidget {
     required this.pillBorder,
     required this.textColor,
     required this.onToggle,
+    this.useAccent = false,
+    required this.accent,
   });
 
   @override
@@ -356,7 +385,7 @@ class _BalancePill extends StatelessWidget {
                   wallet,
                   width:  widthSize(18),
                   height: heightSize(18),
-                  colorFilter: ColorFilter.mode(
+                  colorFilter: useAccent?ColorFilter.mode(accent, BlendMode.srcIn):ColorFilter.mode(
                     isDark ? sNavContainer : sActionButton,
                     BlendMode.srcIn,
                   ),

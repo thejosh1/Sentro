@@ -17,9 +17,17 @@ class AccountSummary extends StatefulWidget {
 }
 
 class _AccountSummaryState extends State<AccountSummary> {
+  bool _fromPayAccountCreation = false;
   bool _isDefaultAccent(Color c) {
     final defaultAccent = AccentController.options.first;
     return c.value == defaultAccent.value;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final args = Get.arguments as Map<String, dynamic>?;
+    _fromPayAccountCreation = args?['fromPayAccountCreation'] == true;
   }
 
   bool _isAnonymous = false;
@@ -180,12 +188,12 @@ class _AccountSummaryState extends State<AccountSummary> {
               ),
               SizedBox(height: heightSize(20),),
               Container(
-                height: heightSize(85),
-                padding: EdgeInsets.symmetric(horizontal: widthSize(15),),
+                //height: heightSize(85),
+                padding: EdgeInsets.symmetric(horizontal: widthSize(15), vertical: heightSize(13)),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(11.17),
-                  border: Border.all(color: sDarkBorder),
-                  color: Colors.white.withOpacity(0.05),
+                  border: Border.all(color: sSentroLightGreen),
+                  color: sSentroLightGreen.withOpacity(0.25),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -207,6 +215,7 @@ class _AccountSummaryState extends State<AccountSummary> {
                           child: CText(
                             text: 'By confirming, you authorise Sentro to debit your selected funding source. to create your account',
                             size: 12,
+                            height: heightSize(1.5),
                             fontWeight: CFONT.wRegular,
                             fontFamily: CFONT.FAMILY,
                           ),
@@ -257,7 +266,10 @@ class _AccountSummaryState extends State<AccountSummary> {
                 color: useAccent?accent:sNavContainer,
                 textColor: sActionButton,
                 callback: () {
-                  Get.toNamed(Routes.confirmTransaction);
+                  Get.toNamed(Routes.confirmTransaction, arguments: {
+                    'isCardCreation': !_fromPayAccountCreation,
+                    'isPayAccountCreation': _fromPayAccountCreation,
+                  });
                 },
               ),
               SizedBox(height: heightSize(30),),
